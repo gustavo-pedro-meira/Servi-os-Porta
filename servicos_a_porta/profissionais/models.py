@@ -10,3 +10,4 @@ class Profissional(Pessoa):
     descricao = models.TextField()
     dataInicio = models.DateField()
     idProfissao = models.ForeignKey('Profissao', on_delete=models.CASCADE, related_name='profissionais')
+    
