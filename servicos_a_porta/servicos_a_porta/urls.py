@@ -21,6 +21,7 @@ from clientes.api.viewsets import ClienteViewSet, EnderecoViewSet
 from posts.api.viewsets import PostViewSet, ComentarioViewSet
 from profissionais.api.viewsets import ProfissaoViewSet, ProfissionalViewSet
 from servicos.api.viewsets import ServicoViewSet
+from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
 
 router = routers.DefaultRouter()
 router.register('clientes', ClienteViewSet)
@@ -34,10 +35,6 @@ router.register('servicos', ServicoViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    # path('api/', include(endereco_router.urls)),
-    # path('api/', include(post_router.urls)),
-    # path('api/', include(comentario_router.urls)),
-    # path('api/', include(profissao_router.urls)),
-    # path('api/', include(profissional_router.urls)),
-    # path('api/', include(servicos_router.urls)),
+    path('api/token', TokenObtainPairView.as_view(),name='token_obtain_pair'),
+    path('api/token/refresh', TokenObtainPairView.as_view(), name='token_refresh')
 ]
