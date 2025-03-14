@@ -4,7 +4,7 @@ from profissionais import models
 class ProfissionalSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Profissional
-        fields = "__all__"
+        fields = ["descricao", "dataInicio", "idProfissao", "password", "username", "email"]
         
 class ProfissaoSerializer(serializers.ModelSerializer):
     class Meta:

@@ -4,7 +4,7 @@ from clientes import models
 class ClienteSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Cliente
-        fields = "__all__"
+        fields = ["biografia", "password", "username", "email"]
         
 class EnderecoSerializer(serializers.ModelSerializer):
     class Meta:

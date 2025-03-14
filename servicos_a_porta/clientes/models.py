@@ -1,5 +1,5 @@
 from django.db import models
-from core.models import Pessoa
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Endereco(models.Model):
@@ -10,5 +10,9 @@ class Endereco(models.Model):
     cep = models.CharField(max_length=8)
     cliente = models.ForeignKey('Cliente', on_delete=models.CASCADE, related_name='enderecos')
      
-class Cliente(Pessoa):
+class Cliente(User):
     biografia = models.TextField()
+    
+    class Meta:
+        verbose_name = "Cliente"
+        verbose_name_plural = "Clientes"
