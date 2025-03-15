@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework_simplejwt',
     'clientes',
-    'core',
     'posts',
     'profissionais',
     'servicos'

@@ -9,6 +9,9 @@ class Profissional(User):
     descricao = models.TextField()
     dataInicio = models.DateField()
     idProfissao = models.ForeignKey('Profissao', on_delete=models.CASCADE, related_name='profissionais')
+    nome = models.CharField(max_length=100)
+    # dataNascimento = models.DateField()
+    cpf = models.CharField(max_length=11)
 
     class Meta:
         verbose_name = "Profissional"

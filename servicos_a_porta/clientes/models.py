@@ -12,6 +12,9 @@ class Endereco(models.Model):
      
 class Cliente(User):
     biografia = models.TextField()
+    nome = models.CharField(max_length=100)
+    # dataNascimento = models.DateField()
+    cpf = models.CharField(max_length=11)
     
     class Meta:
         verbose_name = "Cliente"
