@@ -13,7 +13,7 @@ class Endereco(models.Model):
 class Cliente(User):
     biografia = models.TextField()
     nome = models.CharField(max_length=100)
-    # dataNascimento = models.DateField()
+    dataNascimento = models.DateField(default="2023-03-03")
     cpf = models.CharField(max_length=11)
     
     class Meta:

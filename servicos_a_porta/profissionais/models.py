@@ -10,7 +10,7 @@ class Profissional(User):
     dataInicio = models.DateField()
     idProfissao = models.ForeignKey('Profissao', on_delete=models.CASCADE, related_name='profissionais')
     nome = models.CharField(max_length=100)
-    # dataNascimento = models.DateField()
+    dataNascimento = models.DateField(default="2023-03-03")
     cpf = models.CharField(max_length=11)
 
     class Meta:
