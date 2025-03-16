@@ -86,7 +86,47 @@ const Home = () => {
           </div>
 
       </section>
+      <section className={styles.section_two}>
 
+        <div className={styles.title_unicos}>
+          <span className={styles.line}></span>
+          <h3 className={styles.destaque}>Conheça o que nos torna únicos</h3>
+          <span className={styles.line}></span>
+        </div>
+
+        <div className={styles.div_diferenciais}>
+          <div className={styles.diferencial}>
+            <img className={styles.diferencial_icon} src="/seguranca.png" alt="Icon"></img>
+            <h4>Segurança</h4>
+            <p>Serviços à Porta com segurança e confiança, cuidando do seu lar com qualidade.</p>
+          </div>
+
+          <div className={styles.diferencial}>
+            <img className={styles.diferencial_icon} src="/agendamento.png" alt="Icon"></img>
+            <h4>Agendamento Ágil</h4>
+            <p>Agendamento ágil e sem complicações. Seu serviço marcado em poucos cliques!"</p>
+          </div>
+
+          <div className={styles.diferencial}>
+            <img className={styles.diferencial_icon} src="/servicos.png" alt="Icon"></img>
+            <h4>Serviços Qualificados</h4>
+            <p>Serviços qualificados para sua casa, empresa e outros com excelência e confiança.</p>
+          </div>
+
+          <div className={styles.diferencial}>
+            <img className={styles.diferencial_icon} src="/suporte.png" alt="Icon"></img>
+            <h4>Suporte ao Cliente</h4>
+            <p>Suporte ao cliente rápido e eficiente, sempre que você precisar.</p>
+          </div>
+        </div>
+
+        <div className={styles.title_unicos}>
+          <span className={styles.line}></span>
+          <h3 className={styles.destaque}>Blog de Serviços</h3>
+          <span className={styles.line}></span>
+        </div>
+
+      </section>
     </main>
   );
 };

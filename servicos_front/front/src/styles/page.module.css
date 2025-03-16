@@ -136,6 +136,7 @@ body {
     margin-top: 3%;
     background-color: #F7F7F7;
     border: solid 1px #D9D9D9;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
 }
 
 .services_info {
@@ -169,3 +170,52 @@ body {
 .services_info p {
     white-space: nowrap;
 }
+
+.section_two {
+    display: flex;
+    flex-direction: column;
+}
+
+.title_unicos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 5%;
+}
+
+.line {
+    flex-grow: 0.4;
+    height: 1px;
+    background-color: #38AFD1;
+}
+
+.div_diferenciais {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10%;
+    padding: 10px;
+    margin-top: 5%;
+    width: auto;
+}
+
+.div_diferenciais p {
+    margin-top: 0%;
+    justify-content: center;
+    text-align: center;
+}
+
+
+.diferencial_icon {
+    width: 4vw;
+}
+
+.diferencial {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
