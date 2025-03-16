@@ -218,4 +218,23 @@ body {
     align-items: center;
 }
 
+.posts_blog {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5%;
+}
 
+.more_button {
+    border-radius: 10px;
+    border-style: none;
+    color: #F7F7F7;
+    background-color: #38AFD1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    height: 5vh;
+    width: 12vw;
+    cursor: pointer;
+}
