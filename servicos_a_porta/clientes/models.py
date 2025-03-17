@@ -52,6 +52,6 @@ class Cliente(User, BaseModel):
         verbose_name_plural = "Clientes"
         
     def __str__(self):
-        return f"{self.nome})"
+        return f"{self.nome}"
 
 

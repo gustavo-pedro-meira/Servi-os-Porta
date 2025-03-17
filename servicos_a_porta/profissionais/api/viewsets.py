@@ -1,11 +1,33 @@
 from rest_framework import viewsets
 from profissionais import models
 from profissionais.api import serializers
+from django.contrib.postgres.search import TrigramSimilarity
+from rest_framework.filters import SearchFilter
 
 class ProfissionalViewSet(viewsets.ModelViewSet):
     queryset = models.Profissional.objects.all()
     serializer_class = serializers.ProfissionalSerializer
     
+    def get_queryset(self):
+        queryset = ProfissionalViewSet.queryset
+        query = self.request.query_params.get('search', None)
+        if query:
+            # Busca fuzzy com TrigramSimilarity
+            queryset = queryset.annotate(
+                similarity=TrigramSimilarity('nome', query) 
+            ).filter(similarity__gt=0.2).order_by('-similarity')
+        return queryset
+    
 class ProfissaoViewSet(viewsets.ModelViewSet):
     queryset = models.Profissao.objects.all()
     serializer_class = serializers.ProfissaoSerializer
+    
+    def get_queryset(self):
+        queryset = ProfissaoViewSet.queryset
+        query = self.request.query_params.get('search', None)
+        if query:
+            # Busca fuzzy com TrigramSimilarity
+            queryset = queryset.annotate(
+                similarity=TrigramSimilarity('nome', query) 
+            ).filter(similarity__gt=0.2).order_by('-similarity')
+        return queryset

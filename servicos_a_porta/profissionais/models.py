@@ -43,6 +43,9 @@ class Profissional(User, BaseModel):
     nome = models.CharField(max_length=100)
     dataNascimento = models.DateField(default="2023-03-03")
     cpf = models.CharField(max_length=11)
+    
+    def __str__(self):
+        return self.nome
 
     class Meta:
         verbose_name = "Profissional"
