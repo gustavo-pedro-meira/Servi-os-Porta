@@ -161,7 +161,64 @@ const Home = () => {
         </div>
 
         <button className={styles.more_button} type="button">Contratar Serviço</button>
+        
+        <div className={styles.title_unicos}>
+          <span className={styles.line}></span>
+          <h3 className={styles.destaque}>Sobre Nós</h3>
+          <span className={styles.line}></span>
+        </div>
 
+      </section>
+      <section className={styles.section_three}>
+        <div className={styles.div_sobre}>
+          <div className={styles.sobre_info}>
+            <p>
+            Na Serviços à Porta, dedicamo-nos apaixonadamente a levar praticidade
+            e qualidade para o seu lar. Desde a nossa fundação, somos a escolha ideal
+            para quem busca serviços eficientes e confiáveis, garantindo cuidado e
+            excelência em cada detalhe. Com uma equipe experiente e comprometida,
+            oferecemos diversos tipos de serviços em sua residencia, empresa, comercio
+            e muito mais, sempre com agilidade e profissionalismo.
+            Na Serviços à Porta, estamos empenhados em superar expectativas,
+            proporcionando soluções que trazem conforto, segurança e tranquilidade
+            para o seu dia a dia.
+            </p>
+          </div>
+
+          <div className={styles.sobre_mecanico}>
+            <img src="./mecanico.png"></img>
+          </div>
+
+        </div>
+
+        <div className={styles.title_unicos}>
+          <span className={styles.line}></span>
+          <h3 className={styles.destaque}>Contato</h3>
+          <span className={styles.line}></span>
+        </div>
+        
+        <div className={styles.div_contato}>
+          <div className={styles.diferencial}>
+            <img className={styles.contato_icon} src="/whatsapp.png" alt="Icon"></img>
+            <h4>WhatsApp</h4>
+            <p>00 1.2345 - 6789</p>
+          </div>
+
+          <div className={styles.diferencial}>
+            <img className={styles.contato_icon} src="/endereco.png" alt="Icon"></img>
+            <h4>Endereço</h4>
+            <p>Rua Unifip, Centro,
+            Patos - PB</p>
+          </div>
+
+          <div className={styles.diferencial}>
+            <img className={styles.contato_icon} src="/email.png" alt="Icon"></img>
+            <h4>Email</h4>
+            <p>serviçosaporta@gmail.com</p>
+          </div>
+        </div>
+
+      
       </section>
     </main>
   );
