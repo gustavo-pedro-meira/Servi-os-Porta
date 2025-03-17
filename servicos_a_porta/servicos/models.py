@@ -1,6 +1,8 @@
 from django.db import models
 from profissionais.models import Profissional
 from clientes.models import Cliente
+from django.utils import timezone
+
 
 # Create your models here.
 class BaseModelQuerySet(models.QuerySet):

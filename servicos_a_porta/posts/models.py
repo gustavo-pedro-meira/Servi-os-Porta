@@ -1,5 +1,7 @@
 from django.db import models
 from servicos.models import Servico
+from django.utils import timezone
+
 
 # Create your models here.
 class BaseModelQuerySet(models.QuerySet):
@@ -31,7 +33,7 @@ class BaseModel(models.Model):
 
 class PostServico(BaseModel):
     titulo = models.TextField()
-    conteudo = models.ImageField()
+    conteudo = models.ImageField(upload_to='imagem/', null=True, blank=True)
     dataCriacao = models.DateTimeField(auto_now_add=True)
     idServico = models.OneToOneField(Servico, on_delete=models.CASCADE)
     
