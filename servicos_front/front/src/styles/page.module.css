@@ -237,4 +237,28 @@ body {
     height: 5vh;
     width: 12vw;
     cursor: pointer;
+    margin-top: 2%;
+}
+
+.funciona_div {
+    display: flex;
+    justify-content: space-between;
+    gap: 5%;
+}
+
+.funciona_faxineira {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10%;
+}
+
+.funciona_div span {
+    font-weight: bold;
+}
+
+.funciona_div p {
+    line-height: 3vh;
+    max-width: 90%;
+    font-size: 12px;
 }

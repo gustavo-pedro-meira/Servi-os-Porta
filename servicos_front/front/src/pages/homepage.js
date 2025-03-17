@@ -140,6 +140,28 @@ const Home = () => {
           <span className={styles.line}></span>
         </div>
 
+        <div className={styles.funciona_div}>
+          <div className={styles.funciona_faxineira}>
+            <img src="./faxineira.png"></img>
+          </div>
+
+          <div className={styles.funciona_info}>
+            <p>
+              Nosso sistema conecta pessoas que precisam de um serviço especializado a profissionais qualificados de forma simples e eficiente. <br></br>
+              <span>1 Solicitação de Serviço</span> <br></br> O usuário acessa a plataforma, descreve o problema e escolhe o tipo de profissional necessário. <br></br>
+              <span>2 Conexão com o Profissional</span> <br></br> O sistema exibe uma lista de profissionais disponíveis na região, permitindo ao usuário selecionar aquele que melhor atende às suas
+              necessidades com base em avaliações e recomendações. <br></br>
+              <span>3 Agendamento e Atendimento</span> <br></br> Após a escolha do profissional, o usuário pode agendar um horário conveniente. O profissional se desloca até o local para realizar o
+              serviço de forma segura e eficiente. <br></br>
+              <span>4 Finalização e Feedback</span> <br></br> Ao término do serviço, o usuário pode avaliar o profissional, ajudando outras pessoas a tomarem decisões mais seguras e
+              garantindo a qualidade dos atendimentos na plataforma.
+              Com um processo simples e intuitivo, garantimos rapidez, segurança e praticidade para todos os envolvidos. 🚀
+            </p>
+          </div>
+        </div>
+
+        <button className={styles.more_button} type="button">Contratar Serviço</button>
+
       </section>
     </main>
   );
