@@ -220,6 +220,42 @@ const Home = () => {
 
       
       </section>
+
+      <footer className={styles.footer}>
+        <div className={styles.footer_sobre}>
+          <h3>Serviços à Porta</h3>
+          <span className={styles.footer_line}></span>
+          <p>Serviços à Porta é a solução ideal, conectando pessoas que não tem experiência em serviços com profissionais de alta qualidade, de forma rápida e eficiente. Nossa plataforma é intuitiva e acessível, permitindo que você consiga um profissional com facilidade. Com recursos avançados e  segurança garantida, oferecemos uma experiência confiável e otimizada para atender às suas necessidades.</p>
+            <p>© 2024. Serviços à Porta. Todos os direitos reservados.</p>
+        </div>
+
+        <div className={styles.footer_redes}>
+          <h3>Redes Sociais</h3>
+          <span className={styles.footer_line}></span>
+          <a>Instagram</a>
+          <a>Facebook</a>
+          <a>WhatsApp</a>
+          <a>LinkedIn</a>
+          <a>X</a>
+        </div>
+
+        <div className={styles.footer_paginas}>
+          <h3>Páginas</h3>
+          <span className={styles.footer_line}></span>
+          <a>Como Funciona</a>
+          <a>Seja um Profissional</a>
+          <a>Criar Conta</a>
+          <a>Entrar</a>
+          <a>Contato</a>
+        </div>
+
+        <div className={styles.footer_regulamento}>
+          <h3>Regulamento</h3>
+          <span className={styles.footer_line}></span>
+          <a>Termos de Uso</a>
+          <a>Política de Privacidade</a>
+        </div>
+      </footer>
     </main>
   );
 };
