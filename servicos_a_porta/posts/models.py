@@ -1,6 +1,7 @@
 from django.db import models
 from servicos.models import Servico
 from django.utils import timezone
+from profissionais.models import Profissional
 
 
 # Create your models here.
@@ -35,6 +36,7 @@ class PostServico(BaseModel):
     titulo = models.TextField()
     conteudo = models.ImageField(upload_to='imagem/', null=True, blank=True)
     dataCriacao = models.DateTimeField(auto_now_add=True)
+    profissional = models.ForeignKey(Profissional, on_delete=models.CASCADE)
     idServico = models.OneToOneField(Servico, on_delete=models.CASCADE)
     
 

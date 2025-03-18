@@ -3,11 +3,14 @@ from profissionais import models
 from profissionais.api import serializers
 from django.contrib.postgres.search import TrigramSimilarity
 from rest_framework.filters import SearchFilter
+from rest_framework.permissions import DjangoModelPermissions
+
 
 class ProfissionalViewSet(viewsets.ModelViewSet):
     queryset = models.Profissional.objects.all()
     serializer_class = serializers.ProfissionalSerializer
-    
+    permission_classes = [DjangoModelPermissions]
+
     def get_queryset(self):
         queryset = ProfissionalViewSet.queryset
         query = self.request.query_params.get('search', None)
@@ -21,6 +24,7 @@ class ProfissionalViewSet(viewsets.ModelViewSet):
 class ProfissaoViewSet(viewsets.ModelViewSet):
     queryset = models.Profissao.objects.all()
     serializer_class = serializers.ProfissaoSerializer
+    permission_classes = [DjangoModelPermissions]
     
     def get_queryset(self):
         queryset = ProfissaoViewSet.queryset
