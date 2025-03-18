@@ -39,12 +39,21 @@ class Profissao(BaseModel):
     
     
 class Profissional(User, BaseModel):
+    nvl = (
+        ('I', 'Iniciante'),
+        ('Q', 'Qualificado'),
+        ('P', 'Profissional,'),
+    )
+    
     descricao = models.TextField()
     dataInicio = models.DateField()
     idProfissao = models.ForeignKey('Profissao', on_delete=models.CASCADE, related_name='profissionais')
     nome = models.CharField(max_length=100)
     dataNascimento = models.DateField(default="2023-03-03")
     cpf = models.CharField(max_length=11)
+    nivel_profissional = models.CharField(max_length=50, choices=nvl, default='I')
+    cidade = models.CharField(max_length=100)
+    estado = models.CharField(max_length=100)
     
     def __str__(self):
         return self.nome

@@ -33,8 +33,8 @@ class BaseModel(models.Model):
 class Endereco(BaseModel):
     rua = models.CharField(max_length=50)
     numero = models.CharField(max_length=30)
-    cidade = models.CharField(max_length=50)
-    estado = models.CharField(max_length=20)
+    cidade = models.CharField(max_length=100)
+    estado = models.CharField(max_length=100)
     cep = models.CharField(max_length=8)
     cliente = models.ForeignKey('Cliente', on_delete=models.CASCADE, related_name='enderecos')
     
