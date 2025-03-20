@@ -1,8 +1,17 @@
 import React from "react";
-import Home from "./pages/homepage"; // Caminho correto para o seu arquivo
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Home from "./pages/homepage";
+import Bio from "./pages/bio";
 
-function App() {
-  return <Home/>;
-}
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/bio" element={<Bio />} />
+      </Routes>
+    </Router>
+  );
+};
 
 export default App;

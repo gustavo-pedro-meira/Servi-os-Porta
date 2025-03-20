@@ -1,17 +1,27 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa"; // Importe o ícone de lupa
 import styles from "../styles/page.module.css";
 
 const Home = () => {
+
+  const navigate = useNavigate();
+
   return (
     <main className={styles.mainClass}>
       <nav className={styles.nav}>
         <img src="#" alt="Logo" />
         <div className={styles.navcontent}>
-          <p>Fale Conosco</p>
-          <p>Sobre Nós</p>
-          <p>Como Funciona?</p>
-          <button type="button">Seja um Profissional</button>
+          <p onClick={() => document.getElementById("contato").scrollIntoView({behavior: "smooth"})}>
+            Fale Conosco
+          </p>
+          <p onClick={() => document.getElementById("sobre").scrollIntoView({ behavior: "smooth" })}>
+            Sobre Nós
+          </p>
+          <p onClick={() => document.getElementById("como_funciona").scrollIntoView({behavior: "smooth"})}>
+            Como Funciona?
+          </p>
+          <button onClick={() => navigate("/bio")} type="button">Seja um Profissional</button>
           <button type="button">Entrar</button>
         </div>
       </nav>
@@ -134,7 +144,7 @@ const Home = () => {
         </div>
         <button className={styles.more_button} type="button">Ver Mais</button>
 
-        <div className={styles.title_unicos}>
+        <div id="como_funciona" className={styles.title_unicos}>
           <span className={styles.line}></span>
           <h3 className={styles.destaque}>Como Funciona?</h3>
           <span className={styles.line}></span>
@@ -162,7 +172,7 @@ const Home = () => {
 
         <button className={styles.more_button} type="button">Contratar Serviço</button>
         
-        <div className={styles.title_unicos}>
+        <div id="sobre" className={styles.title_unicos}>
           <span className={styles.line}></span>
           <h3 className={styles.destaque}>Sobre Nós</h3>
           <span className={styles.line}></span>
@@ -191,7 +201,7 @@ const Home = () => {
 
         </div>
 
-        <div className={styles.title_unicos}>
+        <div id="contato" className={styles.title_unicos}>
           <span className={styles.line}></span>
           <h3 className={styles.destaque}>Contato</h3>
           <span className={styles.line}></span>
