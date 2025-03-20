@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+import requests
 
 # Create your models here.
 class BaseModelQuerySet(models.QuerySet):
@@ -39,7 +40,7 @@ class Profissao(BaseModel):
     
     
 class Profissional(User, BaseModel):
-    nvl = (
+    NIVEL = (
         ('I', 'Iniciante'),
         ('Q', 'Qualificado'),
         ('P', 'Profissional,'),
@@ -51,10 +52,24 @@ class Profissional(User, BaseModel):
     nome = models.CharField(max_length=100)
     dataNascimento = models.DateField(default="2023-03-03")
     cpf = models.CharField(max_length=11)
-    nivel_profissional = models.CharField(max_length=50, choices=nvl, default='I')
-    cidade = models.CharField(max_length=100)
-    estado = models.CharField(max_length=100)
-    
+    cep = models.CharField(max_length=8)
+    nivel_profissional = models.CharField(max_length=50, choices=NIVEL, default='I')
+    estado = models.CharField(max_length=100, blank=True, null=True)
+    cidade = models.CharField(max_length=100, blank=True, null=True)
+
+    def clean(self):
+        url = f"https://viacep.com.br/ws/{self.cep}/json/"
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            data = response.json()
+
+            if 'erro' not in data:
+                self.estado = data.get('uf')
+                self.cidade = data.get('localidade')
+            else:
+                raise ValidationError({'cep': 'CEP não encontrado.'})
+
     def __str__(self):
         return self.nome
 

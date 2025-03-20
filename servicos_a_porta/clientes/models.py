@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+import requests
 
 # Create your models here.
 class BaseModelQuerySet(models.QuerySet):
@@ -33,10 +34,23 @@ class BaseModel(models.Model):
 class Endereco(BaseModel):
     rua = models.CharField(max_length=50)
     numero = models.CharField(max_length=30)
-    cidade = models.CharField(max_length=100)
-    estado = models.CharField(max_length=100)
     cep = models.CharField(max_length=8)
+    cidade = models.CharField(max_length=100, blank=True, null=True)
+    estado = models.CharField(max_length=100, blank=True, null=True)
     cliente = models.ForeignKey('Cliente', on_delete=models.CASCADE, related_name='enderecos')
+    
+    def clean(self):
+        url = f"https://viacep.com.br/ws/{self.cep}/json/"
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            data = response.json()
+
+            if 'erro' not in data:
+                self.estado = data.get('uf')
+                self.cidade = data.get('localidade')
+            else:
+                raise ValidationError({'cep': 'CEP não encontrado.'})
     
     def __str__(self):
         return f"{self.rua} - {self.cliente.nome}"

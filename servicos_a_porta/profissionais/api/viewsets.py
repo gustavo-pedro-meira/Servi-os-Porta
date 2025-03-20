@@ -5,7 +5,6 @@ from django.contrib.postgres.search import TrigramSimilarity
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import DjangoModelPermissions
 
-
 class ProfissionalViewSet(viewsets.ModelViewSet):
     queryset = models.Profissional.objects.all()
     serializer_class = serializers.ProfissionalSerializer
@@ -35,3 +34,4 @@ class ProfissaoViewSet(viewsets.ModelViewSet):
                 similarity=TrigramSimilarity('nome', query) 
             ).filter(similarity__gt=0.2).order_by('-similarity')
         return queryset
+    

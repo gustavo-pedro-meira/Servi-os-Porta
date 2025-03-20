@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework_simplejwt',
     'corsheaders',
+    'smart_selects',
     'clientes',
     'posts',
     'profissionais',
@@ -161,3 +162,5 @@ CORS_ALLOWED_ORIGINS = [
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'midia')
 MEDIA_URL = '/midia/'
+
+USE_DJANGO_JQUERY = True

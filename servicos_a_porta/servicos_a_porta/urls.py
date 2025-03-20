@@ -33,6 +33,7 @@ router.register('comentarios', ComentarioViewSet)
 router.register('profissoes', ProfissaoViewSet)
 router.register('profissionais', ProfissionalViewSet)
 router.register('servicos', ServicoViewSet)
+# router.register('cidades', CidadesPorEstadoView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

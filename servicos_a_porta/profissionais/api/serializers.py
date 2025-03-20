@@ -1,10 +1,11 @@
 from rest_framework import serializers
 from profissionais import models
 
+
 class ProfissionalSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Profissional
-        fields = ["cpf", "nome", "dataNascimento", "descricao", "dataInicio", "idProfissao", "password", "username", "email"]
+        fields = ["cpf", "nome", "dataNascimento", "descricao","nivel_profissional", "cep", "estado", "cidade", "dataInicio", "idProfissao", "password", "username", "email"]
         
 class ProfissaoSerializer(serializers.ModelSerializer):
     class Meta:
