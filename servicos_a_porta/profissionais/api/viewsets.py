@@ -2,13 +2,17 @@ from rest_framework import viewsets
 from profissionais import models
 from profissionais.api import serializers
 from django.contrib.postgres.search import TrigramSimilarity
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import DjangoModelPermissions
 
 class ProfissionalViewSet(viewsets.ModelViewSet):
     queryset = models.Profissional.objects.all()
     serializer_class = serializers.ProfissionalSerializer
     permission_classes = [DjangoModelPermissions]
+    filter_backends = [OrderingFilter, DjangoFilterBackend]
+    filterset_fields = ['cep', 'nivel_profissional']
+    ordering = ['nome']
 
     def get_queryset(self):
         queryset = ProfissionalViewSet.queryset
@@ -24,6 +28,8 @@ class ProfissaoViewSet(viewsets.ModelViewSet):
     queryset = models.Profissao.objects.all()
     serializer_class = serializers.ProfissaoSerializer
     permission_classes = [DjangoModelPermissions]
+    filter_backends = [OrderingFilter]
+    ordering = ['nome']
     
     def get_queryset(self):
         queryset = ProfissaoViewSet.queryset
