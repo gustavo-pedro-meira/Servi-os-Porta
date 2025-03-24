@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/homepage";
 import Bio from "./pages/bio";
+import Blog from "./pages/blog";
 
 const App = () => {
   return (
@@ -9,6 +10,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/bio" element={<Bio />} />
+        <Route path="/blog" element={<Blog />}/>
       </Routes>
     </Router>
   );
