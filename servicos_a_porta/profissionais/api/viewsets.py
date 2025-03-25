@@ -4,12 +4,11 @@ from profissionais.api import serializers
 from django.contrib.postgres.search import TrigramSimilarity
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.permissions import DjangoModelPermissions
+
 
 class ProfissionalViewSet(viewsets.ModelViewSet):
     queryset = models.Profissional.objects.all()
     serializer_class = serializers.ProfissionalSerializer
-    permission_classes = [DjangoModelPermissions]
     filter_backends = [OrderingFilter, DjangoFilterBackend]
     filterset_fields = ['cep', 'nivel_profissional']
     ordering = ['nome']
@@ -18,7 +17,6 @@ class ProfissionalViewSet(viewsets.ModelViewSet):
         queryset = ProfissionalViewSet.queryset
         query = self.request.query_params.get('search', None)
         if query:
-            # Busca fuzzy com TrigramSimilarity
             queryset = queryset.annotate(
                 similarity=TrigramSimilarity('nome', query) 
             ).filter(similarity__gt=0.2).order_by('-similarity')
@@ -27,7 +25,6 @@ class ProfissionalViewSet(viewsets.ModelViewSet):
 class ProfissaoViewSet(viewsets.ModelViewSet):
     queryset = models.Profissao.objects.all()
     serializer_class = serializers.ProfissaoSerializer
-    permission_classes = [DjangoModelPermissions]
     filter_backends = [OrderingFilter]
     ordering = ['nome']
     
@@ -35,7 +32,6 @@ class ProfissaoViewSet(viewsets.ModelViewSet):
         queryset = ProfissaoViewSet.queryset
         query = self.request.query_params.get('search', None)
         if query:
-            # Busca fuzzy com TrigramSimilarity
             queryset = queryset.annotate(
                 similarity=TrigramSimilarity('nome', query) 
             ).filter(similarity__gt=0.2).order_by('-similarity')

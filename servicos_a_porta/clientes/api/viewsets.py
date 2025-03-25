@@ -3,13 +3,12 @@ from clientes import models
 from clientes.api import serializers
 from django.contrib.postgres.search import TrigramSimilarity
 from rest_framework.filters import SearchFilter
-from rest_framework.permissions import DjangoModelPermissions
+from .permissions import PermissaoCliente
 
 class ClienteViewSet(viewsets.ModelViewSet):
+    permission_classes = [PermissaoCliente]
     queryset = models.Cliente.objects.all()
     serializer_class = serializers.ClienteSerializer
-    permission_classes = [DjangoModelPermissions]
-    
     
     def get_queryset(self):
         queryset = ClienteViewSet.queryset
@@ -24,4 +23,3 @@ class ClienteViewSet(viewsets.ModelViewSet):
 class EnderecoViewSet(viewsets.ModelViewSet):
     queryset = models.Endereco.objects.all()
     serializer_class = serializers.EnderecoSerializer
-    permission_classes = [DjangoModelPermissions]

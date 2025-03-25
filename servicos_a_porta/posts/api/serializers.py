@@ -5,6 +5,7 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.PostServico
         fields = "__all__"
+
         
 class ComentarioSerializer(serializers.ModelSerializer):
     class Meta:

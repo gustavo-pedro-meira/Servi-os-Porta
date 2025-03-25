@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework_simplejwt',
     'corsheaders',
-    'smart_selects',
     'clientes',
     'posts',
     'profissionais',
@@ -144,7 +143,10 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "NON_FIELD_ERRORS_KEY": "error",
     "PAGE_SIZE": 5,
-    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated',],
+    'DEFAULT_PERMISSION_CLASSES': [
+        # "rest_framework.permissions.IsAuthenticated",
+        # "clientes.api.permissions.LeituraClientes"
+        ],
     'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework_simplejwt.authentication.JWTAuthentication',]
 }
 

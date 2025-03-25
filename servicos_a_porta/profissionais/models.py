@@ -60,15 +60,14 @@ class Profissional(User, BaseModel):
     def clean(self):
         url = f"https://viacep.com.br/ws/{self.cep}/json/"
         response = requests.get(url)
-
         if response.status_code == 200:
-            data = response.json()
-
-            if 'erro' not in data:
-                self.estado = data.get('uf')
-                self.cidade = data.get('localidade')
+            cepValido = response.json()
+            if 'erro' not in cepValido:
+                self.estado = cepValido.get('uf')
+                self.cidade = cepValido.get('localidade')
             else:
                 raise ValidationError({'cep': 'CEP não encontrado.'})
+        
 
     def __str__(self):
         return self.nome

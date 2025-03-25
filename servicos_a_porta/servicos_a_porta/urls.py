@@ -33,11 +33,11 @@ router.register('comentarios', ComentarioViewSet)
 router.register('profissoes', ProfissaoViewSet)
 router.register('profissionais', ProfissionalViewSet)
 router.register('servicos', ServicoViewSet)
-# router.register('cidades', CidadesPorEstadoView)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api/token/', TokenObtainPairView.as_view(),name='token_obtain_pair'),
-    path('api/token/refresh/', TokenObtainPairView.as_view(), name='token_refresh')
+    path('api/token/refresh/', TokenObtainPairView.as_view(), name='token_refresh'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

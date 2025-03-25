@@ -37,7 +37,7 @@ class PostServico(BaseModel):
     conteudo = models.ImageField(upload_to='imagem/', null=True, blank=True)
     dataCriacao = models.DateTimeField(auto_now_add=True)
     profissional = models.ForeignKey(Profissional, on_delete=models.CASCADE)
-    idServico = models.OneToOneField(Servico, on_delete=models.CASCADE)
+    idServico = models.ForeignKey(Servico, on_delete=models.CASCADE)
     
 
 class ComentarioPost(BaseModel):
