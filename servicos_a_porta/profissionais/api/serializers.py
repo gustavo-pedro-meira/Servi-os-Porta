@@ -20,10 +20,13 @@ class ProfissionalSerializer(serializers.ModelSerializer):
         return user
     
     def update(self, instance, validated_data):
-        instance.cep = validated_data.get("cep", instance.cep)
-        instance.password = validated_data.get("password", instance.password)
-        instance.clean()  
-        instance.save()   
+        password = validated_data.pop("password", None)
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        if password is not None:
+            instance.set_password(password)
+        instance.clean()
+        instance.save()
         return instance
     
         
