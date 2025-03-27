@@ -3,7 +3,7 @@ from clientes import models
 from clientes.api import serializers
 from django.contrib.postgres.search import TrigramSimilarity
 from rest_framework.filters import SearchFilter
-from .permissions import PermissaoCliente
+# from .permissions import PermissaoCliente
 
 class ClienteViewSet(viewsets.ModelViewSet):
     # permission_classes = [PermissaoCliente]
