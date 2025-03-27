@@ -28,7 +28,6 @@ class ClienteSerializer(serializers.ModelSerializer):
         return instance
         
         
-        
 class EnderecoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Endereco
@@ -38,7 +37,8 @@ class EnderecoSerializer(serializers.ModelSerializer):
         instance = Endereco(**validated_data)
         instance.clean()
         instance.save()   
-
+        return instance
+    
     def update(self, instance, validated_data):
         instance.rua = validated_data.get("rua", instance.rua)
         instance.numero = validated_data.get("numero", instance.numero)
