@@ -39,11 +39,11 @@ class Profissao(BaseModel):
         return self.nome
     
     
-class Profissional(User, BaseModel):
+class Profissional(User):
     NIVEL = (
         ('I', 'Iniciante'),
         ('Q', 'Qualificado'),
-        ('P', 'Profissional,'),
+        ('P', 'Profissional'),
     )
     
     descricao = models.TextField()
@@ -61,12 +61,14 @@ class Profissional(User, BaseModel):
         url = f"https://viacep.com.br/ws/{self.cep}/json/"
         response = requests.get(url)
         if response.status_code == 200:
-            cepValido = response.json()
-            if 'erro' not in cepValido:
-                self.estado = cepValido.get('uf')
-                self.cidade = cepValido.get('localidade')
+            data = response.json()
+            if 'erro' not in data:
+                self.estado = data.get('uf')
+                self.cidade = data.get('localidade')
             else:
                 raise ValidationError({'cep': 'CEP não encontrado.'})
+        else:
+            raise ValidationError({'cep': 'Erro ao consultar o CEP.'})
         
 
     def __str__(self):

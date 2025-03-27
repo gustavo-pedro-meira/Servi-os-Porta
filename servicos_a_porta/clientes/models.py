@@ -42,20 +42,20 @@ class Endereco(BaseModel):
     def clean(self):
         url = f"https://viacep.com.br/ws/{self.cep}/json/"
         response = requests.get(url)
-
         if response.status_code == 200:
             data = response.json()
-
             if 'erro' not in data:
                 self.estado = data.get('uf')
                 self.cidade = data.get('localidade')
             else:
                 raise ValidationError({'cep': 'CEP não encontrado.'})
+        else:
+            raise ValidationError({'cep': 'Erro ao consultar o CEP.'})
     
     def __str__(self):
         return f"{self.rua} - {self.cliente.nome}"
      
-class Cliente(User, BaseModel):
+class Cliente(User):
     biografia = models.TextField()
     nome = models.CharField(max_length=100)
     dataNascimento = models.DateField(default="2023-03-03")
