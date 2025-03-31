@@ -1,9 +1,11 @@
 from rest_framework import serializers
 from profissionais.models import Profissao, Profissional
 from django.contrib.auth.models import User
+from rest_framework.validators import UniqueValidator
 
 class ProfissionalSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only = True, style = {'input_type': 'password'})
+    email = serializers.EmailField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
     class Meta:
         model = Profissional
         fields = ["nome", "dataNascimento", "descricao", "nivel_profissional", "cpf", "cep", "estado", "cidade", "dataInicio", "idProfissao", "username", "email", "password"]

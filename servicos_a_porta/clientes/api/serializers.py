@@ -1,14 +1,24 @@
 from rest_framework import serializers
 from clientes.models import Cliente, Endereco
+from django.contrib.auth.models import User
+from rest_framework.validators import UniqueValidator
 
 class ClienteSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only = True, style = {'input_type': 'password'})
-    
+    email = serializers.EmailField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
     class Meta:
         model = Cliente
         fields = ["cpf", "nome", "dataNascimento", "biografia", "password", "username", "email"]
         write_only_fields = ('password')
         read_only_fields = ('is_staff', 'is_superuser', 'is_active')
+        
+    def validate(self, data):
+        caracteres = ["!","@","#","$","%","^","&","*"]
+        if len(data["password"]) < 8:
+            raise serializers.ValidationError("A senha deve ter pelo menos 8 caracteres.")
+        if not any(c in data["password"] for c in caracteres):
+            raise serializers.ValidationError("A senha deve conter caracteres especiais.")
+        return data
         
     def create(self, validated_data):
         password = validated_data.pop("password")
