@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from rest_framework import serializers
 import requests
-
 # Create your models here.
 class BaseModelQuerySet(models.QuerySet):
     def delete(self):
@@ -58,6 +58,7 @@ class Profissional(User):
     cidade = models.CharField(max_length=100, blank=True, null=True)
 
     def clean(self):
+        #VALIDAÇÃO DE API COM A API VIACEP E ADD O ESTADO E A CIDADE AUTOMATICAMENTE
         url = f"https://viacep.com.br/ws/{self.cep}/json/"
         response = requests.get(url)
         if response.status_code == 200:
@@ -69,6 +70,19 @@ class Profissional(User):
                 raise ValidationError({'cep': 'CEP não encontrado.'})
         else:
             raise ValidationError({'cep': 'Erro ao consultar o CEP.'})
+        #VALIDAÇÃO DO EMAIL, VERIFICA SE O EMAIL É EXISTENTE USANDO A API ABSTRACTAPI
+        url = f"https://emailvalidation.abstractapi.com/v1/?api_key=c52cafa9304f4d418f4f3651ae02e4c8&email={self.email}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            is_smtp_valid = data["is_smtp_valid"]["value"]
+            if is_smtp_valid:
+                return True
+            else:
+                raise serializers.ValidationError({"email": "Email Inválido."})
+        else:
+            raise serializers.ValidationError({"email": "Erro na API."})
+        
         
 
     def __str__(self):

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 import requests
+from rest_framework import serializers
 
 # Create your models here.
 class BaseModelQuerySet(models.QuerySet):
@@ -60,6 +61,19 @@ class Cliente(User):
     nome = models.CharField(max_length=100)
     dataNascimento = models.DateField(default="2023-03-03")
     cpf = models.CharField(max_length=11)
+    
+    def clean(self):
+        url = f"https://emailvalidation.abstractapi.com/v1/?api_key=c52cafa9304f4d418f4f3651ae02e4c8&email={self.email}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            is_smtp_valid = data["is_smtp_valid"]["value"]
+            if is_smtp_valid:
+                return True
+            else:
+                raise serializers.ValidationError({"email": "Email Inválido."})
+        else:
+            raise serializers.ValidationError({"email": "Erro na API."})
 
     class Meta:
         verbose_name = "Cliente"
