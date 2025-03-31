@@ -3,6 +3,7 @@ from clientes.models import Cliente, Endereco
 
 class ClienteSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only = True, style = {'input_type': 'password'})
+    
     class Meta:
         model = Cliente
         fields = ["cpf", "nome", "dataNascimento", "biografia", "password", "username", "email"]

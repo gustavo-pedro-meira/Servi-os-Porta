@@ -10,6 +10,13 @@ class ProfissionalSerializer(serializers.ModelSerializer):
         write_only_fields = ('password')
         read_only_fields = ('is_staff', 'is_superuser', 'is_active')
 
+    def validate(self, data):
+        caracteres = ["!","@","#","$","%","^","&","*"]
+        if len(data["password"]) < 8:
+            raise serializers.ValidationError("A senha deve ter pelo menos 8 caracteres.")
+        if not any(c in data["password"] for c in caracteres):
+            raise serializers.ValidationError("A senha deve conter caracteres especiais.")
+        return data
         
     def create(self, validated_data):
         password = validated_data.pop("password")
