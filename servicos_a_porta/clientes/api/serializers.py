@@ -12,12 +12,20 @@ class ClienteSerializer(serializers.ModelSerializer):
         write_only_fields = ('password')
         read_only_fields = ('is_staff', 'is_superuser', 'is_active')
         
-    def validate(self, data):
-        caracteres = ["!","@","#","$","%","^","&","*"]
+    def Senha8Digitos(self, data):
         if len(data["password"]) < 8:
             raise serializers.ValidationError("A senha deve ter pelo menos 8 caracteres.")
+        return data
+        
+    def SenhaCaracteresEspeciais(self, data):
+        caracteres = ["!","@","#","$","%","^","&","*"]
         if not any(c in data["password"] for c in caracteres):
             raise serializers.ValidationError("A senha deve conter caracteres especiais.")
+        return data
+
+    def validate(self, data):
+        self.Senha8Digitos(data)
+        self.SenhaCaracteresEspeciais(data)
         return data
         
     def create(self, validated_data):

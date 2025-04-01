@@ -40,7 +40,7 @@ class Endereco(BaseModel):
     estado = models.CharField(max_length=100, blank=True, null=True)
     cliente = models.ForeignKey('Cliente', on_delete=models.CASCADE, related_name='enderecos')
     
-    def clean(self):
+    def CepAutomatico(self):
         url = f"https://viacep.com.br/ws/{self.cep}/json/"
         response = requests.get(url)
         if response.status_code == 200:
@@ -53,6 +53,10 @@ class Endereco(BaseModel):
         else:
             raise ValidationError({'cep': 'Erro ao consultar o CEP.'})
     
+    def clean(self):
+        self.CepAutomatico()
+        
+    
     def __str__(self):
         return f"{self.rua} - {self.cliente.nome}"
      
@@ -62,7 +66,7 @@ class Cliente(User):
     dataNascimento = models.DateField(default="2023-03-03")
     cpf = models.CharField(max_length=11)
     
-    def clean(self):
+    def ValidaEmail(self):
         url = f"https://emailvalidation.abstractapi.com/v1/?api_key=c52cafa9304f4d418f4f3651ae02e4c8&email={self.email}"
         response = requests.get(url)
         if response.status_code == 200:
@@ -74,6 +78,15 @@ class Cliente(User):
                 raise serializers.ValidationError({"email": "Email Inválido."})
         else:
             raise serializers.ValidationError({"email": "Erro na API."})
+        
+    def ValidaCpf(self):
+        if not validate_cpf(self.cpf):
+            raise serializers.ValidationError({"cpf": "CPF Inválido."})
+        return self.cpf
+    
+    def clean(self):
+        self.ValidaEmail()
+        self.ValidaCpf()
 
     class Meta:
         verbose_name = "Cliente"
