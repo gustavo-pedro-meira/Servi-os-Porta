@@ -22,7 +22,7 @@ const Bio = () => {
             <img src="./angelica.png"></img>
           </div>
 
-          <div className={styles.profissional_info}>
+          <div className={styles.funciona_info}>
             <h3 className={styles.nome_prof}>Angelica Felix</h3>
             <p>Patos - PB, 25 anos</p>
             <p>Cuidadora de Idosos</p>
@@ -62,7 +62,7 @@ const Bio = () => {
                 <div className={styles.circle}>
                   <img className={styles.circle_icon} src="/saulo.png" alt="Icon"></img>
                 </div>
-                <p>Saulo J.</p>
+                <p>Saulo J</p>
               </div>
 
               <div className={styles.services_separator}>
@@ -80,7 +80,7 @@ const Bio = () => {
               </div>
             </div>
           </div>
-            <button className={styles.more_button} type="button">Ver Mais</button>
+
       </section>
       <footer className={styles.footer}>
         <div className={styles.footer_sobre}>
