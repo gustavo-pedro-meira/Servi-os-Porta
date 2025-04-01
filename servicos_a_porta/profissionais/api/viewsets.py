@@ -1,10 +1,9 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from profissionais import models
 from profissionais.api import serializers
 from django.contrib.postgres.search import TrigramSimilarity
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
-
 
 class ProfissionalViewSet(viewsets.ModelViewSet):
     queryset = models.Profissional.objects.all()

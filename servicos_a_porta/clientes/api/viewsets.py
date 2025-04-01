@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from clientes import models
+from clientes.models import Endereco, Cliente
 from clientes.api import serializers
 from django.contrib.postgres.search import TrigramSimilarity
 from rest_framework.filters import SearchFilter
@@ -7,7 +7,7 @@ from rest_framework.filters import SearchFilter
 
 class ClienteViewSet(viewsets.ModelViewSet):
     # permission_classes = [PermissaoCliente]
-    queryset = models.Cliente.objects.all()
+    queryset = Cliente.objects.all()
     serializer_class = serializers.ClienteSerializer
     
     def get_queryset(self):
@@ -20,5 +20,5 @@ class ClienteViewSet(viewsets.ModelViewSet):
         return queryset
     
 class EnderecoViewSet(viewsets.ModelViewSet):
-    queryset = models.Endereco.objects.all()
+    queryset = Endereco.objects.all()
     serializer_class = serializers.EnderecoSerializer
