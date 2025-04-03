@@ -53,10 +53,14 @@ class Profissional(User):
     nome = models.CharField(max_length=100)
     dataNascimento = models.DateField(default="2023-03-03")
     cpf = models.CharField(max_length=11)
-    cep = models.CharField(max_length=8)
+    cep = models.CharField(max_length=8, null=False)
+    numero = models.CharField(max_length=11, unique=True)
     nivel_profissional = models.CharField(max_length=50, choices=NIVEL, default='I')
     estado = models.CharField(max_length=100, blank=True, null=True)
     cidade = models.CharField(max_length=100, blank=True, null=True)
+    
+    def NumeroUnico(self):
+        self.numero
     
     def CepAutomatico(self):
         url = f"https://viacep.com.br/ws/{self.cep}/json/"
@@ -67,12 +71,12 @@ class Profissional(User):
                 self.estado = data.get('uf')
                 self.cidade = data.get('localidade')
             else:
-                raise ValidationError({'cep': 'CEP não encontrado.'})
+                raise serializers.ValidationError({'cep': 'CEP não encontrado.'})
         else:
-            raise ValidationError({'cep': 'Erro ao consultar o CEP.'})
+            raise serializers.ValidationError({'cep': 'Erro ao consultar o CEP.'})
         
     def ValidaEmail(self):
-        url = f"https://emailvalidation.abstractapi.com/v1/?api_key=c52cafa9304f4d418f4f3651ae02e4c8&email={self.email}"
+        url = f"https://emailvalidation.abstractapi.com/v1/?api_key=38b9e713f4e846d0a9d5af7d54ec97f7&email={self.email}"
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()

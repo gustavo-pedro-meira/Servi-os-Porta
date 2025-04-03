@@ -65,6 +65,7 @@ class Cliente(User):
     nome = models.CharField(max_length=100)
     dataNascimento = models.DateField(default="2023-03-03")
     cpf = models.CharField(max_length=11)
+    numero = models.CharField(max_length=11, unique=True)
     
     def ValidaEmail(self):
         url = f"https://emailvalidation.abstractapi.com/v1/?api_key=c52cafa9304f4d418f4f3651ae02e4c8&email={self.email}"

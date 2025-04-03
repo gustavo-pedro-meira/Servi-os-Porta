@@ -34,10 +34,10 @@ class BaseModel(models.Model):
 
 class Servico(BaseModel):
     nome = models.CharField(max_length=100)
-    descricao = models.TextField()
-    preco = models.DecimalField(max_digits=5, decimal_places=2)
-    servicosSolicitados = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name='cliente_servicos')
-    servicosFeitos = models.ForeignKey(Profissional, on_delete=models.CASCADE, related_name='profissional_servicos')
+    descricao = models.TextField(blank=True, null=True)
+    preco = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    servicosSolicitados = models.ForeignKey(Cliente, on_delete=models.CASCADE, related_name='cliente_servicos', null=True, blank=True)
+    servicosFeitos = models.ForeignKey(Profissional, on_delete=models.CASCADE, related_name='profissional_servicos', null=True, blank=True)
     
     def __str__(self):
         return self.nome

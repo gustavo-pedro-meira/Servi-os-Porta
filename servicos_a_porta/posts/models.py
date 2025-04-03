@@ -35,15 +35,21 @@ class BaseModel(models.Model):
 class PostServico(BaseModel):
     titulo = models.TextField()
     conteudo = models.ImageField(upload_to='imagem/', null=True, blank=True)
-    dataCriacao = models.DateTimeField(auto_now_add=True)
+    dataCriacao = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     profissional = models.ForeignKey(Profissional, on_delete=models.CASCADE)
     idServico = models.ForeignKey(Servico, on_delete=models.CASCADE)
+    curtidas = models.BigIntegerField(default=0, blank=True, null=True)
+    
+    def __str__(self):
+        return self.profissional
     
 
 class ComentarioPost(BaseModel):
     conteudo = models.TextField()
-    dataCriacao = models.DateTimeField(auto_now_add=True)
-    Post = models.OneToOneField(PostServico, on_delete=models.CASCADE)
+    dataCriacao = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    post = models.OneToOneField(PostServico, on_delete=models.CASCADE)
+    curtidas = models.BigIntegerField(default=0, blank=True, null=True)
+    profissional = models.ForeignKey(Profissional, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.Post

@@ -8,7 +8,7 @@ class ProfissionalSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
     class Meta:
         model = Profissional
-        fields = ["nome", "dataNascimento", "descricao", "nivel_profissional", "cpf", "cep", "estado", "cidade", "dataInicio", "idProfissao", "username", "email", "password"]
+        fields = ["nome", "dataNascimento", "descricao", "nivel_profissional", "cpf", "cep", "estado", "cidade", "dataInicio", "idProfissao", "username", "numero", "email", "password"]
         write_only_fields = ('password')
         read_only_fields = ('is_staff', 'is_superuser', 'is_active')
         
