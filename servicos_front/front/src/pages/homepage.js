@@ -142,7 +142,7 @@ const Home = () => {
           <img src="./post_gustavo.png" className={styles.post_image}></img>
           <img src="./post_joao.png" className={styles.post_image}></img>
         </div>
-        <button className={styles.more_button} type="button">Ver Mais</button>
+        <button onClick={() => navigate("/blog")} className={styles.more_button} type="button">Ver Mais</button>
 
         <div id="como_funciona" className={styles.title_unicos}>
           <span className={styles.line}></span>
