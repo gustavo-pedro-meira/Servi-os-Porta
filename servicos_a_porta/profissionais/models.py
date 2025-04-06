@@ -76,7 +76,7 @@ class Profissional(User):
             raise serializers.ValidationError({'cep': 'Erro ao consultar o CEP.'})
         
     def ValidaEmail(self):
-        url = f"https://emailvalidation.abstractapi.com/v1/?api_key=38b9e713f4e846d0a9d5af7d54ec97f7&email={self.email}"
+        url = f"https://emailvalidation.abstractapi.com/v1/?api_key=f1c1e678a6724d0e853721b6eb9b0354&email={self.email}"
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()

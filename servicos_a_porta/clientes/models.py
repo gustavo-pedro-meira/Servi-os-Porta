@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 import requests
 from rest_framework import serializers
+from brazilnum.cpf import validate_cpf
 
 # Create your models here.
 class BaseModelQuerySet(models.QuerySet):
@@ -68,7 +69,7 @@ class Cliente(User):
     numero = models.CharField(max_length=11, unique=True)
     
     def ValidaEmail(self):
-        url = f"https://emailvalidation.abstractapi.com/v1/?api_key=c52cafa9304f4d418f4f3651ae02e4c8&email={self.email}"
+        url = f"https://emailvalidation.abstractapi.com/v1/?api_key=f1c1e678a6724d0e853721b6eb9b0354&email={self.email}"
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()
