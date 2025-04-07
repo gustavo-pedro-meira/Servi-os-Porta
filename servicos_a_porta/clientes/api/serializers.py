@@ -33,12 +33,18 @@ class ClienteSerializer(serializers.ModelSerializer):
         if not any(c in data["password"] for c in caracteres):
             raise serializers.ValidationError("A senha deve conter caracteres especiais.")
         return data
+    
+    def SenhaSemEspacos(self, data):
+        if " " in data["password"]:
+            raise serializers.ValidationError("A senha não pode conter espaços.")
+        return data
 
     def validate(self, data):
         self.Senha8Digitos(data)
         self.SenhaCaracteresEspeciais(data)
         self.SenhaLetraMaiuscula(data)
         self.SenhaContemNumero(data)
+        self.SenhaSemEspacos(data)
         return data
         
     def create(self, validated_data):
