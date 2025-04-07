@@ -19,13 +19,6 @@ class ProfissionalSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("A senha deve ter pelo menos 8 caracteres.")
         return data
     
-    def IdadeMaior18(self, data):
-        data = data["dataNascimento"]
-        hoje = datetime.date.today()
-        idade = hoje.year - data.year - ((hoje.month, hoje.day) < (data.month, data.day))
-        if idade < 18:
-            raise serializers.ValidationError("A pessoa deve ter pelo menos 18 anos.")
-    
     def SenhaLetraMaiuscula(self, data):
         if not re.search(r'[A-Z]', data["password"]):
             raise serializers.ValidationError("A senha deve conter pelo menos uma letra maiúscula.")
@@ -46,6 +39,13 @@ class ProfissionalSerializer(serializers.ModelSerializer):
         if " " in data["password"]:
             raise serializers.ValidationError("A senha não pode conter espaços.")
         return data
+    
+    def IdadeMaior18(self, data):
+        data = data["dataNascimento"]
+        hoje = datetime.date.today()
+        idade = hoje.year - data.year - ((hoje.month, hoje.day) < (data.month, data.day))
+        if idade < 18:
+            raise serializers.ValidationError("A pessoa deve ter pelo menos 18 anos.")
 
     def validate(self, data):
         self.Senha8Digitos(data)
