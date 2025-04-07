@@ -2,6 +2,7 @@ from rest_framework import serializers
 from clientes.models import Cliente, Endereco
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
+import re
 
 class ClienteSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only = True, style = {'input_type': 'password'})
@@ -17,6 +18,16 @@ class ClienteSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("A senha deve ter pelo menos 8 caracteres.")
         return data
         
+    def SenhaLetraMaiuscula(self, data):
+        if not re.search(r'[A-Z]', data["password"]):
+            raise serializers.ValidationError("A senha deve conter pelo menos uma letra maiúscula.")
+        return data
+    
+    def SenhaContemNumero(self, data):
+        if not re.search(r'[0-9]', data["password"]):
+            raise serializers.ValidationError("A senha deve conter pelo menos um número.")
+        return data
+        
     def SenhaCaracteresEspeciais(self, data):
         caracteres = ["!","@","#","$","%","^","&","*"]
         if not any(c in data["password"] for c in caracteres):
@@ -26,6 +37,8 @@ class ClienteSerializer(serializers.ModelSerializer):
     def validate(self, data):
         self.Senha8Digitos(data)
         self.SenhaCaracteresEspeciais(data)
+        self.SenhaLetraMaiuscula(data)
+        self.SenhaContemNumero(data)
         return data
         
     def create(self, validated_data):

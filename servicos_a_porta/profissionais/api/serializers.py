@@ -2,6 +2,7 @@ from rest_framework import serializers
 from profissionais.models import Profissao, Profissional
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
+import re
 
 class ProfissionalSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only = True, style = {'input_type': 'password'})
@@ -16,6 +17,16 @@ class ProfissionalSerializer(serializers.ModelSerializer):
         if len(data["password"]) < 8:
             raise serializers.ValidationError("A senha deve ter pelo menos 8 caracteres.")
         return data
+    
+    def SenhaLetraMaiuscula(self, data):
+        if not re.search(r'[A-Z]', data["password"]):
+            raise serializers.ValidationError("A senha deve conter pelo menos uma letra maiúscula.")
+        return data
+    
+    def SenhaContemNumero(self, data):
+        if not re.search(r'[0-9]', data["password"]):
+            raise serializers.ValidationError("A senha deve conter pelo menos um número.")
+        return data
         
     def SenhaCaracteresEspeciais(self, data):
         caracteres = ["!","@","#","$","%","^","&","*"]
@@ -26,6 +37,8 @@ class ProfissionalSerializer(serializers.ModelSerializer):
     def validate(self, data):
         self.Senha8Digitos(data)
         self.SenhaCaracteresEspeciais(data)
+        self.SenhaLetraMaiuscula(data)
+        self.SenhaContemNumero(data)
         return data
         
     def create(self, validated_data):
