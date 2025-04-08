@@ -2,6 +2,8 @@ from rest_framework import serializers
 from clientes.models import Cliente, Endereco
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
+import datetime
+import re
 
 class ClienteSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only = True, style = {'input_type': 'password'})
@@ -17,15 +19,41 @@ class ClienteSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("A senha deve ter pelo menos 8 caracteres.")
         return data
         
+    def SenhaLetraMaiuscula(self, data):
+        if not re.search(r'[A-Z]', data["password"]):
+            raise serializers.ValidationError("A senha deve conter pelo menos uma letra maiúscula.")
+        return data
+    
+    def SenhaContemNumero(self, data):
+        if not re.search(r'[0-9]', data["password"]):
+            raise serializers.ValidationError("A senha deve conter pelo menos um número.")
+        return data
+        
     def SenhaCaracteresEspeciais(self, data):
         caracteres = ["!","@","#","$","%","^","&","*"]
         if not any(c in data["password"] for c in caracteres):
             raise serializers.ValidationError("A senha deve conter caracteres especiais.")
         return data
+    
+    def SenhaSemEspacos(self, data):
+        if " " in data["password"]:
+            raise serializers.ValidationError("A senha não pode conter espaços.")
+        return data
+    
+    def IdadeMaior18(self, data):
+        data = data["dataNascimento"]
+        hoje = datetime.date.today()
+        idade = hoje.year - data.year - ((hoje.month, hoje.day) < (data.month, data.day))
+        if idade < 18:
+            raise serializers.ValidationError("A pessoa deve ter pelo menos 18 anos.")
 
     def validate(self, data):
         self.Senha8Digitos(data)
         self.SenhaCaracteresEspeciais(data)
+        self.SenhaLetraMaiuscula(data)
+        self.SenhaContemNumero(data)
+        self.SenhaSemEspacos(data)
+        self.IdadeMaior18(data)
         return data
         
     def create(self, validated_data):
