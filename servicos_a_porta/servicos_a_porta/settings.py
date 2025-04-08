@@ -91,7 +91,7 @@ DATABASES = {
         'NAME': 'servicosPorta',
         'USER': 'postgres',
         # Mudar PASSWORD conforme necessário. (Gustavo: 123456, Gabriel: 55555)
-        'PASSWORD': '123456',
+        'PASSWORD': '55555',
         'HOST': 'localhost'
     }
 }
@@ -210,6 +210,7 @@ LOGGING = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "http://localhost:5173",
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'midia')

@@ -1,11 +1,33 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styles from "../styles/login.module.css";
+import { useNavigate } from "react-router-dom";
+
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
 
     const togglePassword = () => {
         setShowPassword(!showPassword);
+    };
+    const navigate = useNavigate();
+
+    const handleLogin = async () => {
+        try {
+            const response = await axios.post("http://127.0.0.1:8000/api/token/", {
+                username: email,
+                password: password,
+            });
+            localStorage.setItem("access", response.data.access);
+            localStorage.setItem("refresh", response.data.refresh);
+            alert("Login bem-sucedido!");
+            navigate("/");
+        } catch (err) {
+            setError("Credenciais inválidas.");
+        }
     };
 
     useEffect(() => {
@@ -26,7 +48,12 @@ const Login = () => {
 
                             <div className={styles.inputcontainer}>
                                 <i className="fas fa-envelope"></i>
-                                <input placeholder="Email" type="email" />
+                                <input
+                                    placeholder="Usuário"
+                                    type="text"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
                             </div>
 
                             <div className={styles.inputcontainer}>
@@ -35,6 +62,8 @@ const Login = () => {
                                     id="password"
                                     placeholder="Senha"
                                     type={showPassword ? "text" : "password"}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                                 <i
                                     id="toggle-password"
@@ -42,7 +71,14 @@ const Login = () => {
                                     onClick={togglePassword}
                                     style={{ cursor: "pointer" }}
                                 ></i>
+                                {error && <p style={{ color: "red" }}>{error}</p>}
+
+                                <button onClick={handleLogin} className={styles.loginbutton}>
+                                    Entrar
+                                </button>
                             </div>
+
+                            
                         </div>
 
                         <div className={styles.loginimage}>
@@ -59,7 +95,7 @@ const Login = () => {
                                     Ainda não <br /> tem uma conta?
                                 </h3>
                                 <p>Crie agora mesmo.</p>
-                                <a className={styles.registeraccount} href="register.html">
+                                <a className={styles.registeraccount} href="/register">
                                     <button className={styles.registerbutton} type="button">
                                         Cadastrar
                                     </button>

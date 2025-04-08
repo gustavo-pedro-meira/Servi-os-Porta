@@ -1,31 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaSearch } from "react-icons/fa"; // Importe o ícone de lupa
+import { FaSearch } from "react-icons/fa";
 import styles from "../styles/page.module.css";
 
 const Home = () => {
-
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Checa se o usuário está logado
+  useEffect(() => {
+    const token = localStorage.getItem("access");
+    setIsLoggedIn(!!token);
+  }, []);
+
+  // Faz o logout
+  const handleLogout = () => {
+    const confirmLogout = window.confirm("Tem certeza que deseja sair?");
+    if (confirmLogout) {
+      localStorage.removeItem("access");
+      localStorage.removeItem("refresh");
+      setIsLoggedIn(false);
+      navigate("/");
+    }
+  };
 
   return (
     <main className={styles.mainClass}>
       <nav className={styles.nav}>
         <img src="#" alt="Logo" />
         <div className={styles.navcontent}>
-          <p onClick={() => document.getElementById("contato").scrollIntoView({behavior: "smooth"})}>
+          <p onClick={() => document.getElementById("contato").scrollIntoView({ behavior: "smooth" })}>
             Fale Conosco
           </p>
           <p onClick={() => document.getElementById("sobre").scrollIntoView({ behavior: "smooth" })}>
             Sobre Nós
           </p>
-          <p onClick={() => document.getElementById("como_funciona").scrollIntoView({behavior: "smooth"})}>
+          <p onClick={() => document.getElementById("como_funciona").scrollIntoView({ behavior: "smooth" })}>
             Como Funciona?
           </p>
           <button onClick={() => navigate("/bio")} type="button">Seja um Profissional</button>
-          <button type="button">Entrar</button>
+
+          {isLoggedIn ? (
+            <button onClick={handleLogout} type="button">Logout</button>
+          ) : (
+            <button onClick={() => navigate("/login")} type="button">Entrar</button>
+          )}
         </div>
       </nav>
-
       <section className={styles.section_one}>
         <div className={styles.services_div}>
           <div className={styles.info}>

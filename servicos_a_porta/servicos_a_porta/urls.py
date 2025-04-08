@@ -38,6 +38,7 @@ router.register('servicos', ServicoViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('api/', include('clientes.urls')),
     path('api/token/', TokenObtainPairView.as_view(),name='token_obtain_pair'),
     path('api/token/refresh/', TokenObtainPairView.as_view(), name='token_refresh'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
