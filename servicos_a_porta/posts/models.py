@@ -47,9 +47,9 @@ class PostServico(BaseModel):
 class ComentarioPost(BaseModel):
     conteudo = models.TextField()
     dataCriacao = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    post = models.OneToOneField(PostServico, on_delete=models.CASCADE)
+    post = models.OneToOneField(PostServico, on_delete=models.CASCADE, blank=True, null=True)
     curtidas = models.BigIntegerField(default=0, blank=True, null=True)
-    profissional = models.ForeignKey(Profissional, on_delete=models.CASCADE)
+    profissional = models.ForeignKey(Profissional, on_delete=models.CASCADE, blank=True, null=True)
     
     def __str__(self):
         return self.conteudo

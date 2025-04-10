@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'behave_django',
+    'drf_yasg',
     'rest_framework_simplejwt',
     'corsheaders',
     'clientes',
@@ -213,7 +214,7 @@ LOGGING = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
+    "http://10.0.0.148:3000",
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'midia')
