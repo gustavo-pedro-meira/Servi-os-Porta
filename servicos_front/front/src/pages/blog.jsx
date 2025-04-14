@@ -1,11 +1,22 @@
 import React, { useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 import styles from "../styles/blog.module.css";
+import { useNavigate } from "react-router-dom";
+
 
 const Blog = () => {
+  const navigate = useNavigate();
+
   useEffect(() => {
     window.scrollTo(0, 0);
+  
+    const token = localStorage.getItem("access");
+  
+    if (!token) {
+      navigate("/login"); // ou o caminho da sua página de login
+    }
   }, []);
+  
 
   return (
     <main className={styles.mainClass}>
