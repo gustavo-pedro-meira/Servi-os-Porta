@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import styles from "../styles/blog.module.css";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,64 @@ import { useNavigate } from "react-router-dom";
 
 const Blog = () => {
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [profissionais, setProfissionais] = useState([]);
+  const [cep, setCep] = useState("");
+  const [estado, setEstado] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [nivel, setNivel] = useState("");
+
+  const handleCepChange = async (e) => {
+    const novoCep = e.target.value;
+    setCep(novoCep);
+
+    if (novoCep.length === 8) {
+      try {
+        const response = await fetch(`https://viacep.com.br/ws/${novoCep}/json/`);
+        if (response.status === 200) {
+          const data = await response.json();
+          if (!data.erro) {
+            setEstado(data.uf);
+            setCidade(data.localidade);
+          } else {
+            alert('CEP não encontrado.');
+            setEstado('');
+            setCidade('');
+          }
+        } else {
+          alert('Erro ao consultar o CEP.');
+          setEstado('');
+          setCidade('');
+        }
+      } catch (error) {
+        console.error('Erro ao consultar o CEP:', error);
+        alert('Erro ao consultar o CEP.');
+        setEstado('');
+        setCidade('');
+      }
+    }
+  };
+
+  const handleSearch = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/profissionais/?search=${searchTerm}`);
+      const data = await response.json();
+      setProfissionais(data);
+      navigate('/resultados', { state: { profissionais: data } });
+    } catch (error) {
+      console.error("Erro ao buscar profissionais:", error);
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -40,45 +98,19 @@ const Blog = () => {
                 className={styles.inputsearch}
                 type="text"
                 placeholder="Buscar"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                onKeyDown={handleKeyPress}
               />
               <FaSearch className={styles.searchIcon} />
             </div>
           </div>
 
           <div className={styles.buttons_list}>
-            <input className={styles.input_select} type="number" placeholder="CEP" />
-            <input className={styles.input_select} type="text" id="estados" placeholder="Estado" list="lista-estados" />
-            <datalist id="lista-estados">
-              <option value="Acre" />
-              <option value="Alagoas" />
-              <option value="Amapá" />
-              <option value="Amazonas" />
-              <option value="Bahia" />
-              <option value="Ceará" />
-              <option value="Distrito Federal" />
-              <option value="Espírito Santo" />
-              <option value="Goiás" />
-              <option value="Maranhão" />
-              <option value="Mato Grosso" />
-              <option value="Mato Grosso do Sul" />
-              <option value="Minas Gerais" />
-              <option value="Pará" />
-              <option value="Paraíba" />
-              <option value="Paraná" />
-              <option value="Pernambuco" />
-              <option value="Piauí" />
-              <option value="Rio de Janeiro" />
-              <option value="Rio Grande do Norte" />
-              <option value="Rio Grande do Sul" />
-              <option value="Rondônia" />
-              <option value="Roraima" />
-              <option value="Santa Catarina" />
-              <option value="São Paulo" />
-              <option value="Sergipe" />
-              <option value="Tocantins" />
-            </datalist>
-            <input className={styles.input_select} type="text" id="cidades" placeholder="Cidade" />
-            <input className={styles.input_select} type="text" id="nivel" placeholder="Nivel Profissional" list="lista-nivel" />
+            <input className={styles.input_select} onChange={handleCepChange} value={cep} type="text" placeholder="  CEP" />
+            <input className={styles.input_select} onChange={(e) => setEstado(e.target.value)} value={estado} type="text" id="  estados" placeholder="Estado" list="lista-estados" />
+            <input className={styles.input_select} onChange={(e) => setCidade(e.target.value)} value={cidade} type="text" id="  cidades" placeholder="Cidade" />
+            <input className={styles.input_select} onChange={(e) => setNivel(e.target.value)} value={nivel} type="text" id="  nivel" placeholder="Nivel Profissional" list="lista-nivel" />
             <datalist id="lista-nivel">
               <option value="Estagiário" />
               <option value="Júnior" />

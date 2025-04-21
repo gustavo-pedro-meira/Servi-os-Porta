@@ -6,6 +6,29 @@ import styles from "../styles/page.module.css";
 const Home = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [profissionais, setProfissionais] = useState([]);
+
+  const handleSearch = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/profissionais/?search=${searchTerm}`);
+      const data = await response.json();
+      setProfissionais(data);
+      navigate('/resultados', { state: { profissionais: data } });
+    } catch (error) {
+      console.error("Erro ao buscar profissionais:", error);
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
   // Checa se o usuário está logado
   useEffect(() => {
@@ -23,6 +46,7 @@ const Home = () => {
       navigate("/");
     }
   };
+
 
   return (
     <main className={styles.mainClass}>
@@ -68,9 +92,15 @@ const Home = () => {
               <input
                 className={styles.inputsearch}
                 type="text"
-                placeholder="Buscar"
+                placeholder="Buscar profissionais"
+                value={searchTerm} // Vincula o valor ao estado
+                onChange={handleSearchChange} // Atualiza o estado ao digitar
+                onKeyPress={handleKeyPress} // Dispara busca ao pressionar Enter
               />
-              <FaSearch className={styles.searchIcon} />
+              <FaSearch
+                className={styles.searchIcon}
+                onClick={handleSearch} // Dispara busca ao clicar no ícone
+              />
             </div>
           </div>
         </div>
@@ -191,7 +221,7 @@ const Home = () => {
           </div>
         </div>
 
-        <button className={styles.more_button} type="button">Contratar Serviço</button>
+        <button className={styles.more_button} onClick={() => navigate("/blog")} type="button">Contratar Serviço</button>
         
         <div id="sobre" className={styles.title_unicos}>
           <span className={styles.line}></span>

@@ -218,9 +218,7 @@ LOGGING = {
     }
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "http://10.0.0.148:3000",
-]
+CORS_ALLOW_ALL_ORIGINS = True
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'midia')
 MEDIA_URL = '/midia/'
