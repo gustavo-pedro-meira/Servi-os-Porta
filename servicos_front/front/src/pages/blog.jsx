@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import styles from "../styles/blog.module.css";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
 
 const Blog = () => {
   const navigate = useNavigate();
@@ -65,6 +65,7 @@ const Blog = () => {
     }
   };
 
+
   useEffect(() => {
     window.scrollTo(0, 0);
   
@@ -73,6 +74,27 @@ const Blog = () => {
     if (!token) {
       navigate("/login"); // ou o caminho da sua página de login
     }
+
+    const buscarProfissionais = async () => {      
+      try {
+        const response = await axios.get(`http://localhost:8000/api/profissionais/?t=${Date.now()}`);
+        console.log("Dados Recebidos:", response.data);
+        setProfissionais(Array.isArray(response.data) ? response.data : []);
+        if (Array.isArray(response.data)) {
+          setProfissionais(response.data);
+        } else if (Array.isArray(response.data.results)) {
+          setProfissionais(response.data.results);
+        } else {
+          setProfissionais([]);
+          console.error('Erro ao buscar profissionais', error);
+        }
+      } catch (error) {
+        console.error('Erro na requisição:', error);
+      }
+    };
+
+    buscarProfissionais();
+
   }, []);
   
 
@@ -107,10 +129,10 @@ const Blog = () => {
           </div>
 
           <div className={styles.buttons_list}>
-            <input className={styles.input_select} onChange={handleCepChange} value={cep} type="text" placeholder="  CEP" />
-            <input className={styles.input_select} onChange={(e) => setEstado(e.target.value)} value={estado} type="text" id="  estados" placeholder="Estado" list="lista-estados" />
-            <input className={styles.input_select} onChange={(e) => setCidade(e.target.value)} value={cidade} type="text" id="  cidades" placeholder="Cidade" />
-            <input className={styles.input_select} onChange={(e) => setNivel(e.target.value)} value={nivel} type="text" id="  nivel" placeholder="Nivel Profissional" list="lista-nivel" />
+            <input className={styles.input_select} onChange={handleCepChange} value={cep} type="text" placeholder="CEP" />
+            <input className={styles.input_select} onChange={(e) => setEstado(e.target.value)} value={estado} type="text" id="estados" placeholder="Estado" list="lista-estados" />
+            <input className={styles.input_select} onChange={(e) => setCidade(e.target.value)} value={cidade} type="text" id="cidades" placeholder="Cidade" />
+            <input className={styles.input_select} onChange={(e) => setNivel(e.target.value)} value={nivel} type="text" id="nivel" placeholder="Nivel Profissional" list="lista-nivel" />
             <datalist id="lista-nivel">
               <option value="Estagiário" />
               <option value="Júnior" />
@@ -123,60 +145,24 @@ const Blog = () => {
         </div>
 
         <div className={styles.div_perfil}>
-          <div className={styles.perfil}>
-            <div className={styles.perfil_image}>
-              <img className={styles.image} src="gustavo.jpg" alt="Gustavo Pedro" />
+          {Array.isArray(profissionais) && profissionais.map((profissional) => (
+            console.log(profissional),
+            <div className={styles.perfil} key={profissional.id}>
+              <div className={styles.perfil_image}>
+                <img
+                  className={styles.image}
+                  src={profissional.foto_perfil ? profissional.foto_perfil : '/default.jpg'}
+                  alt={profissional.nome}
+                  onError={(e) => (e.target.src = '/default.jpg')}
+                />
+              </div>  
+              <div className={styles.perfil_info}>
+                <h3>{profissional.nome}</h3>
+                <h5 className={styles.perfil_funcao}>{profissional.profissao}</h5>
+                <p className={styles.perfil_paragrafo}>{profissional.descricao}</p>
+              </div>
             </div>
-            <div className={styles.perfil_info}>
-              <h3>Gustavo Pedro</h3>
-              <h5 className={styles.perfil_funcao}>Pedreiro</h5>
-              <p className={styles.perfil_paragrafo}>Tenho 20 anos.</p>
-            </div>
-          </div>
-
-          <div className={styles.perfil}>
-            <div className={styles.perfil_image}>
-              <img className={styles.image} src="/gabriel.jpg" alt="Gabriel França" />
-            </div>
-            <div className={styles.perfil_info}>
-              <h3>Gabriel França</h3>
-              <h5 className={styles.perfil_funcao}>Montador de Móveis</h5>
-              <p className={styles.perfil_paragrafo}>Fanático por montar móveis.</p>
-            </div>
-          </div>
-
-          <div className={styles.perfil}>
-            <div className={styles.perfil_image}>
-              <img className={styles.image} src="/angelica1.jpeg" alt="Angélica Felix" />
-            </div>
-            <div className={styles.perfil_info}>
-              <h3>Angélica Felix</h3>
-              <h5 className={styles.perfil_funcao}>Cuidadora de Idosos</h5>
-              <p className={styles.perfil_paragrafo}>Sempre ajudando aqueles que precisam de ajuda.</p>
-            </div>
-          </div>
-
-          <div className={styles.perfil}>
-            <div className={styles.perfil_image}>
-              <img className={styles.image} src="/matheus.jpeg" alt="Matheus Lima" />
-            </div>
-            <div className={styles.perfil_info}>
-              <h3>Matheus Lima</h3>
-              <h5 className={styles.perfil_funcao}>Encanador</h5>
-              <p className={styles.perfil_paragrafo}>Evitando risco em sua residência.</p>
-            </div>
-          </div>
-
-          <div className={styles.perfil}>
-            <div className={styles.perfil_image}>
-              <img className={styles.image} src="/pablo.jpeg" alt="Pablo Roberto" />
-            </div>
-            <div className={styles.perfil_info}>
-              <h3>Pablo Roberto</h3>
-              <h5 className={styles.perfil_funcao}>Diarista</h5>
-              <p className={styles.perfil_paragrafo}>Prazer, sou Pablo diarista.</p>
-            </div>
-          </div>
+          ))}
 
           <h5 className={styles.aviso_pagina}>(Aqui será inserido a paginação).</h5>
         </div>

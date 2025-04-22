@@ -220,7 +220,7 @@ LOGGING = {
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'midia')
-MEDIA_URL = '/midia/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 USE_DJANGO_JQUERY = True

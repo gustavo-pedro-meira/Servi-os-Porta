@@ -51,6 +51,7 @@ class Profissional(User):
     dataInicio = models.DateField()
     idProfissao = models.ForeignKey('Profissao', on_delete=models.CASCADE, related_name='profissionais')
     nome = models.CharField(max_length=100)
+    foto_perfil = models.ImageField(upload_to='profissionais/', blank=True, null=True)
     dataNascimento = models.DateField(default="2023-03-03")
     cpf = models.CharField(max_length=11)
     cep = models.CharField(max_length=8, null=False)
