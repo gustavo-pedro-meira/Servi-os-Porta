@@ -70,6 +70,9 @@
     width: 30vw;
     color: #595959;
     font-size: 14px;
+    max-width: 30vw; /* Limita a largura a aproximadamente 50 caracteres */
+    text-overflow: ellipsis; /* Adiciona "..." no final do texto cortado */
+    white-space: nowrap; /* Impede que o texto quebre em várias linhas */
 }
 
 .image {
@@ -137,6 +140,8 @@ body {
 }
 
 .navcontent button:first-of-type {
+    background-color: #ffffff;
+    color: #595959;
     border-color: #38AFD1;
     border-width: 1px;
 }
