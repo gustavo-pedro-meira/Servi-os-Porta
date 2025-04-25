@@ -24,7 +24,7 @@ class ProfissionalViewSet(viewsets.ModelViewSet):
         if query:
             queryset = queryset.annotate(
                 similarity=TrigramSimilarity('nome', query) 
-            ).filter(similarity__gt=0.2).order_by('-similarity')
+            ).filter(similarity__gt=0.1).order_by('-similarity')
         return queryset
     
 class ProfissaoViewSet(viewsets.ModelViewSet):

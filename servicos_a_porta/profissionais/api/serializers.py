@@ -11,7 +11,7 @@ class ProfissionalSerializer(serializers.ModelSerializer):
     profissao = serializers.CharField(source='idProfissao.nome', read_only=True)
     class Meta:
         model = Profissional
-        fields = ["nome", "dataNascimento", "descricao", "nivel_profissional", "foto_perfil" , "cpf", "cep", "estado", "cidade", "dataInicio", "profissao", "username", "numero", "email", "password"]
+        fields = ["nome", "dataNascimento", "descricao", "nivel_profissional", "foto_perfil" , "idProfissao", "cpf", "cep", "estado", "cidade", "dataInicio", "profissao", "username", "numero", "email", "password"]
         write_only_fields = ('password')
         read_only_fields = ('is_staff', 'is_superuser', 'is_active')
         

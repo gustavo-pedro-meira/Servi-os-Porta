@@ -3,6 +3,7 @@ import { FaSearch } from "react-icons/fa";
 import styles from "../styles/blog.module.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import debounce from "lodash/debounce";
 
 const Blog = () => {
   const navigate = useNavigate();
@@ -46,6 +47,7 @@ const Blog = () => {
       setEstado("");
       setCidade("");
     }
+    
   };
 
   // Busca por termo
@@ -53,7 +55,7 @@ const Blog = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/profissionais/?search=${searchTerm}`
+        `http://localhost:8000/api/profissionais/?search=${searchTerm}&cep=${cep}&estado=${estado}&cidade=${cidade}&nivel_profissional=${nivel}&t=${Date.now()}`
       );
       const data = Array.isArray(response.data)
         ? response.data
@@ -61,7 +63,6 @@ const Blog = () => {
         ? response.data.results
         : [];
       setProfissionais(data);
-      navigate("/resultados", { state: { profissionais: data } });
     } catch (error) {
       console.error("Erro ao buscar profissionais:", error);
       setProfissionais([]);
@@ -93,7 +94,7 @@ const Blog = () => {
     const buscarProfissionais = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get("http://localhost:8000/api/profissionais/", {
+        const response = await axios.get(`http://localhost:8000/api/profissionais/?t=${Date.now()}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         console.log("dados recebidos", response.data);
@@ -115,12 +116,13 @@ const Blog = () => {
     };
 
     buscarProfissionais();
-  }, [navigate]);
+    handleSearch();
+  }, [navigate, searchTerm, cep, estado, cidade, nivel]);
 
   return (
     <main className={styles.mainClass}>
       <nav className={styles.nav}>
-        <img src="/logo.png" alt="Logo" /> {/* Substitua por caminho válido */}
+        <img src="/logoservicos.png" alt="Logo" height={80} />
         <div className={styles.navcontent}>
           <p>Fale Conosco</p>
           <p>Sobre Nós</p>

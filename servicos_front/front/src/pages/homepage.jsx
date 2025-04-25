@@ -51,7 +51,7 @@ const Home = () => {
   return (
     <main className={styles.mainClass}>
       <nav className={styles.nav}>
-        <img src="#" alt="Logo" />
+        <img src="/logoservicos.png" alt="Logo" height={80} />
         <div className={styles.navcontent}>
           <p onClick={() => document.getElementById("contato").scrollIntoView({ behavior: "smooth" })}>
             Fale Conosco
@@ -92,7 +92,7 @@ const Home = () => {
               <input
                 className={styles.inputsearch}
                 type="text"
-                placeholder="Buscar profissionais"
+                placeholder="Buscar profissão"
                 value={searchTerm} // Vincula o valor ao estado
                 onChange={handleSearchChange} // Atualiza o estado ao digitar
                 onKeyPress={handleKeyPress} // Dispara busca ao pressionar Enter

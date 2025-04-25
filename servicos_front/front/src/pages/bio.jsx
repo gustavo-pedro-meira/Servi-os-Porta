@@ -1,12 +1,63 @@
 import React from "react";
 import { FaWhatsapp } from "react-icons/fa";
 import styles from "../styles/bio.module.css";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
 
 const Bio = () => {
-  return (
+  const [profissional, setProfissional] = useState(null);
+  const [profissionais, setProfissionais] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProfissional = async () => {
+      try {
+        setIsLoading(true);
+        const response = await axios.get(`http://localhost:8000/api/profissionais/78/?t=${Date.now()}`);
+        console.log("Resposta da API:", response.data);
+        setProfissional(response.data); // Ajuste se necessário, ex.: response.data.profissional
+      } catch (error) {
+        console.error("Erro ao buscar profissional:", error);
+        setError("Não foi possível carregar os dados do profissional.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchProfissional();
+  
+  const buscarProfissionais = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(`http://localhost:8000/api/profissionais/?t=${Date.now()}`);
+      console.log("Resposta da API:", response.data);
+      setProfissionais(response.data.results);
+    } catch (error) {
+      console.error("Erro ao buscar profissionais:", error);
+      setProfissionais([]);
+      if (error.response?.status === 401) {
+        navigate("/login"); // Token inválido ou expirado
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  buscarProfissionais();
+  },[]);
+
+ 
+  const outrosProfissionais = profissionais
+    .filter((p) => p.id !== 78 && p.profissao === profissional?.profissao)
+    .slice(0, 4);
+    
+  console.log(profissionais);
+
+    return (
     <main className={styles.mainClass}>
       <nav className={styles.nav}>
-        <img src="#" alt="Logo" />
+        <img src="/logoservicos.png" alt="Logo" height={80} />
         <div className={styles.navcontent}>
           <p>Fale Conosco</p>
           <p>Sobre Nós</p>
@@ -17,31 +68,29 @@ const Bio = () => {
       </nav>
 
       <section className={styles.section_one}>
-        <div className={styles.profissional_div}>
-          <div className={styles.profissional_imagem}>
-            <img src="./angelica.png"></img>
+        {profissional ? (
+          <div className={styles.profissional_div}>
+            <div className={styles.profissional_imagem}>
+              <img src={profissional.foto_perfil} alt={profissional.nome} height={270} width={180}></img>
           </div>
 
-          <div className={styles.profissional_info}>
-            <h3 className={styles.nome_prof}>Angelica Felix</h3>
-            <p>Patos - PB, 25 anos</p>
-            <p>Cuidadora de Idosos</p>
-            <h5>Apresentação</h5>
-            <p className={styles.apresentacao_bio}>
-                Meu nome é Angélica Felix, tenho 25 anos e sou de Patos, PB.Trabalho como cuidadora de idosos, uma profissão que exerço
-                com muito carinho e dedicação. Minha missão é proporcionar
-                conforto, atenção e qualidade de vida para aqueles que precisam
-                de cuidados especiais. Gosto de criar um ambiente acolhedor,
-                ajudando nas atividades do dia a dia, oferecendo companhia e
-                garantindo que cada idoso se sinta respeitado e bem assistido.
-                Para mim, cuidar é mais do que uma profissão, é um ato de amor e empatia.
-            </p>
+            <div className={styles.profissional_info}>
+              <h3 className={styles.nome_prof}>{profissional.nome}</h3>
+              <p>{profissional.cidade} - {profissional.estado}, {profissional.idade} anos</p>
+              <p>{profissional.profissao}</p>
+              <h5>Apresentação</h5>
+              <p className={styles.apresentacao_bio}>
+                {profissional.descricao}
+              </p>
           </div>
-        </div>
+          </div>
+        ) : (
+          <p>Carregando...</p>
+        )}
         <button 
             className={styles.whatsapp_button} 
             type="button"
-            onClick={() => window.open("https://wa.me/55123456789", "_blank")}
+            onClick={() => window.open(`https://wa.me/${profissional.numero}`, "_blank")}
         >
             <FaWhatsapp size={20} style={{ marginRight: "8px" }} />
             Fale com o Profissional
@@ -51,33 +100,19 @@ const Bio = () => {
             <h1 className={styles.destaque}>Outros profissionais que oferecem o mesmo serviço ou serviços semelhantes</h1>
 
             <div className={styles.services_info}>
-              <div className={styles.services_separator}>
-                <div className={styles.circle}>
-                  <img className={styles.circle_icon} src="/pedro.png" alt="Icon"></img> 
-                </div>
-                <p>Pedro Lucas</p>
-              </div>
+              {Array.isArray(outrosProfissionais) && outrosProfissionais.length > 0 ? (
+                outrosProfissionais.map((profissional) => (
+                  <div key={profissional.id} className={styles.services_separator}>
+                    <div className={styles.circle}>
+                      <img className={styles.circle_icon} src={profissional.foto_perfil} alt="Icon"></img> 
+                    </div>
+                    <p>{profissional.nome}</p>
 
-              <div className={styles.services_separator}>
-                <div className={styles.circle}>
-                  <img className={styles.circle_icon} src="/saulo.png" alt="Icon"></img>
-                </div>
-                <p>Saulo J.</p>
-              </div>
-
-              <div className={styles.services_separator}>
-                <div className={styles.circle}>
-                  <img className={styles.circle_icon} src="/charles.png" alt="Icon"></img>
-                </div>
-                <p>Charles Oliveira</p>
-              </div>
-
-              <div className={styles.services_separator}>
-                <div className={styles.circle}>
-                  <img className={styles.circle_icon} src="/fernando.png" alt="Icon"></img>
-                </div>
-                <p>Fernando Neto</p>
-              </div>
+                  </div>
+                ))
+              ) : (
+                <p>Nenhum outro profissional encontrado.</p>
+              )}
             </div>
           </div>
             <button className={styles.more_button} type="button">Ver Mais</button>
