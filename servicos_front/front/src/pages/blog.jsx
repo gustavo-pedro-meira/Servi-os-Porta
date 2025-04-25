@@ -14,6 +14,7 @@ const Blog = () => {
   const [cidade, setCidade] = useState("");
   const [nivel, setNivel] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isCepLoading, setIsCepLoading] = useState(false);
 
   // Função utilitária para cortar texto
   const truncateText = (text, maxLength = 100) => {
@@ -22,11 +23,11 @@ const Blog = () => {
   };
 
   // Validação de CEP
-  const handleCepChange = async (e) => {
-    const novoCep = e.target.value.replace(/\D/g, ""); // Remove não-dígitos
+  const debouncedCepChange = debounce(async (novoCep) => {
     setCep(novoCep);
 
     if (novoCep.length === 8) {
+      setIsCepLoading(true);
       try {
         const response = await axios.get(`https://viacep.com.br/ws/${novoCep}/json/`);
         if (response.data.erro) {
@@ -42,12 +43,25 @@ const Blog = () => {
         alert("Erro ao consultar o CEP.");
         setEstado("");
         setCidade("");
-      }
+      } finally {
+        setIsCepLoading(false);
+      } 
     } else {
       setEstado("");
       setCidade("");
     }
-    
+  }, 100);
+
+  const formatCep = (cep) => {
+    const onlyNumbers = cep.replace(/\D/g, "");
+    if (onlyNumbers.length <= 5) return onlyNumbers;
+    return `${onlyNumbers.slice(0, 5)}-${onlyNumbers.slice(5)}`;
+  };
+
+  const handleCepChange = (e) => {
+    const novoCep = e.target.value.replace(/\D/g, "");
+    setCep(formatCep(novoCep));
+    debouncedCepChange(novoCep);
   };
 
   // Busca por termo
@@ -57,11 +71,14 @@ const Blog = () => {
       const response = await axios.get(
         `http://localhost:8000/api/profissionais/?search=${searchTerm}&cep=${cep}&estado=${estado}&cidade=${cidade}&nivel_profissional=${nivel}&t=${Date.now()}`
       );
+      console.log("URL da requisição:", response.config.url);
+      console.log("Resposta da requisição:", response.data);
       const data = Array.isArray(response.data)
         ? response.data
         : Array.isArray(response.data.results)
         ? response.data.results
         : [];
+      console.log("Profissionais encontrados:", data);
       setProfissionais(data);
     } catch (error) {
       console.error("Erro ao buscar profissionais:", error);
@@ -113,11 +130,14 @@ const Blog = () => {
       } finally {
         setIsLoading(false);
       }
-    };
+    }
+
+    if (cep.length === 8 && estado && cidade){
+      handleSearch();
+    }
 
     buscarProfissionais();
-    handleSearch();
-  }, [navigate, searchTerm, cep, estado, cidade, nivel]);
+  }, [navigate]);
 
   return (
     <main className={styles.mainClass}>
@@ -156,8 +176,9 @@ const Blog = () => {
               value={cep}
               type="text"
               placeholder="CEP"
-              maxLength={8}
+              maxLength={9}
               pattern="\d*"
+              disabled={isCepLoading}
             />
             <input
               className={styles.input_select}
