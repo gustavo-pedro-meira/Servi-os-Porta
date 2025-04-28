@@ -1,33 +1,19 @@
 package main
 
-import (
-	"fmt"
-)
-
-// Função para verificar se um número é par ou ímpar
-func par(numero int) {
-	if numero%2 == 0 {
-		fmt.Println(numero, "é par")
-	} else {
-		fmt.Println(numero, "é ímpar")
-	}
-}
-
-func imprimirNome(nome string) {
-	fmt.Println("Olá,", nome + "!")
-	if nome == "João" {
-		fmt.Println("Que nome impressionante!")
-	} else {
-		fmt.Println("Que nome interessante!")
-	}
-}
+import "fmt"
 
 func main() {
-	var numero int
-	fmt.Print("Digite um número: ")
-	fmt.Scan(&numero)
-	
-	// Chama a função par
-	par(numero)
-	imprimirNome("João")
+    destino, diasViagem, custoDiario, orcamento := "Paris", 7, 190.10, 1200.00
+    custoViagem := float64(diasViagem) * custoDiario
+
+    if custoViagem > orcamento {
+        fmt.Println("Economize mais R$" , (custoViagem - orcamento))
+    } else {
+        fmt.Println("Você pode viajar!")
+    }
+    
+    fmt.Println("Planejando sua viagem para" , destino + "!" )
+    fmt.Println("Duração:" , diasViagem, "dias")
+    fmt.Println("Custo diário: R$" , custoDiario)
+    fmt.Println("Custo total: R$", custoViagem)
 }

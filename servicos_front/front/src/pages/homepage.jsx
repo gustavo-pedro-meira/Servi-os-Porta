@@ -1,3 +1,6 @@
+
+
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
@@ -7,16 +10,19 @@ const Home = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [profissionais, setProfissionais] = useState([]);
 
   const handleSearch = async () => {
-    try {
-      const response = await fetch(`http://localhost:8000/api/profissionais/?search=${searchTerm}`);
-      const data = await response.json();
-      setProfissionais(data);
-      navigate('/resultados', { state: { profissionais: data } });
-    } catch (error) {
-      console.error("Erro ao buscar profissionais:", error);
+    if (searchTerm.trim()) {
+      try {
+        // Busca opcional para verificar profissões (pode ser removida se não for necessária)
+        await fetch(`http://localhost:8000/api/profissoes/?search=${searchTerm}`);
+        // Navega para ListaProfissionais, passando o termo de busca
+        navigate("/listar", { state: { searchTerm } });
+      } catch (error) {
+        console.error("Erro ao buscar Profissões:", error);
+        // Mesmo com erro, navega com o termo digitado
+        navigate("/listar", { state: { searchTerm } });
+      }
     }
   };
 
@@ -25,18 +31,16 @@ const Home = () => {
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSearch();
     }
   };
 
-  // Checa se o usuário está logado
   useEffect(() => {
     const token = localStorage.getItem("access");
     setIsLoggedIn(!!token);
   }, []);
 
-  // Faz o logout
   const handleLogout = () => {
     const confirmLogout = window.confirm("Tem certeza que deseja sair?");
     if (confirmLogout) {
@@ -46,7 +50,6 @@ const Home = () => {
       navigate("/");
     }
   };
-
 
   return (
     <main className={styles.mainClass}>
@@ -63,9 +66,8 @@ const Home = () => {
             Como Funciona?
           </p>
           <button onClick={() => navigate("/bio")} type="button">Seja um Profissional</button>
-
           {isLoggedIn ? (
-            <button onClick={handleLogout} type="button">Logout</button>
+            <button onClick={handleLogout} type="button">Sair</button>
           ) : (
             <button onClick={() => navigate("/login")} type="button">Entrar</button>
           )}
@@ -79,11 +81,9 @@ const Home = () => {
               <span className={styles.destaque}>Serviços à Porta.</span>
             </p>
           </div>
-
           <div className={styles.mainimage}>
             <img className={styles.engenheiro} src="/Engenheiro.png" alt="Imagem" />
           </div>
-
           <div className={styles.search}>
             <h1 className={styles.searchtitle}>
               Um método moderno para <span className={styles.destaque}>contratar profissionais</span>
@@ -93,60 +93,51 @@ const Home = () => {
                 className={styles.inputsearch}
                 type="text"
                 placeholder="Buscar profissão"
-                value={searchTerm} // Vincula o valor ao estado
-                onChange={handleSearchChange} // Atualiza o estado ao digitar
-                onKeyPress={handleKeyPress} // Dispara busca ao pressionar Enter
+                value={searchTerm}
+                onChange={handleSearchChange}
+                onKeyPress={handleKeyPress}
               />
-              <FaSearch
-                className={styles.searchIcon}
-                onClick={handleSearch} // Dispara busca ao clicar no ícone
-              />
+              <FaSearch className={styles.searchIcon} onClick={handleSearch} />
             </div>
           </div>
         </div>
-
-          <div className={styles.service_type}>
-            <h1 className={styles.destaque}>Principais Serviços</h1>
-
-            <div className={styles.services_info}>
-              <div className={styles.services_separator}>
-                <div className={styles.circle}>
-                  <img className={styles.circle_icon} src="/limpezadomestica.png" alt="Icon"></img>
-                </div>
-                <p>Limpeza Domésticas</p>
+        <div className={styles.service_type}>
+          <h1 className={styles.destaque}>Principais Serviços</h1>
+          <div className={styles.services_info}>
+            <div className={styles.services_separator}>
+              <div className={styles.circle}>
+                <img className={styles.circle_icon} src="/limpezadomestica.png" alt="Icon" />
               </div>
-                
-              <div className={styles.services_separator}>
-                <div className={styles.circle}>
-                  <img className={styles.circle_icon} src="/reparo.png" alt="Icon"></img> 
-                </div>
-                <p>Reparos e Manutenção</p>
+              <p>Limpeza Domésticas</p>
+            </div>
+            <div className={styles.services_separator}>
+              <div className={styles.circle}>
+                <img className={styles.circle_icon} src="/reparo.png" alt="Icon" />
               </div>
-
-              <div className={styles.services_separator}>
-                <div className={styles.circle}>
-                  <img className={styles.circle_icon} src="/servicoar.png" alt="Icon"></img>   
-                </div>
-                <p>Serviços de Ar-Condionado</p>
+              <p>Reparos e Manutenção</p>
+            </div>
+            <div className={styles.services_separator}>
+              <div className={styles.circle}>
+                <img className={styles.circle_icon} src="/servicoar.png" alt="Icon" />
               </div>
-
-              <div className={styles.services_separator}>
-                <div className={styles.circle}>
-                  <img className={styles.circle_icon} src="/transporte.png" alt="Icon"></img>
-                </div>
-                <p>Mudança e Transportes</p>
+              <p>Serviços de Ar-Condicionado</p>
+            </div>
+            <div className={styles.services_separator}>
+              <div className={styles.circle}>
+                <img className={styles.circle_icon} src="/transporte.png" alt="Icon" />
               </div>
-
-              <div className={styles.services_separator}>
-                <div className={styles.circle}>
-                  <img className={styles.circle_icon} src="/instalacoes.png" alt="Icon"></img>
-                </div>
-                <p>Instalações</p>
+              <p>Mudança e Transportes</p>
+            </div>
+            <div className={styles.services_separator}>
+              <div className={styles.circle}>
+                <img className={styles.circle_icon} src="/instalacoes.png" alt="Icon" />
               </div>
+              <p>Instalações</p>
             </div>
           </div>
-
+        </div>
       </section>
+
       <section className={styles.section_two}>
 
         <div className={styles.title_unicos}>
@@ -221,7 +212,7 @@ const Home = () => {
           </div>
         </div>
 
-        <button className={styles.more_button} onClick={() => navigate("/blog")} type="button">Contratar Serviço</button>
+        <button className={styles.more_button} onClick={() => navigate("/listar")} type="button">Contratar Serviço</button>
         
         <div id="sobre" className={styles.title_unicos}>
           <span className={styles.line}></span>

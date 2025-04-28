@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import styles from "../styles/blog.module.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import debounce from "lodash/debounce";
 
-const Blog = () => {
+const ListaProfissionais = () => {
   const navigate = useNavigate();
+  const location = useLocation(); // Para acessar o state passado por Home
   const [searchTerm, setSearchTerm] = useState("");
   const [profissionais, setProfissionais] = useState([]);
   const [cep, setCep] = useState("");
   const [estado, setEstado] = useState("");
   const [cidade, setCidade] = useState("");
   const [nivel, setNivel] = useState("");
+  const [profissao, setProfissao] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isCepLoading, setIsCepLoading] = useState(false);
+
 
   // Função utilitária para cortar texto
   const truncateText = (text, maxLength = 100) => {
@@ -25,7 +28,6 @@ const Blog = () => {
   // Validação de CEP
   const debouncedCepChange = debounce(async (novoCep) => {
     setCep(novoCep);
-
     if (novoCep.length === 8) {
       setIsCepLoading(true);
       try {
@@ -45,7 +47,7 @@ const Blog = () => {
         setCidade("");
       } finally {
         setIsCepLoading(false);
-      } 
+      }
     } else {
       setEstado("");
       setCidade("");
@@ -64,12 +66,19 @@ const Blog = () => {
     debouncedCepChange(novoCep);
   };
 
+  const handleProfissaoChange = (e) => {
+    setProfissao(e.target.value);
+  };
+
   // Busca por termo
   const handleSearch = async () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/profissionais/?search=${searchTerm}&cep=${cep}&estado=${estado}&cidade=${cidade}&nivel_profissional=${nivel}&t=${Date.now()}`
+        `http://localhost:8000/api/profissionais/?search=${searchTerm}&cep=${cep}&estado=${estado}&cidade=${cidade}&nivel_profissional=${nivel}&idProfissao=${profissao}&t=${Date.now()}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("access")}` },
+        }
       );
       console.log("URL da requisição:", response.config.url);
       console.log("Resposta da requisição:", response.data);
@@ -83,6 +92,9 @@ const Blog = () => {
     } catch (error) {
       console.error("Erro ao buscar profissionais:", error);
       setProfissionais([]);
+      if (error.response?.status === 401) {
+        navigate("/login");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -101,20 +113,27 @@ const Blog = () => {
   // Verificação de autenticação e busca inicial
   useEffect(() => {
     window.scrollTo(0, 0);
-
     const token = localStorage.getItem("access");
     if (!token) {
       navigate("/login");
       return;
     }
 
+    // Recebe o searchTerm do state (vindo de Home)
+    const initialSearchTerm = location.state?.searchTerm || "";
+    if (initialSearchTerm) {
+      setProfissao(initialSearchTerm); // Define o termo no campo profissão
+    }
+
     const buscarProfissionais = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8000/api/profissionais/?t=${Date.now()}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        console.log("dados recebidos", response.data);
+        const response = await axios.get(
+          `http://localhost:8000/api/profissionais/?idProfissao=${initialSearchTerm}&t=${Date.now()}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         const data = Array.isArray(response.data)
           ? response.data
           : Array.isArray(response.data.results)
@@ -125,19 +144,21 @@ const Blog = () => {
         console.error("Erro ao buscar profissionais:", error);
         setProfissionais([]);
         if (error.response?.status === 401) {
-          navigate("/login"); // Token inválido ou expirado
+          navigate("/login");
         }
       } finally {
         setIsLoading(false);
       }
-    }
+    };
 
-    if (cep.length === 8 && estado && cidade){
-      handleSearch();
+    // Executa a busca inicial se houver um searchTerm
+    if (initialSearchTerm) {
+      buscarProfissionais();
+    } else {
+      // Busca padrão sem filtros (como no código original)
+      buscarProfissionais();
     }
-
-    buscarProfissionais();
-  }, [navigate]);
+  }, [navigate, location.state]);
 
   return (
     <main className={styles.mainClass}>
@@ -151,7 +172,6 @@ const Blog = () => {
           <button type="button">Entrar</button>
         </div>
       </nav>
-
       <section className={styles.section_one}>
         <div className={styles.search_div}>
           <div className={styles.service_search}>
@@ -168,7 +188,6 @@ const Blog = () => {
               <FaSearch className={styles.searchIcon} />
             </div>
           </div>
-
           <div className={styles.buttons_list}>
             <input
               className={styles.input_select}
@@ -197,6 +216,13 @@ const Blog = () => {
             />
             <input
               className={styles.input_select}
+              onChange={handleProfissaoChange}
+              value={profissao}
+              type="text"
+              placeholder="Profissão"
+            />
+            <input
+              className={styles.input_select}
               onChange={(e) => setNivel(e.target.value)}
               value={nivel}
               type="text"
@@ -210,14 +236,12 @@ const Blog = () => {
             </datalist>
           </div>
         </div>
-
         <div className={styles.div_perfil}>
           {isLoading ? (
             <p>Carregando...</p>
           ) : Array.isArray(profissionais) && profissionais.length > 0 ? (
             profissionais.map((profissional) => (
-              
-              <div className={styles.perfil} key={profissional.id}>
+              <div className={styles.perfil} key={profissional.id} onClick={() => navigate(`/bio`)}>
                 <div className={styles.perfil_image}>
                   <img
                     className={styles.image}
@@ -238,11 +262,9 @@ const Blog = () => {
           ) : (
             <p>Nenhum profissional encontrado.</p>
           )}
-
           <h5 className={styles.aviso_pagina}>(Aqui será inserido a paginação).</h5>
         </div>
       </section>
-
       <footer className={styles.footer}>
         <div className={styles.footer_sobre}>
           <h3>Serviços à Porta</h3>
@@ -289,4 +311,4 @@ const Blog = () => {
   );
 };
 
-export default Blog;
+export default ListaProfissionais;

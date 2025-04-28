@@ -11,7 +11,7 @@ class ProfissionalViewSet(viewsets.ModelViewSet):
     queryset = models.Profissional.objects.all()
     serializer_class = serializers.ProfissionalSerializer
     filter_backends = [OrderingFilter, DjangoFilterBackend]
-    filterset_fields = ['cep', 'nivel_profissional']
+    filterset_fields = ['cep', 'nivel_profissional', 'idProfissao']
     ordering = ['nome']
 
     @method_decorator(cache_page(900))
