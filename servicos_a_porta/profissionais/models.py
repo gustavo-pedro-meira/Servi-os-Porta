@@ -62,6 +62,7 @@ class Profissional(User):
     
     def NumeroUnico(self):
         self.numero
+
     
     def CepAutomatico(self):
         url = f"https://viacep.com.br/ws/{self.cep}/json/"

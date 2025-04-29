@@ -95,7 +95,7 @@ body {
 .searchIcon {
     position: absolute;
     top: 19px;
-    left: 518px;
+    left: 513px;
     transform: translateY(-50%);
     color: #38AFD1;
 }
@@ -121,6 +121,81 @@ body {
     flex-direction: column;
     margin-top: 5vh;
 }
+
+.criar_postagem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.criar_publicacao {
+    background: #595959;
+    height: max-content;
+    min-height: 400px;
+    width: 50%;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.titulo_post {
+    color: #38AFD1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.linha_criar {
+    margin: 10px;
+    background: #C5C5C5;
+    height: 1px;
+}
+
+.campos_criar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.campos_criar img {
+    margin-top: -50px;
+    margin-right: 680px;
+}
+
+.campos_criar h3 {
+    color: #C5C5C5;
+    margin-right: 490px;
+}
+
+.campos_criar p {
+    margin-top: 10px;
+    margin-right: 400px;
+    color: #CECECE;
+}
+
+.input_arquivo {
+    display: none; /* Esconde o campo padrão */
+  }
+  
+.add_arquivo_label {
+    display: inline-block;
+    border-radius: 40px;
+    border: 1px solid #38AFD1;
+    padding: 10px 20px;
+    background-color: #f9f9f9;
+    color: #333;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.add_arquivo_label:hover {
+    background-color: #eefbff;
+    border-color: #2c8aa7;
+}
+  
 
 .posts {
     background: #F4F4F4;

@@ -131,6 +131,7 @@ const Home = () => {
             <div className={styles.services_separator}>
               <div className={styles.circle}>
                 <img className={styles.circle_icon} src="/instalacoes.png" alt="Icon" />
+                
               </div>
               <p>Instalações</p>
             </div>
@@ -184,7 +185,7 @@ const Home = () => {
           <img src="./post_gustavo.png" className={styles.post_image}></img>
           <img src="./post_joao.png" className={styles.post_image}></img>
         </div>
-        <button onClick={() => navigate("/blog")} className={styles.more_button} type="button">Ver Mais</button>
+        <button onClick={() => navigate("/posts")} className={styles.more_button} type="button">Ver Mais</button>
 
         <div id="como_funciona" className={styles.title_unicos}>
           <span className={styles.line}></span>

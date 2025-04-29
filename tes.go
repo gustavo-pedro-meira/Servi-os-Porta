@@ -15,5 +15,7 @@ func main() {
     fmt.Println("Planejando sua viagem para" , destino + "!" )
     fmt.Println("Duração:" , diasViagem, "dias")
     fmt.Println("Custo diário: R$" , custoDiario)
-    fmt.Println("Custo total: R$", custoViagem)
+    fmt.Println("Custo total da Viagem: R$", custoViagem)
 }
+
+func

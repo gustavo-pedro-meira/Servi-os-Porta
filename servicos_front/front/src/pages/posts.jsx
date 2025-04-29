@@ -56,6 +56,22 @@ const Posts = () => {
         </div>
       </section>
 
+      <section className={styles.criar_postagem}>
+        <div className={styles.criar_publicacao}>
+        <h2 className={styles.titulo_post}>Criar Publicação</h2>
+        <div className={styles.linha_criar}/>
+          <div className={styles.campos_criar}>
+            <img className={styles.img_perfil} src="/pablo.jpeg" alt="Img Perfil"/>
+            <h3>Pablo Roberto</h3>
+            <p>No que você está pensando, Pablo Roberto?</p>
+            <label htmlFor="arquivo" className={styles.add_arquivo_label}>
+              Adicionar Mídia
+            </label>
+            <input type="file" id="arquivo" name="arquivo" className={styles.input_arquivo} />
+          </div>
+        </div>
+      </section>
+
       <footer className={styles.footer}>
         <div className={styles.footer_sobre}>
           <h3>Serviços à Porta</h3>
