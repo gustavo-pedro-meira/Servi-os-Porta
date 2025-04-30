@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { FaSearch } from "react-icons/fa";
 import styles from "../styles/posts.module.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import debounce from "lodash/debounce";
-
 
 const Posts = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,67 +12,110 @@ const Posts = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [profissionais, setProfissionais] = useState([]);
 
+  // Função para buscar todos os posts
+  const fetchPosts = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(
+        `http://localhost:8000/api/posts/?t=${Date.now()}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("access")}` },
+        }
+      );
+      const data = Array.isArray(response.data)
+        ? response.data
+        : Array.isArray(response.data.results)
+        ? response.data.results
+        : [];
+      console.log("Posts encontrados:", data);
+      setPosts(data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Erro ao buscar posts:", error);
+      setPosts([]);
+      setIsLoading(false);
+    }
+  };
+
+  // Função para buscar profissionais
+  const fetchProfissionais = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/profissionais/?t=${Date.now()}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("access")}` },
+        }
+      );
+      const data = Array.isArray(response.data)
+        ? response.data
+        : Array.isArray(response.data.results)
+        ? response.data.results
+        : [];
+      console.log("Profissionais Encontrados:", data);
+      setProfissionais(data);
+    } catch (error) {
+      console.error("Erro ao buscar profissionais:", error);
+      setProfissionais([]);
+      setIsLoading(false);
+    }
+  };
+
+  // Função de busca
+  const handleSearch = async (term) => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(
+        `http://localhost:8000/api/posts/?search=${term}&t=${Date.now()}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("access")}` },
+        }
+      );
+      const data = Array.isArray(response.data)
+        ? response.data
+        : Array.isArray(response.data.results)
+        ? response.data.results
+        : [];
+      console.log("Posts encontrados na busca:", data);
+      setPosts(data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Erro ao buscar posts:", error);
+      setPosts([]);
+      setIsLoading(false);
+    }
+  };
+
+  // Função de busca com debounce
+  const debouncedSearch = useCallback(
+    debounce((term) => {
+      if (term) {
+        handleSearch(term);
+      } else {
+        fetchPosts();
+      }
+    }, 700),
+    []
+  );
+
+  // Função para lidar com a mudança no input
+  const handleSearchChange = (e) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+    debouncedSearch(term);
+  };
+
+  // Função para lidar com o pressionamento de teclas
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      debouncedSearch.cancel();
+      handleSearch(searchTerm);
+    }
+  };
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8000/api/posts/?t=${Date.now()}`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("access")}`}
-        })
-        const data = Array.isArray(response.data)
-          ? response.data
-          : Array.isArray(response.data.results)
-          ? response.data.results
-          : [];
-        console.log("Posts encontrados:", data);
-        setPosts(data);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Erro ao buscar posts:", error);
-        setPosts([]);
-        setIsLoading(false);
-      }
-    };
-
-    const fetchProfissionais = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8000/api/profissionais/?t=${Date.now()}`,{
-          headers: {Authorization: `Bearer ${localStorage.getItem("access")}`}
-        })
-        const data = Array.isArray(response.data)
-          ? response.data
-          : Array.isArray(response.data.results)
-          ? response.data.results
-          : [];
-        console.log("Profissionais Encontrados:", data)
-        setProfissionais(data);
-      } catch (error) {
-        console.error("Erro ao buscar profissionais:", error);
-        setProfissionais([]);
-        setIsLoading(false);
-      }
-    };
-
     fetchPosts();
     fetchProfissionais();
   }, []);
-
-
-  const handleSearch = async () => {
-    try {
-      const response = await axios.get(`http://localhost:8000/api/posts/?search=${searchTerm}&t=${Date.now()}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("access")}`}
-      })
-      setPosts(response.data);
-    } catch (error) {
-      console.error("Erro ao buscar posts:", error);
-      setIsLoading(false);
-    }
-  }
-
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  }
 
   // Função para abrir o modal
   const abrirModal = () => {
@@ -110,12 +152,13 @@ const Posts = () => {
                 placeholder="Buscar..."
                 value={searchTerm}
                 onChange={handleSearchChange}
+                onKeyDown={handleKeyDown}
               />
-              <FaSearch className={styles.searchIcon} />
-              <button
-                className={styles.button_publi}
-                onClick={abrirModal}
-              >
+              <FaSearch
+                className={styles.searchIcon}
+                onClick={() => handleSearch(searchTerm)}
+              />
+              <button className={styles.button_publi} onClick={abrirModal}>
                 Criar Publicação
               </button>
             </div>
@@ -123,44 +166,39 @@ const Posts = () => {
         </div>
       </section>
 
-      
       {isLoading ? (
         <p>Carregando...</p>
       ) : Array.isArray(posts) && posts.length > 0 ? (
-        posts.map((post) =>(
+        posts.map((post) => (
           <section className={styles.postagens} key={post.id}>
-          <div className={styles.posts}>
-            <img
-              className={styles.img_perfil}
-              src={post?.usuario?.foto_perfil || "/default.jpg"}
-              alt="Img Perfil"
-            />
-            <h3>{post?.usuario?.nome}</h3>
-            <h5>{post?.usuario?.profissao || "Profissão não informada"}</h5>
-            <p>{post?.titulo}</p>
-            <img
-              src={post?.conteudo || "/default.jpg"}
-              alt="Img Post"
-              className={styles.img_post}
-            />
-            <div className={styles.linha} />
-          </div>
-        </section>
+            <div className={styles.posts}>
+              <img
+                className={styles.img_perfil}
+                src={post?.usuario?.foto_perfil || "/default.jpg"}
+                alt="Img Perfil"
+              />
+              <h3>{post?.usuario?.nome}</h3>
+              <h5>{post?.usuario?.profissao || "Profissão não informada"}</h5>
+              <p>{post?.titulo}</p>
+              <img
+                src={post?.conteudo || "/default.jpg"}
+                alt="Img Post"
+                className={styles.img_post}
+              />
+              <div className={styles.linha} />
+            </div>
+          </section>
         ))
       ) : (
         <p>Nenhum post encontrado</p>
       )}
-        
-      {/* Modal de Criação de Publicação */}
+
       {isModalOpen && (
         <>
           <div className={styles.overlay} onClick={fecharModal}></div>
           <section className={styles.criar_postagem_modal}>
             <div className={styles.criar_publicacao}>
-              <button
-                className={styles.button_fechar}
-                onClick={fecharModal}
-              >
+              <button className={styles.button_fechar} onClick={fecharModal}>
                 X
               </button>
               <h2 className={styles.titulo_post}>Criar Publicação</h2>
@@ -172,7 +210,12 @@ const Posts = () => {
                   alt="Img Perfil"
                 />
                 <h3>Pablo Roberto</h3>
-                <input className={styles.text_post} type="text" placeholder="No que você está pensando, Pablo Roberto?"/>                <label
+                <input
+                  className={styles.text_post}
+                  type="text"
+                  placeholder="No que você está pensando, Pablo Roberto?"
+                />
+                <label
                   htmlFor="arquivo"
                   className={styles.add_arquivo_label}
                 >
@@ -190,10 +233,7 @@ const Posts = () => {
                   className={styles.input_arquivo}
                 />
               </div>
-              <button
-                type="button"
-                className={styles.button_postar}
-              >
+              <button type="button" className={styles.button_postar}>
                 Postar
               </button>
             </div>

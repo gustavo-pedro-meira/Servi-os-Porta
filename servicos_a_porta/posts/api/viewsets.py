@@ -4,11 +4,21 @@ from posts.api import serializers
 from rest_framework.permissions import IsAuthenticated
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from django.contrib.postgres.search import TrigramSimilarity
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = models.PostServico.objects.all()
     serializer_class = serializers.PostSerializer
     # permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = PostViewSet.queryset
+        query = self.request.query_params.get("search", None)
+        if query:
+            queryset = queryset.annotate(
+                similarity=TrigramSimilarity("titulo", query)
+            ).filter(similarity__gt=0.1).order_by("-similarity")
+        return queryset
     
     @method_decorator(cache_page(900))
     def dispatch(self, *args, **kwargs):
