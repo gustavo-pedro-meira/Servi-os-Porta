@@ -33,7 +33,7 @@ class BaseModel(models.Model):
         super(BaseModel, self).delete(**kwargs)
 
 class PostServico(BaseModel):
-    titulo = models.TextField()
+    titulo = models.TextField(null=True, blank=True)
     conteudo = models.ImageField(upload_to='imagem/', null=True, blank=True)
     dataCriacao = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     profissional = models.ForeignKey(Profissional, on_delete=models.CASCADE, blank=True, null=True)
@@ -41,7 +41,7 @@ class PostServico(BaseModel):
     curtidas = models.BigIntegerField(default=0, blank=True, null=True)
     
     def __str__(self):
-        return str(self.profissional)
+        return self.titulo
     
 
 class ComentarioPost(BaseModel):

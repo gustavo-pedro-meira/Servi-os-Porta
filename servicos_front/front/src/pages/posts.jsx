@@ -17,7 +17,7 @@ const Posts = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/posts/?t=${Date.now}`, {
+        const response = await axios.get(`http://localhost:8000/api/posts/?t=${Date.now()}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem("access")}`}
         })
         const data = Array.isArray(response.data)
@@ -136,10 +136,10 @@ const Posts = () => {
               alt="Img Perfil"
             />
             <h3>{post?.usuario?.nome}</h3>
-            <h5>{post?.usuario?.profissao || "Profissão não informado"}</h5>
-            <p>{post.titulo}</p>
+            <h5>{post?.usuario?.idProfissao?.nome || "Profissão não informado"}</h5>
+            <p>{post?.titulo}</p>
             <img
-              src={post?.midia || "/default.jpg"}
+              src={post?.conteudo || "/default.jpg"}
               alt="Img Post"
               className={styles.img_post}
             />

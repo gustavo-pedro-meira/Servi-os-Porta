@@ -14,6 +14,7 @@ class ProfissionalSerializer(serializers.ModelSerializer):
         fields = ["nome", "dataNascimento", "descricao", "nivel_profissional", "foto_perfil" , "idProfissao", "cpf", "cep", "estado", "cidade", "dataInicio", "profissao", "username", "numero", "email", "password"]
         write_only_fields = ('password')
         read_only_fields = ('is_staff', 'is_superuser', 'is_active')
+        ref_name = "ProfissionalSerializer"
         
     def Senha8Digitos(self, data):
         if len(data["password"]) < 8:
