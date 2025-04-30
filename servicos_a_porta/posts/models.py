@@ -41,7 +41,7 @@ class PostServico(BaseModel):
     curtidas = models.BigIntegerField(default=0, blank=True, null=True)
     
     def __str__(self):
-        return self.profissional
+        return str(self.profissional)
     
 
 class ComentarioPost(BaseModel):

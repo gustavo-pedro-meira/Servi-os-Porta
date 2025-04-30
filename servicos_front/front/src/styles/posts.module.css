@@ -122,6 +122,28 @@ body {
     margin-top: 5vh;
 }
 
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+}
+
+.criar_postagem_modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
 .criar_postagem {
     display: flex;
     justify-content: center;
@@ -129,12 +151,13 @@ body {
 }
 
 .criar_publicacao {
-    background: #595959;
+    background: #FFFFFF;
     height: max-content;
     min-height: 400px;
     width: 50%;
     border-radius: 20px;
     padding: 20px;
+    box-shadow: 0px 1px 3px rgb(0, 0, 0, 0.2);
 }
 
 .titulo_post {
@@ -164,31 +187,78 @@ body {
 }
 
 .campos_criar h3 {
-    color: #C5C5C5;
+    color: #595959;
     margin-right: 490px;
 }
 
-.campos_criar p {
+.text_post {
+    border: transparent;
+    border-radius: 0px;
     margin-top: 10px;
-    margin-right: 400px;
-    color: #CECECE;
+    margin-right: 100px;
+    width: 600px;
+    color: #747474;
 }
 
 .input_arquivo {
-    display: none; /* Esconde o campo padrão */
+    display: none;
   }
   
 .add_arquivo_label {
     display: inline-block;
     border-radius: 40px;
-    border: 1px solid #38AFD1;
-    padding: 10px 20px;
-    background-color: #f9f9f9;
-    color: #333;
+    border: 2px solid #38AFD1;
+    padding: 1px 20px;
+    background-color: transparent;
+    color: #38AFD1;
     font-family: Arial, sans-serif;
     font-size: 14px;
     cursor: pointer;
     transition: background-color 0.3s, border-color 0.3s;
+    width: 200px;
+    height: 20px;
+    margin: 5px;
+    position: absolute;
+    left: 400px;
+    margin-bottom: -450px;
+}
+
+
+.img_midia {
+    margin-left: 180px;
+    margin-bottom: 10px;
+}
+
+.button_postar {
+    height: 30px;
+    width: 100px;
+    background: #38AFD1;
+    color: #FFFFFF;
+    border-radius: 20px;
+    border: 2px solid transparent;
+    box-shadow: 0px 4px 3px rgba(0, 0, 0, 0.2);
+    margin-top: 200px;
+    margin-left: 300px;
+}
+
+.button_fechar {
+    position: absolute;
+    top: 35px;
+    right: 400px;
+    background: #C5C5C5;
+    color: white;
+    text-shadow: 0px 1px 2px rgd(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 100px;
+    height: 35px;
+    width: 35px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+  
+.button_fechar:hover {
+    background: #595959;
 }
 
 .add_arquivo_label:hover {
