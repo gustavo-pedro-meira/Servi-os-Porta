@@ -3,9 +3,10 @@ from posts import models
 from profissionais.models import Profissional
 
 class ProfissionalSerializer(serializers.ModelSerializer):
+    profissao = serializers.CharField(source='idProfissao.nome', read_only=True)
     class Meta:
         model = Profissional
-        fields = ["id", "nome", "idProfissao", "foto_perfil"]
+        fields = ["id", "nome", "idProfissao", "foto_perfil", "profissao"]
         ref_name = "PostProfissionalSerializer"
 
 

@@ -60,6 +60,7 @@ class Profissional(User):
     estado = models.CharField(max_length=100, blank=True, null=True)
     cidade = models.CharField(max_length=100, blank=True, null=True)
     
+    
     def NumeroUnico(self):
         self.numero
 

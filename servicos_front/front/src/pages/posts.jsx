@@ -136,7 +136,7 @@ const Posts = () => {
               alt="Img Perfil"
             />
             <h3>{post?.usuario?.nome}</h3>
-            <h5>{post?.usuario?.idProfissao?.nome || "Profissão não informado"}</h5>
+            <h5>{post?.usuario?.profissao || "Profissão não informada"}</h5>
             <p>{post?.titulo}</p>
             <img
               src={post?.conteudo || "/default.jpg"}
