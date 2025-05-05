@@ -36,12 +36,11 @@ class PostServico(BaseModel):
     titulo = models.TextField(null=True, blank=True)
     conteudo = models.ImageField(upload_to='imagem/', null=True, blank=True)
     dataCriacao = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    profissional = models.ForeignKey(Profissional, on_delete=models.CASCADE, blank=True, null=True)
-    idServico = models.ForeignKey(Servico, on_delete=models.CASCADE, blank=True, null=True)
+    profissional = models.ForeignKey(Profissional, on_delete=models.CASCADE)
     curtidas = models.BigIntegerField(default=0, blank=True, null=True)
     
     def __str__(self):
-        return self.titulo
+        return self.titulo or "Publicação sem título"
     
 
 class ComentarioPost(BaseModel):

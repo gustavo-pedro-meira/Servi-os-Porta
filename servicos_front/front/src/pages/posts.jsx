@@ -86,31 +86,25 @@ const Posts = () => {
   };
 
   // Função de busca com debounce
-  const debouncedSearch = useCallback(
-    debounce((term) => {
-      if (term) {
-        handleSearch(term);
-      } else {
-        fetchPosts();
-      }
-    }, 700),
-    []
-  );
+  
 
   // Função para lidar com a mudança no input
   const handleSearchChange = (e) => {
-    const term = e.target.value;
-    setSearchTerm(term);
-    debouncedSearch(term);
+    setSearchTerm(e.target.value);
   };
 
   // Função para lidar com o pressionamento de teclas
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      debouncedSearch.cancel();
-      handleSearch(searchTerm);
+      const term = e.target.value
+      if (term.trim()) {
+        handleSearch(term);
+      } else {
+        fetchPosts();
+      }
     }
   };
+
 
   useEffect(() => {
     fetchPosts();
@@ -167,7 +161,7 @@ const Posts = () => {
       </section>
 
       {isLoading ? (
-        <p>Carregando...</p>
+        <p className={styles.loading}>Carregando...</p>
       ) : Array.isArray(posts) && posts.length > 0 ? (
         posts.map((post) => (
           <section className={styles.postagens} key={post.id}>
@@ -210,10 +204,11 @@ const Posts = () => {
                   alt="Img Perfil"
                 />
                 <h3>Pablo Roberto</h3>
-                <input
+                <textarea
                   className={styles.text_post}
                   type="text"
                   placeholder="No que você está pensando, Pablo Roberto?"
+                  rows={17}
                 />
                 <label
                   htmlFor="arquivo"

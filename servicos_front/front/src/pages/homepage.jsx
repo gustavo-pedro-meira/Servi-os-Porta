@@ -1,28 +1,46 @@
-
-
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import styles from "../styles/page.module.css";
+import axios from "axios";
 
 const Home = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleSearch = async () => {
     if (searchTerm.trim()) {
       try {
-        // Busca opcional para verificar profissões (pode ser removida se não for necessária)
         await fetch(`http://localhost:8000/api/profissoes/?search=${searchTerm}`);
-        // Navega para ListaProfissionais, passando o termo de busca
         navigate("/listar", { state: { searchTerm } });
       } catch (error) {
         console.error("Erro ao buscar Profissões:", error);
-        // Mesmo com erro, navega com o termo digitado
         navigate("/listar", { state: { searchTerm } });
       }
+    }
+  };
+
+  const fetchPosts = async() => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(`http://localhost:8000/api/posts/?ordering=-dataCriacao&t=${Date.now()}`, {
+        headers: {Authorization: `Bearer ${localStorage.getItem("access")}`}
+      })
+      const data = Array.isArray(response.data)
+        ? response.data
+        : Array.isArray(response.data.results)
+        ? response.data.results
+        : [];
+      console.log("Posts Encontrados:", data);
+      setPosts(data);
+    } catch (error) {
+      console.error("Erro ao buscar posts:", error);
+      setPosts([]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -39,6 +57,7 @@ const Home = () => {
   useEffect(() => {
     const token = localStorage.getItem("access");
     setIsLoggedIn(!!token);
+    fetchPosts();
   }, []);
 
   const handleLogout = () => {
@@ -179,11 +198,25 @@ const Home = () => {
           <span className={styles.line}></span>
         </div>
 
-        {/* Somente representativo, será substituido futuramente */}
         <div className={styles.posts_blog}>
-          <img src="./post_pablo.png" className={styles.post_image}></img>
-          <img src="./post_gustavo.png" className={styles.post_image}></img>
-          <img src="./post_joao.png" className={styles.post_image}></img>
+          {isLoading ? (
+            <p>Carregando posts...</p>
+          ) : posts.length > 0 ? (
+            posts.slice(0,3).map((post) => (
+              <div className={styles.post_home} key={post.id || Math.random()}>
+                <img
+                  src={post.conteudo || "/default.jpg"} 
+                  alt={post.titulo || "Imagem do post"} 
+                  className={styles.post_image}
+                  onError={(e) => (e.target.src = "/default.jpg")} 
+                />
+                <h2>{post?.usuario?.nome}</h2>
+                <h4>{post.titulo || "Sem título"}</h4>
+              </div>
+            ))
+          ) : (
+            <p>Nenhum post encontrado</p>
+          )}
         </div>
         <button onClick={() => navigate("/posts")} className={styles.more_button} type="button">Ver Mais</button>
 

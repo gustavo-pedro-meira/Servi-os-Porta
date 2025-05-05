@@ -153,7 +153,7 @@ body {
 .criar_publicacao {
     background: #FFFFFF;
     height: max-content;
-    min-height: 400px;
+    max-height: 600px;
     width: 50%;
     border-radius: 20px;
     padding: 20px;
@@ -182,7 +182,7 @@ body {
 }
 
 .campos_criar img {
-    margin-top: -50px;
+    margin-top: -272px;
     margin-right: 680px;
 }
 
@@ -194,10 +194,12 @@ body {
 .text_post {
     border: transparent;
     border-radius: 0px;
+    outline: none;
     margin-top: 10px;
     margin-right: 100px;
     width: 600px;
     color: #747474;
+    resize: none;
 }
 
 .input_arquivo {
@@ -237,8 +239,8 @@ body {
     border-radius: 20px;
     border: 2px solid transparent;
     box-shadow: 0px 4px 3px rgba(0, 0, 0, 0.2);
-    margin-top: 200px;
-    margin-left: 300px;
+    margin-top: 12%;
+    margin-left: 43%;
     cursor: pointer;
 }
 
