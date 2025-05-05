@@ -1,6 +1,7 @@
 from django.db import models
 from servicos.models import Servico
 from django.utils import timezone
+from django.contrib.auth.models import User
 from profissionais.models import Profissional
 
 
@@ -32,6 +33,7 @@ class BaseModel(models.Model):
     def hard_delete (self, **kwargs):
         super(BaseModel, self).delete(**kwargs)
 
+
 class PostServico(BaseModel):
     titulo = models.TextField(null=True, blank=True)
     conteudo = models.ImageField(upload_to='imagem/', null=True, blank=True)
@@ -47,9 +49,19 @@ class ComentarioPost(BaseModel):
     conteudo = models.TextField()
     dataCriacao = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     post = models.OneToOneField(PostServico, on_delete=models.CASCADE, blank=True, null=True)
-    curtidas = models.BigIntegerField(default=0, blank=True, null=True)
     profissional = models.ForeignKey(Profissional, on_delete=models.CASCADE, blank=True, null=True)
     
     def __str__(self):
         return self.conteudo
     
+
+class Curtida(BaseModel):
+    post = models.ForeignKey(PostServico, on_delete=models.CASCADE, related_name='curtidas_post')
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='curtidas_usuario')
+    data_curtida = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('post', 'usuario')
+
+    def __str__(self):
+        return f"{self.usuario.username} curtiu {self.post.titulo}"
