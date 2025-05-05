@@ -36,7 +36,7 @@ class PostServico(BaseModel):
     titulo = models.TextField(null=True, blank=True)
     conteudo = models.ImageField(upload_to='imagem/', null=True, blank=True)
     dataCriacao = models.DateTimeField(auto_now_add=True, null=True, blank=True)
-    profissional = models.ForeignKey(Profissional, on_delete=models.CASCADE)
+    profissional = models.ForeignKey(Profissional, on_delete=models.CASCADE, blank=True, null=True)
     curtidas = models.BigIntegerField(default=0, blank=True, null=True)
     
     def __str__(self):

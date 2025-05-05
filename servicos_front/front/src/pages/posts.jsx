@@ -1,16 +1,21 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 import styles from "../styles/posts.module.css";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import debounce from "lodash/debounce";
 
 const Posts = () => {
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [profissionais, setProfissionais] = useState([]);
+  const [isProfissional, setIsProfissional] = useState(false); // Novo estado para verificar se é profissional
+  const [titulo, setTitulo] = useState(""); // Estado para o título do post
+  const [conteudo, setConteudo] = useState(null); // Estado para a imagem
+  const [error, setError] = useState(""); // Estado para mensagens de erro
+  const [currentUser, setCurrentUser] = useState(null); // Estado para o usuário atual
 
   // Função para buscar todos os posts
   const fetchPosts = async () => {
@@ -56,11 +61,40 @@ const Posts = () => {
     } catch (error) {
       console.error("Erro ao buscar profissionais:", error);
       setProfissionais([]);
-      setIsLoading(false);
     }
   };
 
-  // Função de busca
+  // Função para verificar se o usuário é profissional e obter dados do usuário
+  const checkProfissional = async () => {
+    const token = localStorage.getItem("access");
+    if (token) {
+      try {
+        const response = await axios.get(`http://localhost:8000/api/profissionais/?t=${Date.now()}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        // Verifica se há dados do profissional
+        if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+          setIsProfissional(true);
+          setCurrentUser(response.data[0]); // Armazena os dados do profissional
+        } else if (response.data && !Array.isArray(response.data)) {
+          setIsProfissional(true);
+          setCurrentUser(response.data); // Caso a API retorne um objeto diretamente
+        } else {
+          setIsProfissional(false);
+          setCurrentUser(null);
+        }
+      } catch (err) {
+        console.error("Erro ao verificar profissional:", err);
+        setIsProfissional(false);
+        setCurrentUser(null);
+      }
+    } else {
+      setIsProfissional(false);
+      setCurrentUser(null);
+    }
+  };
+
+  // Função para buscar posts com base no termo de busca
   const handleSearch = async (term) => {
     try {
       setIsLoading(true);
@@ -85,18 +119,15 @@ const Posts = () => {
     }
   };
 
-  // Função de busca com debounce
-  
-
-  // Função para lidar com a mudança no input
+  // Função para lidar com a mudança no input de busca
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  // Função para lidar com o pressionamento de teclas
+  // Função para lidar com o pressionamento de teclas no input de busca
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      const term = e.target.value
+      const term = e.target.value;
       if (term.trim()) {
         handleSearch(term);
       } else {
@@ -105,21 +136,66 @@ const Posts = () => {
     }
   };
 
+  // Função para criar um novo post
+  const handleCreatePost = async (e) => {
+    e.preventDefault();
+    setError("");
 
-  useEffect(() => {
-    fetchPosts();
-    fetchProfissionais();
-  }, []);
+    if (!titulo.trim()) {
+      setError("O título é obrigatório.");
+      return;
+    }
 
-  // Função para abrir o modal
+    const formData = new FormData();
+    formData.append("titulo", titulo);
+    if (conteudo) {
+      formData.append("conteudo", conteudo);
+    }
+
+    try {
+      await axios.post(`http://localhost:8000/api/posts/?t=${Date.now()}`, formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      alert("Post criado com sucesso!");
+      setTitulo("");
+      setConteudo(null);
+      setIsModalOpen(false);
+      fetchPosts(); // Atualiza a lista de posts
+    } catch (err) {
+      console.error("Erro ao criar post:", err);
+      setError(
+        err.response?.data?.detail ||
+          "Erro ao criar o post. Verifique se você é um profissional."
+      );
+    }
+  };
+
+  // Função para abrir o modal (apenas para profissionais)
   const abrirModal = () => {
+    // if (!isProfissional) {
+    //   alert("Apenas profissionais podem criar publicações.");
+    //   navigate("/bio");
+    //   return;
+    // }
     setIsModalOpen(true);
   };
 
   // Função para fechar o modal
   const fecharModal = () => {
     setIsModalOpen(false);
+    setTitulo("");
+    setConteudo(null);
+    setError("");
   };
+
+  useEffect(() => {
+    fetchPosts();
+    fetchProfissionais();
+    checkProfissional();
+  }, []);
 
   return (
     <main className={styles.mainClass}>
@@ -130,8 +206,12 @@ const Posts = () => {
             <p>Fale Conosco</p>
             <p>Sobre Nós</p>
             <p>Como Funciona?</p>
-            <button type="button">Seja um Profissional</button>
-            <button type="button">Entrar</button>
+            <button type="button" onClick={() => navigate("/bio")}>
+              Seja um Profissional
+            </button>
+            <button type="button" onClick={() => navigate("/login")}>
+              Entrar
+            </button>
           </div>
         </nav>
       </section>
@@ -170,6 +250,7 @@ const Posts = () => {
                 className={styles.img_perfil}
                 src={post?.usuario?.foto_perfil || "/default.jpg"}
                 alt="Img Perfil"
+                onError={(e) => (e.target.src = "/default.jpg")}
               />
               <h3>{post?.usuario?.nome}</h3>
               <h5>{post?.usuario?.profissao || "Profissão não informada"}</h5>
@@ -178,6 +259,7 @@ const Posts = () => {
                 src={post?.conteudo || "/default.jpg"}
                 alt="Img Post"
                 className={styles.img_post}
+                onError={(e) => (e.target.src = "/default.jpg")}
               />
               <div className={styles.linha} />
             </div>
@@ -200,20 +282,19 @@ const Posts = () => {
               <div className={styles.campos_criar}>
                 <img
                   className={styles.img_perfil}
-                  src="/pablo.jpeg"
+                  src={currentUser?.foto_perfil || "/default.jpg"}
                   alt="Img Perfil"
+                  onError={(e) => (e.target.src = "/default.jpg")}
                 />
-                <h3>Pablo Roberto</h3>
+                <h3>{currentUser?.nome || "Usuário"}</h3>
                 <textarea
                   className={styles.text_post}
-                  type="text"
-                  placeholder="No que você está pensando, Pablo Roberto?"
+                  placeholder={`No que você está pensando, ${currentUser?.nome || "Usuário"}?`}
                   rows={17}
+                  value={titulo}
+                  onChange={(e) => setTitulo(e.target.value)}
                 />
-                <label
-                  htmlFor="arquivo"
-                  className={styles.add_arquivo_label}
-                >
+                <label htmlFor="arquivo" className={styles.add_arquivo_label}>
                   Adicionar Mídia
                   <img
                     src="/imgMidia.png"
@@ -225,10 +306,17 @@ const Posts = () => {
                   type="file"
                   id="arquivo"
                   name="arquivo"
+                  accept="image/*"
                   className={styles.input_arquivo}
+                  onChange={(e) => setConteudo(e.target.files[0])}
                 />
+                {error && <p className={styles.error}>{error}</p>}
               </div>
-              <button type="button" className={styles.button_postar}>
+              <button
+                type="button"
+                className={styles.button_postar}
+                onClick={handleCreatePost}
+              >
                 Postar
               </button>
             </div>

@@ -8,6 +8,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from django.contrib.postgres.search import TrigramSimilarity
 from posts.api.permissions import IsProfissional
+from profissionais.models import Profissional
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = models.PostServico.objects.all().order_by('-created_at')  # Ordenação padrão

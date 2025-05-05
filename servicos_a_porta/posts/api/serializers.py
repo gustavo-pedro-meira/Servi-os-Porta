@@ -12,7 +12,7 @@ class ProfissionalSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     usuario = ProfissionalSerializer(source="profissional", read_only=True)
-    profissional = serializers.PrimaryKeyRelatedField(queryset=Profissional.objects.all())
+    profissional = serializers.PrimaryKeyRelatedField(queryset=Profissional.objects.all(), required=False)
     class Meta:
         model = models.PostServico
         fields = ["id", "titulo", "conteudo", "dataCriacao", "profissional", "curtidas", "usuario", "created_at", "updated_at", "is_active"]
