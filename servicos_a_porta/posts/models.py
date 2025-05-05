@@ -39,7 +39,7 @@ class PostServico(BaseModel):
     conteudo = models.ImageField(upload_to='imagem/', null=True, blank=True)
     dataCriacao = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     profissional = models.ForeignKey(Profissional, on_delete=models.CASCADE, blank=True, null=True)
-    curtidas = models.BigIntegerField(default=0, blank=True, null=True)
+    curtida = models.BigIntegerField(default=0, blank=True, null=True)
     
     def __str__(self):
         return self.titulo or "Publicação sem título"
@@ -56,8 +56,8 @@ class ComentarioPost(BaseModel):
     
 
 class Curtida(BaseModel):
-    post = models.ForeignKey(PostServico, on_delete=models.CASCADE, related_name='curtidas_post')
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='curtidas_usuario')
+    post = models.ForeignKey(PostServico, on_delete=models.CASCADE, related_name='curtidas')
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='curtidas')
     data_curtida = models.DateTimeField(auto_now_add=True)
 
     class Meta:

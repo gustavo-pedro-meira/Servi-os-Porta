@@ -2,6 +2,7 @@ from rest_framework import serializers
 from posts import models
 from profissionais.models import Profissional
 
+
 class ProfissionalSerializer(serializers.ModelSerializer):
     profissao = serializers.CharField(source='idProfissao.nome', read_only=True)
     class Meta:
@@ -20,7 +21,7 @@ class PostSerializer(serializers.ModelSerializer):
         return obj.curtidas.count()
     
     def get_is_curtido(self, obj):
-        request = self.context.get("request").user
+        user = self.context.get("request").user
         if user.is_authenticated:
             return obj.curtidas.filter(usuario=user).exists()
         return False
@@ -35,7 +36,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.PostServico
-        fields = ["id", "titulo", "conteudo", "dataCriacao", "profissional", "idServico", "curtidas_count", "is_curtido", "usuario", "created_at", "updated_at", "is_active"]
+        fields = ["id", "titulo", "conteudo", "dataCriacao", "profissional", "curtidas_count", "is_curtido", "usuario", "created_at", "updated_at", "is_active"]
         read_only_fields = ["dataCriacao", "curtidas_count", "is_curtido", "usuario", "created_at", "updated_at", "is_active"]
         
 class ComentarioSerializer(serializers.ModelSerializer):
