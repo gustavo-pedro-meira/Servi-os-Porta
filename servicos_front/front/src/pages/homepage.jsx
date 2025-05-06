@@ -84,7 +84,7 @@ const Home = () => {
           <p onClick={() => document.getElementById("como_funciona").scrollIntoView({ behavior: "smooth" })}>
             Como Funciona?
           </p>
-          <button onClick={() => navigate("/bio")} type="button">Seja um Profissional</button>
+          <button onClick={() => navigate("/cadastro")} type="button">Seja um Profissional</button>
           {isLoggedIn ? (
             <button onClick={handleLogout} type="button">Sair</button>
           ) : (

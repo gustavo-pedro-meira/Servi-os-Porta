@@ -323,6 +323,62 @@ body {
     height: 1px;
 }
 
+.pontos_editar {
+    position: relative;
+    padding: 10px;
+    background: #f0f0f0;
+    border-radius: 8px;
+    width: 300px;
+    margin: 20px auto;
+}
+
+.menu_container {
+    position: relative;
+    display: inline-block;
+}
+
+.botao_editar {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.menu_opcoes {
+    display: none; /* Escondido por padrão */
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    min-width: 120px;
+    z-index: 10;
+}
+
+.menu_opcoes.show {
+    display: block;
+}
+
+.menu_opcoes li {
+    padding: 10px;
+}
+
+.menu_opcoes li a {
+    text-decoration: none;
+    color: #FFFFFF;
+    display: block;
+}
+
+.menu_opcoes li:hover {
+    background-color: #38AFD1;
+}
+
 .footer {
     display: flex;
     justify-content: space-between;

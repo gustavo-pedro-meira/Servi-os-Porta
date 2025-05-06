@@ -168,7 +168,7 @@ const ListaProfissionais = () => {
           <p>Fale Conosco</p>
           <p>Sobre Nós</p>
           <p onClick={() => navigate("..")}>Como Funciona?</p>
-          <button type="button">Seja um Profissional</button>
+          <button type="button" onClick={() => navigate("/cadastro")}>Seja um Profissional</button>
           <button type="button">Entrar</button>
         </div>
       </nav>

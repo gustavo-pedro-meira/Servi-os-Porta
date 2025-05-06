@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { FaSearch } from "react-icons/fa";
+import React, { useState, useEffect, useRef } from "react";
+import { FaSearch, FaHeart } from "react-icons/fa";
 import styles from "../styles/posts.module.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -11,13 +11,19 @@ const Posts = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [profissionais, setProfissionais] = useState([]);
-  const [isProfissional, setIsProfissional] = useState(false); // Novo estado para verificar se é profissional
-  const [titulo, setTitulo] = useState(""); // Estado para o título do post
-  const [conteudo, setConteudo] = useState(null); // Estado para a imagem
-  const [error, setError] = useState(""); // Estado para mensagens de erro
-  const [currentUser, setCurrentUser] = useState(null); // Estado para o usuário atual
+  const [isProfissional, setIsProfissional] = useState(false);
+  const [titulo, setTitulo] = useState("");
+  const [conteudo, setConteudo] = useState(null);
+  const [error, setError] = useState("");
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isPosting, setIsPosting] = useState(false);
+  const [menuOpenId, setMenuOpenId] =  useState(null);
+  const menuRef = useRef(null);
 
-  // Função para buscar todos os posts
+  const handleMenuClick = (postId) => {
+    setMenuOpenId(menuOpenId === postId ? null : postId);
+  }
+
   const fetchPosts = async () => {
     try {
       setIsLoading(true);
@@ -42,7 +48,6 @@ const Posts = () => {
     }
   };
 
-  // Função para buscar profissionais
   const fetchProfissionais = async () => {
     try {
       const response = await axios.get(
@@ -64,21 +69,19 @@ const Posts = () => {
     }
   };
 
-  // Função para verificar se o usuário é profissional e obter dados do usuário
   const checkProfissional = async () => {
     const token = localStorage.getItem("access");
     if (token) {
       try {
-        const response = await axios.get(`http://localhost:8000/api/profissionais/?t=${Date.now()}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        // Verifica se há dados do profissional
-        if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+        const response = await axios.get(
+          `http://localhost:8000/api/profissionais/?t=${Date.now()}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        if (response.data && !Array.isArray(response.data)) {
           setIsProfissional(true);
-          setCurrentUser(response.data[0]); // Armazena os dados do profissional
-        } else if (response.data && !Array.isArray(response.data)) {
-          setIsProfissional(true);
-          setCurrentUser(response.data); // Caso a API retorne um objeto diretamente
+          setCurrentUser(response.data);
         } else {
           setIsProfissional(false);
           setCurrentUser(null);
@@ -94,7 +97,6 @@ const Posts = () => {
     }
   };
 
-  // Função para buscar posts com base no termo de busca
   const handleSearch = async (term) => {
     try {
       setIsLoading(true);
@@ -119,12 +121,10 @@ const Posts = () => {
     }
   };
 
-  // Função para lidar com a mudança no input de busca
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  // Função para lidar com o pressionamento de teclas no input de busca
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       const term = e.target.value;
@@ -136,13 +136,32 @@ const Posts = () => {
     }
   };
 
-  // Função para criar um novo post
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (!["image/jpeg", "image/png"].includes(file.type)) {
+        setError("Apenas imagens JPEG ou PNG são permitidas.");
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        setError("A imagem deve ter no máximo 5MB.");
+        return;
+      }
+      setConteudo(file);
+      setError("");
+    } else {
+      setConteudo(null);
+    }
+  };
+
   const handleCreatePost = async (e) => {
     e.preventDefault();
     setError("");
+    setIsPosting(true);
 
     if (!titulo.trim()) {
       setError("O título é obrigatório.");
+      setIsPosting(false);
       return;
     }
 
@@ -153,7 +172,7 @@ const Posts = () => {
     }
 
     try {
-      await axios.post(`http://localhost:8000/api/posts/?t=${Date.now()}`, formData, {
+      await axios.post(`http://localhost:8000/api/posts/`, formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access")}`,
           "Content-Type": "multipart/form-data",
@@ -163,27 +182,54 @@ const Posts = () => {
       setTitulo("");
       setConteudo(null);
       setIsModalOpen(false);
-      fetchPosts(); // Atualiza a lista de posts
+      fetchPosts();
     } catch (err) {
       console.error("Erro ao criar post:", err);
       setError(
         err.response?.data?.detail ||
           "Erro ao criar o post. Verifique se você é um profissional."
       );
+    } finally {
+      setIsPosting(false);
     }
   };
 
-  // Função para abrir o modal (apenas para profissionais)
+  const handleCurtir = async (postId) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/api/posts/${postId}/curtir/`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("access")}` },
+        }
+      );
+      console.log("Resposta do curtir:", response.data);
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post.id === postId
+            ? {
+                ...post,
+                curtidas_count: response.data.curtidas_count,
+                is_curtido: response.data.status === "curtido",
+              }
+            : post
+        )
+      );
+    } catch (error) {
+      console.error("Erro ao curtir post:", error);
+      alert("Erro ao curtir o post. Verifique se você está logado.");
+    }
+  };
+
   const abrirModal = () => {
-    // if (!isProfissional) {
-    //   alert("Apenas profissionais podem criar publicações.");
-    //   navigate("/bio");
-    //   return;
-    // }
+    if (!isProfissional) {
+      alert("Apenas profissionais podem criar publicações.");
+      navigate("/bio");
+      return;
+    }
     setIsModalOpen(true);
   };
 
-  // Função para fechar o modal
   const fecharModal = () => {
     setIsModalOpen(false);
     setTitulo("");
@@ -197,6 +243,18 @@ const Posts = () => {
     checkProfissional();
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpenId(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <main className={styles.mainClass}>
       <section className={styles.section}>
@@ -206,7 +264,7 @@ const Posts = () => {
             <p>Fale Conosco</p>
             <p>Sobre Nós</p>
             <p>Como Funciona?</p>
-            <button type="button" onClick={() => navigate("/bio")}>
+            <button type="button" onClick={() => navigate("/cadastro")}>
               Seja um Profissional
             </button>
             <button type="button" onClick={() => navigate("/login")}>
@@ -261,6 +319,31 @@ const Posts = () => {
                 className={styles.img_post}
                 onError={(e) => (e.target.src = "/default.jpg")}
               />
+              <div className={styles.curtidas}>
+                <button
+                  className={styles.botao_curtir}
+                  onClick={() => handleCurtir(post.id)}
+                  disabled={!localStorage.getItem("access")}
+                >
+                  <FaHeart
+                    style={{
+                      color: post.is_curtido ? "red" : "grey",
+                      marginRight: "5px",
+                    }}
+                  />
+                  {post.curtidas_count || 0} curtidas
+                </button>
+              </div>
+              <div className={styles.pontos_editar} ref={menuRef}>
+                <div className={styles.menu_container}>
+                  <button className={styles.botao_editar} onClick={() => handleMenuClick(post.id)}>⋮</button>
+                  <ul className={`${styles.menu_opcoes} ${menuOpenId === post.id ? styles.show : ""}`}>
+                    <li><button onClick={() => handleUpdate(post.id)}>Atualizar</button></li>
+                    <li><button onClick={() => handleDelete(post.id)}>Deletar</button></li>
+                    <li><button onClick={() => handleShare(post.id)}>Compartilhar</button></li>
+                  </ul>
+                </div>
+              </div>
               <div className={styles.linha} />
             </div>
           </section>
@@ -306,9 +389,9 @@ const Posts = () => {
                   type="file"
                   id="arquivo"
                   name="arquivo"
-                  accept="image/*"
+                  accept="image/jpeg,image/png"
                   className={styles.input_arquivo}
-                  onChange={(e) => setConteudo(e.target.files[0])}
+                  onChange={handleFileChange}
                 />
                 {error && <p className={styles.error}>{error}</p>}
               </div>
@@ -316,8 +399,9 @@ const Posts = () => {
                 type="button"
                 className={styles.button_postar}
                 onClick={handleCreatePost}
+                disabled={isPosting}
               >
-                Postar
+                {isPosting ? "Postando..." : "Postar"}
               </button>
             </div>
           </section>

@@ -6,6 +6,7 @@ import ListaProfissionais from "./pages/listar.jsx";
 import Login from "./pages/login.jsx";
 import Register from "./pages/register.jsx";
 import Posts from "./pages/posts.jsx";
+import CadastroProfissional from "./pages/cadastro.jsx";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/posts" element={<Posts />}/>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/cadastro" element={<CadastroProfissional />} />
       </Routes>
     </Router>
   );
