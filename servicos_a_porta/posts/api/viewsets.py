@@ -42,7 +42,7 @@ class PostViewSet(viewsets.ModelViewSet):
             ).filter(similarity__gt=0.1).order_by("-similarity", "-created_at") 
         return queryset
     
-    @action(detail=True, methods=["Post"])
+    @action(detail=True, methods=["post"])
     def curtir(self, request, pk=None):
         post = self.get_object()
         usuario = request.user

@@ -203,7 +203,6 @@ const Posts = () => {
           headers: { Authorization: `Bearer ${localStorage.getItem("access")}` },
         }
       );
-      console.log("Resposta do curtir:", response.data);
       setPosts((prevPosts) =>
         prevPosts.map((post) =>
           post.id === postId
@@ -217,7 +216,9 @@ const Posts = () => {
       );
     } catch (error) {
       console.error("Erro ao curtir post:", error);
-      alert("Erro ao curtir o post. Verifique se você está logado.");
+      const errorMessage =
+        error.response?.data?.detail || "Erro ao curtir o post. Tente novamente.";
+      alert(errorMessage);
     }
   };
 

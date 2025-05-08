@@ -55,7 +55,7 @@ class ComentarioPost(BaseModel):
         return self.conteudo
     
 
-class Curtida(BaseModel):
+class Curtida(models.Model):
     post = models.ForeignKey(PostServico, on_delete=models.CASCADE, related_name='curtidas')
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='curtidas')
     data_curtida = models.DateTimeField(auto_now_add=True)

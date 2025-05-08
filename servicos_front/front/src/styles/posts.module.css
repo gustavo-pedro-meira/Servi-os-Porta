@@ -187,10 +187,12 @@ body {
 }
 
 .titulo_post {
-    color: #38AFD1;
+    color: #74C7DF;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
 }
 
 .linha_criar {
@@ -213,9 +215,10 @@ body {
 }
 
 .campos_criar h3 {
-    color: #595959;
+    color: #656565;
     margin-right: 490px;
-
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
 }
 
 .text_post {
@@ -227,6 +230,8 @@ body {
     width: 600px;
     color: #747474;
     resize: none;
+    font-family: "Rubik", sans-serif;
+    font-weight: 400;
 }
 
 .input_arquivo {
@@ -241,7 +246,7 @@ body {
     background-color: transparent;
     color: #38AFD1;
     font-family: Arial, sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     cursor: pointer;
     transition: background-color 0.3s, border-color 0.3s;
     width: 200px;
@@ -250,7 +255,16 @@ body {
     position: absolute;
     left: 400px;
     margin-bottom: -450px;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
+    transition: 0.3s;
 }
+
+.add_arquivo_label:hover {
+    background-color: #74C7DF;
+    transform: scale(1.05);
+}
+
 
 
 .img_midia {
@@ -260,15 +274,22 @@ body {
 
 .button_postar {
     height: 30px;
-    width: 100px;
+    width: 120px;
     background: #38AFD1;
     color: #FFFFFF;
     border-radius: 20px;
     border: 2px solid transparent;
-    box-shadow: 0px 4px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 5px 4px rgba(0, 0, 0, 0.3);
     margin-top: 12%;
     margin-left: 43%;
     cursor: pointer;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
+    transition: 0.4s;
+}
+
+.button_postar:hover {
+    transform: scale(1.05);
 }
 
 .button_fechar {
@@ -306,7 +327,8 @@ body {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
     padding: 20px;
     margin-bottom: -100px;
-    width: 850px;
+    width: 550px;
+    height: auto;
 }
 
 .img_perfil {
@@ -347,11 +369,11 @@ body {
 }
 
 .imagem_midia {
-    background-color: #656565;
+
 }
 
 .img_post img {
-    width: 30%;
+    width: 50%;
     margin: 10px auto;
     margin-left: -20px;
     object-fit: cover;
@@ -362,10 +384,11 @@ body {
 }
 
 .img_post {
-    width: 80%;
+    width: 90%;
     aspect-ratio: 3 / 4;
     height: auto%;
-    margin-left: 10%;
+    margin-left: 5%;
+    margin-bottom: -40px;
 }
 
 .linha {
@@ -376,7 +399,7 @@ body {
 
 .pontos_editar {
     position: relative;
-    left: 555px;
+    left: 410px;
     top: 80px;
     padding: 10px;
     border-radius: 8px;
@@ -437,7 +460,7 @@ body {
     justify-content: flex-start;
     position: relative;
     top: 100px;
-    margin-left: 25%;
+    margin-left: 20%;
 }
 
 .botao_curtir {
