@@ -71,7 +71,7 @@ const Bio = () => {
         {profissional ? (
           <div className={styles.profissional_div}>
             <div className={styles.profissional_imagem}>
-              <img src={profissional.foto_perfil} alt={profissional.nome} height={270} width={180}></img>
+              <img src={profissional.foto_perfil || "/default.png"} alt={profissional.nome} height={270} width={180}></img>
           </div>
 
             <div className={styles.profissional_info}>
@@ -104,7 +104,7 @@ const Bio = () => {
                 outrosProfissionais.map((profissional) => (
                   <div key={profissional.id} className={styles.services_separator}>
                     <div className={styles.circle}>
-                      <img className={styles.circle_icon} src={profissional.foto_perfil} alt="Icon"></img> 
+                      <img className={styles.circle_icon} src={profissional.foto_perfil || "/default.png"} alt="Icon"></img> 
                     </div>
                     <p>{profissional.nome}</p>
 

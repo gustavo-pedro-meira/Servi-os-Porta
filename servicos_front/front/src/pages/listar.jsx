@@ -180,7 +180,7 @@ const ListaProfissionais = () => {
               <input
                 className={styles.inputsearch}
                 type="text"
-                placeholder="Buscar"
+                placeholder="Buscar..."
                 value={searchTerm}
                 onChange={handleSearchChange}
                 onKeyDown={handleKeyPress}
@@ -221,14 +221,6 @@ const ListaProfissionais = () => {
               type="text"
               placeholder="Profissão"
             />
-            <input
-              className={styles.input_select}
-              onChange={(e) => setNivel(e.target.value)}
-              value={nivel}
-              type="text"
-              placeholder="Nível Profissional"
-              list="lista-nivel"
-            />
             <datalist id="lista-nivel">
               <option value="Iniciante" />
               <option value="Qualificado" />
@@ -245,9 +237,9 @@ const ListaProfissionais = () => {
                 <div className={styles.perfil_image}>
                   <img
                     className={styles.image}
-                    src={profissional.foto_perfil || "/default.jpg"}
+                    src={profissional.foto_perfil || "/default.png"}
                     alt={profissional.nome}
-                    onError={(e) => (e.target.src = "/default.jpg")}
+                    onError={(e) => (e.target.src = "/default.png")}
                   />
                 </div>
                 <div className={styles.perfil_info}>
@@ -262,7 +254,6 @@ const ListaProfissionais = () => {
           ) : (
             <p>Nenhum profissional encontrado.</p>
           )}
-          <h5 className={styles.aviso_pagina}>(Aqui será inserido a paginação).</h5>
         </div>
       </section>
       <footer className={styles.footer}>
