@@ -9,6 +9,7 @@ body {
     color: #38AFD1;
 }
 
+
 .nav {
     display: flex;
     justify-content: space-between;
@@ -20,7 +21,8 @@ body {
 
 .nav p {
     cursor: pointer;
-    margin: 25px;
+    font-family: "Rubik", sans-serif;
+    font-weight: 400;
 }
 
 .navcontent {
@@ -33,34 +35,41 @@ body {
 
 .navcontent button {
     border-radius: 10px;
-    border-style: solid;
-    border: 1px solid transparent;
+    border-style: none;
     height: 5vh;
-    width: 9vw;
+    width: 12vw;
     cursor: pointer;
     transition: 0.3s;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
 }
 
 .navcontent button:first-of-type {
-    border-color: #38AFD1;
+    border-color: #74C7DF;
     border-width: 1px;
 }
 
 .navcontent button:first-of-type:hover {
-    background-color: #38AFD1;
+    background-color: #74C7DF;
     color: white;
     border-style: none;
+    font-weight: 400;
 }
 
 .navcontent button:last-of-type {
-    background-color: #38AFD1;
+    background-color: #74C7DF;
     color: white;
     border-style: none;
 }
 
 .navcontent button:last-of-type:hover {
-    background-color: #2F6F9B;
-    border: 1px solid #38AFD1;
+    border: 1px solid #74C7DF;
+    font-weight: 400;
+
+}
+
+.navcontent button:focus {
+    outline: none;
 }
 
 .mainimage {
@@ -92,12 +101,16 @@ body {
     margin-bottom: 1.5%;
     margin-left: 3%;
     width: 100%;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
 }
 
 .texts_cadastro p {
     font-size: 1.2rem;
     text-align: center;
     margin-top: 1px;
+    font-family: "Rubik", sans-serif;
+    font-weight: 400;
 }
 
 .icones {
@@ -126,6 +139,8 @@ body {
     margin-top: 7px;
     position: relative;
     right: 45px;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
 }
 
 .icones, .icones_textos, .texts_cadastro p {
@@ -153,6 +168,8 @@ body {
     margin-bottom: 3%;
     color: #38AFD1;
     margin-top: -20px;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
 }
 
 .div_cadastro {
@@ -174,6 +191,13 @@ body {
     padding-left: 12px;
     padding-right: 12px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3);
+    font-family: "Rubik", sans-serif;
+    font-weight: 300;
+}
+
+.div_cadastro input[type="date"] {
+    font-family: "Rubik", sans-serif;
+    font-weight: 300;
 }
 
 .div_cadastro select {
@@ -186,7 +210,11 @@ body {
     padding-left: 12px;
     padding-right: 12px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3);
+    font-family: "Rubik", sans-serif;
+    font-weight: 300;
 }
+
+
 
 .div_cadastro button {
     margin-left: 48%;
@@ -199,6 +227,13 @@ body {
     background-color: #38AFD1;
     box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.34);
     cursor: pointer;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
+    transition: 0.4s;
+}
+
+.div_cadastro button:hover {
+    transform: scale(1.05);
 }
 
 
@@ -237,7 +272,7 @@ body {
     background-color: #F4F6FE;
     margin: 0 auto;
     box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.2);
-    margin-top: 15px;
+    margin-top: -30px;
 }
 
 .footer_sobre,

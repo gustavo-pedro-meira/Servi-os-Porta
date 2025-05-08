@@ -47,6 +47,7 @@ const Login = () => {
                             <p>Preencha seus dados</p>
 
                             <div className={styles.inputcontainer}>
+                                <img src="/usuario.png" alt="email" className={styles.img_email} />
                                 <i className="fas fa-envelope"></i>
                                 <input
                                     placeholder="Usuário"
@@ -57,6 +58,7 @@ const Login = () => {
                             </div>
 
                             <div className={styles.inputcontainer}>
+                                <img src="/senha.png" alt="senha" className={styles.img_senha}/>
                                 <i className="fas fa-lock"></i>
                                 <input
                                     id="password"
@@ -95,7 +97,7 @@ const Login = () => {
                                     Ainda não <br /> tem uma conta?
                                 </h3>
                                 <p>Crie agora mesmo.</p>
-                                <a className={styles.registeraccount} href="/register">
+                                <a className={styles.registeraccount} onClick={() => navigate("/register")}>
                                     <button className={styles.registerbutton} type="button">
                                         Cadastrar
                                     </button>

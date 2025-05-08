@@ -43,11 +43,16 @@
 .loginforms h1 {
     color: #595959;
     font-size: 30px;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
+    text-shadow: 0px 4px 5px rgba(0, 0, 0, 0.3);
 }
 
 .loginforms p {
     color: #595959;
-    margin-top: 0;
+    margin-top: -6%;
+    font-family: "Rubik", sans-serif;
+    font-weight: 400;
 }
 
 .inputcontainer {
@@ -91,7 +96,10 @@
     height: 30px;
     padding-left: 30px;
     padding-right: 30px;
+    margin-right: 80%;
     outline: none;
+    font-family: "Rubik", sans-serif;
+    font-weight: 300;
 }
 
 .loginimage {
@@ -103,8 +111,9 @@
 }
 
 .loginimage img {
-    width: 70%;
+    width: 60%;
     height: 70%;
+    margin-left: 35%;
 }
 
 .toregister {
@@ -115,6 +124,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    
 }
 
 .registercontent {
@@ -136,6 +146,10 @@
     width: 100%;
     font-weight: normal;
     font-size: 20px;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
+    margin-bottom: 10px;
+    margin-right: 2%;
 }
 
 .registercontent p {
@@ -147,6 +161,9 @@
     width: 100%;
     font-weight: normal;
     font-size: 15px;
+    font-family: "Rubik", sans-serif;
+    font-weight: 400;
+    margin-top: -10px;
 }
 
 .loginaccount {
@@ -161,14 +178,43 @@
     background-color: #38AFD1;
     border-radius: 20px;
     border-style: solid;
-    border-width: 1px;
+    border-width: 2px;
     width: 7.5vw;
     border-color: white;
-    transition: background-color 0.3s ease;
+    height: 25px;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.cadastrar_button {
+    color: white;
+    margin-top: 1%;
+    box-shadow: 0px 5px 5px rgba(0,0, 0, 0.3);
+    background-color: #38AFD1;
+    border-radius: 20px;
+    border-style: solid;
+    border-width: 2px;
+    width: 7.5vw;
+    border-color: white;
+    height: 28px;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.cadastrar_button:hover {
+    transform: scale(1.05);
+}
+
+.login_forms button {
+    height: 405px;
 }
 
 .registerbutton:hover {
-    background-color: #2a8fbb;
+    transform: scale(1.05);
 }
 
 .forgotpassword {
@@ -177,11 +223,17 @@
     color: white;
     font-size: 7.5px;
     transition: background-color 0.3s ease;
+    font-family: "Rubik", sans-serif;
+    font-weight: 400;
+    transition: 0.3s;
 }
 
 .forgotpassword:hover {
-    background-color: rgb(160, 159, 159);
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
 }
+
+
 
 .white-letter {
     color: white;

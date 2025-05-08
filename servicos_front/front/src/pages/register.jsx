@@ -109,7 +109,7 @@ const Register = () => {
                         {error && <p style={{ color: "red" }}>{error}</p>}
                         {success && <p style={{ color: "green" }}>{success}</p>}
 
-                        <button onClick={handleRegister} className={styles.registerbutton}>
+                        <button onClick={handleRegister} className={styles.cadastrar_button}>
                             Cadastrar
                         </button>
                     </div>

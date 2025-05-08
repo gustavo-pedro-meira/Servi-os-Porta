@@ -49,11 +49,17 @@
 .loginforms h1 {
     color: #595959;
     font-size: 30px;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
+    text-shadow: 0px 4px 5px rgba(0, 0, 0, 0.4);
+    margin-bottom: 1px;
 }
 
 .loginforms p {
     color: #595959;
     margin-top: 0;
+    font-family: "Rubik", sans-serif;
+    font-weight: 400;
 }
 
 .inputcontainer {
@@ -62,12 +68,30 @@
     margin-bottom: 15px;
 }
 
+.img_email {
+    position: absolute;
+    top: 35%;
+    left: 13px;
+}
+
+.img_senha {
+    position: absolute;
+    top: 10%;
+    left: 11px;
+}
+
 .inputcontainer i {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     color: #595959;
     font-size: 16px;
+}
+
+input {
+    font-family: "Rubik", sans-serif;
+    font-weight: 300;
+    font-size: 11px;
 }
 
 .inputcontainer .fa-envelope {
@@ -99,19 +123,23 @@
     padding: 10px 20px;
     background-color: #38AFD1;
     border-radius: 20px;
-    border: 1px solid white;
+    border: 0px solid transparent;
     transition: background-color 0.3s ease;
     cursor: pointer;
-    width: 60%;
+    width: 50%;
+    height: 30px;
     box-shadow: 0px 5px 5px rgba(0,0, 0, 0.3);
     margin-top: 10%;
     align-items: center;
     justify-content: center;
     margin: 10% auto 0 auto;
+    transition: transform 0.3s ease;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
 }
 
 .loginbutton:hover {
-    background-color: #2a8fbb;
+    transform: scale(1.05);
 }
 
 .loginimage {
@@ -152,15 +180,21 @@
     color: white;
     font-weight: normal;
     font-size: 20px;
-    text-align: center;
+    text-align: left;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
+    margin-bottom: -5px;
 }
 
 .registercontent p {
     margin-top: 10px;
     color: white;
     font-weight: normal;
-    font-size: 15px;
+    font-size: 13px;
     text-align: center;
+    margin-right: 12%;
+    font-family: "Rubik", sans-serif;
+    font-weight: 400;
 }
 
 .registeraccount {
@@ -173,16 +207,19 @@
 
 .registerbutton {
     color: white;
-    padding: 10px 20px;
     background-color: #38AFD1;
     border-radius: 20px;
-    border: 1px solid white;
+    border: 2px solid white;
     transition: background-color 0.3s ease;
     cursor: pointer;
     width: 100%;
+    height: 30px;
     box-shadow: 0px 5px 5px rgba(0,0, 0, 0.3);
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
+    transition: transform 0.3s ease;
 }
 
 .registerbutton:hover {
-    background-color: #2a8fbb;
+    transform: scale(1.05);
 }

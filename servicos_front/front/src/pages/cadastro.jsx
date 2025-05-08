@@ -189,12 +189,14 @@ const CadastroProfissional = () => {
                     placeholder="Data de Nascimento"
                     value={dataNascimento}
                     onChange={(e) => setDataNascimento(e.target.value)}
+                    style={{ color: dataNascimento === "" ? "gray" : "black" }}
                     />
                     <input
                     type="date"
                     placeholder="Data de Inicio"
                     value={dataInicio}
                     onChange={(e) => setDataInicio(e.target.value)}
+                    style={{ color: dataInicio === "" ? "gray" : "black" }}
                     />
                     <input
                     type="text"
@@ -202,7 +204,7 @@ const CadastroProfissional = () => {
                     value={cep}
                     onChange={(e) => setCep(e.target.value)}
                     />
-                    <select value={nivelProfissional} onChange={(e) => setNivelProfissional(e.target.value)}>
+                    <select value={nivelProfissional} onChange={(e) => setNivelProfissional(e.target.value)} style={{ color: nivelProfissional === "" ? "gray" : "black" }} >
                         <option value="">Selecione o nível</option>
                         <option value="I">Iniciante</option>
                         <option value="Q">Qualificado</option>
@@ -220,7 +222,7 @@ const CadastroProfissional = () => {
                     value={numero}
                     onChange={(e) => setNumero(e.target.value)}
                     />
-                    <select value={idProfissao} onChange={(e) => setIdProfissao(e.target.value)}>
+                    <select value={idProfissao} onChange={(e) => setIdProfissao(e.target.value)} style={{ color: idProfissao === "" ? "gray" : "black" }}>
                         <option value="">Selecione uma profissão</option>
                         <option value="2">Pedreiro</option>
                     </select>
