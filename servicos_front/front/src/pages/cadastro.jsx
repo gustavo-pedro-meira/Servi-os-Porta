@@ -101,109 +101,189 @@ const CadastroProfissional = () => {
                 </nav>
             </section>
 
-            <div>
-            <h1>Cadastro de Profissional</h1>
-            {erro && <p style={{ color: "red" }}>{erro}</p>}
-            <form onSubmit={handleSubmit}>
-                <input
-                type="text"
-                placeholder="Nome"
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-                />
-                <input
-                type="text"
-                placeholder="Usuário"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                />
-                <input
-                type="email"
-                placeholder="E-mail"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                />
-                <input
-                type="password"
-                placeholder="Senha"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                />
-                <input
-                type="password"
-                placeholder="Confirmar Senha"
-                value={confirmarPassword}
-                onChange={(e) => setConfirmarPassword(e.target.value)}
-                />
-                <input
-                type="text"
-                placeholder="CPF"
-                value={cpf}
-                onChange={(e) => setCpf(e.target.value)}
-                />
-                {/* Adicione outros campos conforme necessário */}
-                <input
-                type="file"
-                onChange={(e) => setFotoPerfil(e.target.files[0])}
-                />
-                <input
-                type="date"
-                placeholder="Data de Nascimento"
-                value={dataNascimento}
-                onChange={(e) => setDataNascimento(e.target.value)}
-                />
-                <input
-                type="date"
-                placeholder="Data de Inicio"
-                value={dataInicio}
-                onChange={(e) => setDataInicio(e.target.value)}
-                />
-                <input
-                type="text"
-                placeholder="CEP"
-                value={cep}
-                onChange={(e) => setCep(e.target.value)}
-                />
-                <select value={nivelProfissional} onChange={(e) => setNivelProfissional(e.target.value)}>
-                    <option value="">Selecione o nível</option>
-                    <option value="I">Iniciante</option>
-                    <option value="Q">Qualificado</option>
-                    <option value="P">Profissional</option>
-                </select>
-
-                <input
-                type="text"
-                placeholder="Descrição"
-                value={descricao}
-                onChange={(e) => setDescricao(e.target.value)}
-                />
-                <input
-                type="text"
-                placeholder="Número"
-                value={numero}
-                onChange={(e) => setNumero(e.target.value)}
-                />
-                <select value={idProfissao} onChange={(e) => setIdProfissao(e.target.value)}>
-                    <option value="">Selecione uma profissão</option>
-                    <option value="2">Pedreiro</option>
-                </select>
-                <input
-                type="text"
-                placeholder="Estado"
-                value={estado}
-                onChange={(e) => setEstado(e.target.value)}
-                />
-                <input
-                type="text"
-                placeholder="Cidade"
-                value={cidade}
-                onChange={(e) => setCidade(e.target.value)}
-                />
-                <button type="submit" disabled={isLoading}>
-                {isLoading ? "Enviando..." : "Cadastrar"}
-                </button>
-            </form>
+            <div className={styles.mainimage}>
+                <img className={styles.engenheiro} src="/Engenheiro.png" alt="Imagem" />
+                <div className={styles.texts_cadastro}>
+                    <h1>Seja um Profissional na Serviços à Porta</h1>
+                    <p>Conheça as vantagens ao fazer parte do nosso time</p>
+                    <div className={styles.icones}>
+                        <img src="/Dinheiro.png" alt="Icone Dinheiro" className={styles.icone_dinheiro} />
+                        <img src="/Localização.png" alt="Icone Localização" className={styles.icone_localizacao} />
+                    </div>
+                    <div className={styles.icones_textos}>
+                        <h6>Aumente sua renda</h6>
+                        <h6>Localize os clientes</h6>
+                    </div>
+                    <div className={styles.texto_explicacao}>
+                        <p className={styles.textinho} >Trabalhar com serviços à porta é uma ótima escolha!
+                            Você ganha flexibilidade para montar sua rotina,
+                            autonomia para gerenciar suas tarefas e a chance
+                            de aumentar sua renda em horários de alta demanda.
+                            Além disso, é um mercado em alta, com oportunidades
+                            constantes, e permite desenvolver habilidades como
+                            atendimento ao cliente e gestão de tempo.
+                            Seja entregando pedidos ou prestando serviços, você
+                            conhece pessoas novas e faz parte da conveniência
+                            que todo mundo ama!
+                        </p>
+                    </div>
+                </div>
             </div>
+        
+            <div className={styles.linha}></div>
+
+            <h2 className={styles.titulo_cadastro}>Cadastro Profissional</h2>
+            
+            <div className={styles.div_cadastro}>
+                {erro && <p style={{ color: "red" }}>{erro}</p>}
+                <div className={styles.container_foto}>
+                <label className={styles.label_foto}>
+                    Foto +
+                    <input
+                    type="file"
+                    onChange={(e) => setFotoPerfil(e.target.files[0])}
+                    className={styles.input_foto}
+                    />
+                </label>
+            </div>
+                <form onSubmit={handleSubmit}>
+                    <input
+                    type="text"
+                    placeholder="Nome"
+                    value={nome}
+                    onChange={(e) => setNome(e.target.value)}
+                    />
+                    <input
+                    type="text"
+                    placeholder="Usuário"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    />
+                    <input
+                    type="email"
+                    placeholder="E-mail"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <input
+                    type="password"
+                    placeholder="Senha"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <input
+                    type="password"
+                    placeholder="Confirmar Senha"
+                    value={confirmarPassword}
+                    onChange={(e) => setConfirmarPassword(e.target.value)}
+                    />
+                    <input
+                    type="text"
+                    placeholder="CPF"
+                    value={cpf}
+                    onChange={(e) => setCpf(e.target.value)}
+                    />
+                    {/* Adicione outros campos conforme necessário */}
+                    <input
+                    type="date"
+                    placeholder="Data de Nascimento"
+                    value={dataNascimento}
+                    onChange={(e) => setDataNascimento(e.target.value)}
+                    />
+                    <input
+                    type="date"
+                    placeholder="Data de Inicio"
+                    value={dataInicio}
+                    onChange={(e) => setDataInicio(e.target.value)}
+                    />
+                    <input
+                    type="text"
+                    placeholder="CEP"
+                    value={cep}
+                    onChange={(e) => setCep(e.target.value)}
+                    />
+                    <select value={nivelProfissional} onChange={(e) => setNivelProfissional(e.target.value)}>
+                        <option value="">Selecione o nível</option>
+                        <option value="I">Iniciante</option>
+                        <option value="Q">Qualificado</option>
+                        <option value="P">Profissional</option>
+                    </select>
+                    <input
+                    type="text"
+                    placeholder="Descrição"
+                    value={descricao}
+                    onChange={(e) => setDescricao(e.target.value)}
+                    />
+                    <input
+                    type="text"
+                    placeholder="Número"
+                    value={numero}
+                    onChange={(e) => setNumero(e.target.value)}
+                    />
+                    <select value={idProfissao} onChange={(e) => setIdProfissao(e.target.value)}>
+                        <option value="">Selecione uma profissão</option>
+                        <option value="2">Pedreiro</option>
+                    </select>
+                    <input
+                    type="text"
+                    placeholder="Estado"
+                    value={estado}
+                    onChange={(e) => setEstado(e.target.value)}
+                    />
+                    <input
+                    type="text"
+                    placeholder="Cidade"
+                    value={cidade}
+                    onChange={(e) => setCidade(e.target.value)}
+                    />
+                    <button type="submit" disabled={isLoading}>
+                    {isLoading ? "Enviando..." : "Cadastrar"}
+                    </button>
+                </form>
+            </div>
+
+            <footer className={styles.footer}>
+                <div className={styles.footer_sobre}>
+                <h3>Serviços à Porta</h3>
+                <span className={styles.footer_line}></span>
+                <p>
+                    Serviços à Porta é a solução ideal, conectando pessoas que não têm
+                    experiência em serviços com profissionais de alta qualidade, de forma
+                    rápida e eficiente. Nossa plataforma é intuitiva e acessível,
+                    permitindo que você consiga um profissional com facilidade. Com
+                    recursos avançados e segurança garantida, oferecemos uma experiência
+                    confiável e otimizada para atender às suas necessidades.
+                </p>
+                <p>© 2024. Serviços à Porta. Todos os direitos reservados.</p>
+                </div>
+
+                <div className={styles.footer_redes}>
+                <h3>Redes Sociais</h3>
+                <span className={styles.footer_line}></span>
+                <a>Instagram</a>
+                <a>Facebook</a>
+                <a>WhatsApp</a>
+                <a>LinkedIn</a>
+                <a>X</a>
+                </div>
+
+                <div className={styles.footer_paginas}>
+                <h3>Páginas</h3>
+                <span className={styles.footer_line}></span>
+                <a>Como Funciona</a>
+                <a>Seja um Profissional</a>
+                <a>Criar Conta</a>
+                <a>Entrar</a>
+                <a>Contato</a>
+                </div>
+
+                <div className={styles.footer_regulamento}>
+                <h3>Regulamento</h3>
+                <span className={styles.footer_line}></span>
+                <a>Termos de Uso</a>
+                <a>Política de Privacidade</a>
+                </div>
+            </footer>
         </main>
       );
     };

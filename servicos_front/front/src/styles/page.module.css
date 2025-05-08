@@ -1,12 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
 body {
     width: auto;
     height: auto;
-    font-family: sans-serif;
+    /* font-family: sans-serif; */
     color: #595959;
 }
 
 .destaque {
-    color: #38AFD1;
+    color: #74C7DF;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
 }
 
 .nav {
@@ -20,6 +24,8 @@ body {
 
 .nav p {
     cursor: pointer;
+    font-family: "Rubik", sans-serif;
+    font-weight: 400;
 }
 
 .navcontent {
@@ -32,33 +38,46 @@ body {
 
 .navcontent button {
     border-radius: 10px;
-    border-style: solid;
+    border-style: none;
     height: 5vh;
     width: 12vw;
     cursor: pointer;
     transition: 0.3s;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
 }
 
 .navcontent button:first-of-type {
-    border-color: #38AFD1;
+    border-color: #74C7DF;
     border-width: 1px;
 }
 
 .navcontent button:first-of-type:hover {
-    background-color: #38AFD1;
+    background-color: #74C7DF;
     color: white;
     border-style: none;
+    font-weight: 400;
 }
 
 .navcontent button:last-of-type {
-    background-color: #38AFD1;
+    background-color: #74C7DF;
     color: white;
     border-style: none;
 }
 
 .navcontent button:last-of-type:hover {
-    background-color: #2F6F9B;
-    border: 1px solid #38AFD1;
+    border: 1px solid #74C7DF;
+    font-weight: 400;
+
+}
+
+.navcontent button:focus {
+    outline: none;
+}
+
+.button_profissional {
+    background-color: #74C7DF;
+    color: #FFFFFF;
 }
 
 .section_one {
@@ -71,6 +90,7 @@ body {
     display: flex;
     justify-content: space-between;
     gap: 1%;
+    margin-top: -2%;
 }
 
 .info {
@@ -79,8 +99,13 @@ body {
 }
 
 .infotext {
-    margin-left: 20%;
+    margin-left: 37%;
+    margin-top: 7%;
     font-size: 20px;
+    font-family: "Rubik", sans-serif;
+    font-weight: 400;
+    width: 40%;
+    color: #8b8b8b;
 }
 
 .mainimage {
@@ -97,22 +122,31 @@ body {
 }
 
 .search {
-    margin-right: 15%;
+    margin-right: 18%;
+    margin-top: 2%;
 }
 
 .searchtitle {
-    font-weight: normal;
+    font-family: "Rubik", sans-serif;
+    font-weight: 400;
+    color: #8b8b8b;
+    margin-left: 16%;
+    margin-top: 2%;
+    margin-bottom: 3.5%;
 }
 
 .inputsearch {
     width: 70%;
-    height: 5vh;
+    height: 5.3vh;
+    margin-left: 16%;
     border-radius: 20px;
     border-style: solid;
     border-width: 1px;
     padding-left: 30px;
-    border-color: #595959;
+    border-color: #8b8b8b;
     outline: none;
+    font-family: "Rubik", sans-serif;
+    font-weight: 300;
 }
 
 .inputWrapper {
@@ -122,10 +156,11 @@ body {
 
 .searchIcon {
     position: absolute;
-    left: 10px;
+    left: 19%;
     top: 50%;
     transform: translateY(-50%);
-    color: #38AFD1; /* Cor do ícone */
+    color: #38AFD1; 
+    cursor: pointer;
 }
 
 .service_type {
@@ -148,12 +183,13 @@ body {
 
 .circle {
     display: flex;
-    width: 5vw;
-    height: 10vh;
-    border-radius: 40px;
-    border: #595959 1px solid;
+    width: 80px;
+    height: 80px;
+    border-radius: 100px;
+    border: #8b8b8b 1px solid;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 
 .circle_icon {
@@ -169,6 +205,10 @@ body {
 
 .services_info p {
     white-space: nowrap;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
+    color: #8b8b8b;
+    cursor: pointer;
 }
 
 .section_two {
@@ -181,7 +221,7 @@ body {
     justify-content: center;
     align-items: center;
     gap: 15px;
-    margin-top: 5%;
+    margin-top: 1%;
 }
 
 .line {
@@ -196,7 +236,7 @@ body {
     align-items: center;
     gap: 10%;
     padding: 10px;
-    margin-top: 5%;
+    margin-top: 1.5%;
     width: auto;
 }
 
@@ -204,6 +244,15 @@ body {
     margin-top: 0%;
     justify-content: center;
     text-align: center;
+    font-family: "Rubik", sans-serif;
+    font-weight: 400;
+    color: #8b8b8b;
+}
+
+.div_diferenciais h4 {
+    font-family: "Rubik", sans-serif;
+    font-size: 20px;
+    font-weight: 500;
 }
 
 
@@ -216,6 +265,13 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    transition: transform 0.5s, color 0.3s;
+}
+
+.diferencial:hover {
+    cursor: pointer;
+    transform: scale(1.08);
+    color: #74C7DF;
 }
 
 .posts_blog {
@@ -230,8 +286,11 @@ body {
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    margin-top: 30px;
+    margin-top: 25px;
+    margin-bottom: -125px;
+    cursor: pointer;
 }
+
 
 .post_home img {
     width: 400px;
@@ -245,6 +304,7 @@ body {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
     margin-bottom: 10px;
     margin-top: 10px;
+    transition: transform 0.5s;
 }
 
 .post_home h2 {
@@ -254,6 +314,9 @@ body {
     position: relative;
     bottom: 100px; /* Mantém o ajuste vertical */
     left: 18px; /* Move o h2 para a esquerda, ajustável (pode usar left: 20px para deslocar mais) */
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
+    transition: transform 0.5s;
 }
 
 .post_home h4 {
@@ -268,6 +331,13 @@ body {
     left: 20px;
     text-align: center;
     color: #FFFFFF; /* Cor mais escura para melhor contraste */
+    font-family: "Rubik", sans-serif;
+    font-weight: 400;
+    transition: transform 0.5s;
+}
+
+.post_home:hover img, .post_home:hover h2, .post_home:hover h4 {
+    transform: scale(1.05);
 }
 
 
@@ -275,7 +345,7 @@ body {
     border-radius: 20px;
     border-style: none;
     color: #F7F7F7;
-    background-color: #38AFD1;
+    background-color: #74C7DF;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -283,14 +353,17 @@ body {
     height: 4.2vh;
     width: 12vw;
     cursor: pointer;
-    margin-top: 2%;
+    margin-top: 1.5%;
     transition: 0.3s;
     box-shadow: 0px 7px 6.5px rgba(0, 0, 0, 0.25);
-    text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
 }
 
 .more_button:hover {
-    background-color: #2F6F9B;
+    font-family: "Rubik", sans-serif;
+    font-weight: 400; 
+    box-shadow: 0px 7px 6.5px rgba(0, 0, 0, 0.19);
 }
 
 .funciona_div {
@@ -307,19 +380,23 @@ body {
 }
 
 .funciona_div span {
-    font-weight: bold;
+    font-family: "Rubik", sans-serif;
+    font-weight: 600; 
 }
 
 .funciona_div p {
     line-height: 3vh;
     max-width: 90%;
     font-size: 12px;
+    font-family: "Rubik", sans-serif;
+    font-weight: 400; 
 }
 
 .div_sobre {
     display: flex;
     justify-content: center;
     gap: 3%;
+    margin-top: 1%;
 }
 
 .sobre_mecanico {
@@ -332,8 +409,12 @@ body {
 .div_sobre p {
     line-height: 3vh;
     max-width: 60%;
+    margin-top: 4%;
     font-size: 15px;
     margin-left: 15%;
+    font-family: "Rubik", sans-serif;
+    font-weight: 400; 
+
 }
 
 .div_contato {
@@ -343,13 +424,21 @@ body {
     gap: 10%;
     padding: 10px;
     width: 90%;
-    margin-top: 5%;
+    margin-top: 1%;
     margin-left: 7%;
     margin-right: auto;
+    margin-bottom: 2.6%;
 }
 
 .div_contato p {
     line-height: 1%;
+    font-family: "Rubik", sans-serif;
+    font-weight: 400; 
+}
+
+.div_contato h4 {
+    font-family: "Rubik", sans-serif;
+    font-weight: 500; 
 }
 
 .contato_icon {

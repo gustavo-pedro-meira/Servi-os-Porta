@@ -20,6 +20,8 @@ body {
 
 .nav p {
     cursor: pointer;
+    font-family: "Rubik", sans-serif;
+    font-weight: 400;
 }
 
 .navcontent {
@@ -32,33 +34,46 @@ body {
 
 .navcontent button {
     border-radius: 10px;
-    border-style: solid;
+    border-style: none;
     height: 5vh;
     width: 12vw;
     cursor: pointer;
     transition: 0.3s;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
 }
 
 .navcontent button:first-of-type {
-    border-color: #38AFD1;
+    border-color: #74C7DF;
     border-width: 1px;
 }
 
 .navcontent button:first-of-type:hover {
-    background-color: #38AFD1;
+    background-color: #74C7DF;
     color: white;
     border-style: none;
+    font-weight: 400;
 }
 
 .navcontent button:last-of-type {
-    background-color: #38AFD1;
+    background-color: #74C7DF;
     color: white;
     border-style: none;
 }
 
 .navcontent button:last-of-type:hover {
-    background-color: #2F6F9B;
-    border: 1px solid #38AFD1;
+    border: 1px solid #74C7DF;
+    font-weight: 400;
+
+}
+
+.navcontent button:focus {
+    outline: none;
+}
+
+.button_profissional {
+    background-color: #74C7DF;
+    color: #FFFFFF;
 }
 
 .section_one {
@@ -83,6 +98,8 @@ body {
     padding-left: 35px;
     border-color: #595959;
     outline: none;
+    font-family: "Rubik", sans-serif;
+    font-weight: 300;
 }
 
 .inputWrapper {
@@ -110,8 +127,16 @@ body {
     width: 150px;
     cursor: pointer;
     transition: 0.3s;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.3);
+    text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.2);
+    font-family: "Rubik", sans-serif;
+    transition: transform 0.5s, text-shadow 0.5s;
+    font-weight: 500;
+}
+
+.button_publi:hover {
+    transform: scale(1.05);
+    text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .postagens {
@@ -119,7 +144,8 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-top: 5vh;
+    margin-top: -62px;
+    margin-bottom: 12vh;
 }
 
 .overlay {
@@ -189,6 +215,7 @@ body {
 .campos_criar h3 {
     color: #595959;
     margin-right: 490px;
+
 }
 
 .text_post {
@@ -276,9 +303,9 @@ body {
     flex-direction: column;
     border-radius: 15px;
     border: 1.5px solid #CECECE;
-    box-shadow: 0px 4px px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
     padding: 20px;
-    margin-bottom: 20px;
+    margin-bottom: -100px;
     width: 850px;
 }
 
@@ -291,30 +318,54 @@ body {
 }
 
 .posts p {
-    color: #595959;
+    color: #656565;
     margin: 10px;
-    margin-top: 3px;
+    margin-top: 5px;
     margin-right: 90px;
+    margin-left: 1px;
     max-width: 800px;
+    font-family: "Rubik", sans-serif;
+    font-weight: 400;
 }
 .posts h3{
     margin: 10px;
     margin-top: 0px;
     margin-left: 50px;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
+    color: #656565;
 
 }
 .posts h5 {
     margin: 12px;
     margin-top: -10px;
     margin-left: 51px;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    color: #656565;
 }
 
-.img_post {
-    width: 104.77%;
+.imagem_midia {
+    background-color: #656565;
+}
+
+.img_post img {
+    width: 30%;
+    margin: 10px auto;
     margin-left: -20px;
     object-fit: cover;
     margin-top: 10px;
-    height: 400px;
+    height: auto;
+    display: block; /* Evita espaçamentos indesejados */
+    aspect-ratio: 4 / 3; 
+}
+
+.img_post {
+    width: 80%;
+    aspect-ratio: 3 / 4;
+    height: auto%;
+    margin-left: 10%;
 }
 
 .linha {
@@ -325,8 +376,9 @@ body {
 
 .pontos_editar {
     position: relative;
+    left: 555px;
+    top: 80px;
     padding: 10px;
-    background: #f0f0f0;
     border-radius: 8px;
     width: 300px;
     margin: 20px auto;
@@ -379,6 +431,43 @@ body {
     background-color: #38AFD1;
 }
 
+.curtidas {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    top: 100px;
+    margin-left: 25%;
+}
+
+.botao_curtir {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px; 
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background-color: transparent;
+    color: #747474;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.botao_curtir:hover {
+    color: #74C7DF;
+    border: 1px solid transparent; 
+    font-weight: 400; 
+}
+
+.botao_curtir.curtido {
+    background-color: #74C7DF;
+}
+
+
 .footer {
     display: flex;
     justify-content: space-between;
@@ -386,7 +475,7 @@ body {
     background-color: #F4F6FE;
     margin: 0 auto;
     box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.2);
-    margin-top: 15px;
+    margin-top: 10%;
 }
 
 .footer_sobre,

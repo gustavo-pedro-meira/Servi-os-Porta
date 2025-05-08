@@ -84,7 +84,7 @@ const Home = () => {
           <p onClick={() => document.getElementById("como_funciona").scrollIntoView({ behavior: "smooth" })}>
             Como Funciona?
           </p>
-          <button onClick={() => navigate("/cadastro")} type="button">Seja um Profissional</button>
+          <button onClick={() => navigate("/cadastro")} type="button" className={styles.button_profissional}>Seja um Profissional</button>
           {isLoggedIn ? (
             <button onClick={handleLogout} type="button">Sair</button>
           ) : (
@@ -111,7 +111,7 @@ const Home = () => {
               <input
                 className={styles.inputsearch}
                 type="text"
-                placeholder="Buscar profissão"
+                placeholder="Buscar profissão..."
                 value={searchTerm}
                 onChange={handleSearchChange}
                 onKeyPress={handleKeyPress}

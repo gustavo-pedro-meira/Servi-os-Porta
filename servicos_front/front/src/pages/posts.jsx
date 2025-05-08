@@ -264,7 +264,7 @@ const Posts = () => {
             <p>Fale Conosco</p>
             <p>Sobre Nós</p>
             <p>Como Funciona?</p>
-            <button type="button" onClick={() => navigate("/cadastro")}>
+            <button type="button" onClick={() => navigate("/cadastro")} className={styles.button_profissional}>
               Seja um Profissional
             </button>
             <button type="button" onClick={() => navigate("/login")}>
@@ -303,6 +303,16 @@ const Posts = () => {
       ) : Array.isArray(posts) && posts.length > 0 ? (
         posts.map((post) => (
           <section className={styles.postagens} key={post.id}>
+            <div className={styles.pontos_editar} ref={menuRef}>
+                <div className={styles.menu_container}>
+                  <button className={styles.botao_editar} onClick={() => handleMenuClick(post.id)}>⋮</button>
+                  <ul className={`${styles.menu_opcoes} ${menuOpenId === post.id ? styles.show : ""}`}>
+                    <li><button onClick={() => handleUpdate(post.id)}>Atualizar</button></li>
+                    <li><button onClick={() => handleDelete(post.id)}>Deletar</button></li>
+                    <li><button onClick={() => handleShare(post.id)}>Compartilhar</button></li>
+                </ul>
+              </div>
+            </div>
             <div className={styles.posts}>
               <img
                 className={styles.img_perfil}
@@ -313,12 +323,14 @@ const Posts = () => {
               <h3>{post?.usuario?.nome}</h3>
               <h5>{post?.usuario?.profissao || "Profissão não informada"}</h5>
               <p>{post?.titulo}</p>
-              <img
-                src={post?.conteudo || "/default.jpg"}
-                alt="Img Post"
-                className={styles.img_post}
-                onError={(e) => (e.target.src = "/default.jpg")}
-              />
+              <div className={styles.imagem_midia}>
+                <img
+                  src={post?.conteudo || "/default.jpg"}
+                  alt="Img Post"
+                  className={styles.img_post}
+                  onError={(e) => (e.target.src = "/default.jpg")}
+                />
+              </div>
               <div className={styles.curtidas}>
                 <button
                   className={styles.botao_curtir}
@@ -327,22 +339,12 @@ const Posts = () => {
                 >
                   <FaHeart
                     style={{
-                      color: post.is_curtido ? "red" : "grey",
+                      color: post.is_curtido ? "#74C7DF" : "grey",
                       marginRight: "5px",
                     }}
                   />
                   {post.curtidas_count || 0} curtidas
                 </button>
-              </div>
-              <div className={styles.pontos_editar} ref={menuRef}>
-                <div className={styles.menu_container}>
-                  <button className={styles.botao_editar} onClick={() => handleMenuClick(post.id)}>⋮</button>
-                  <ul className={`${styles.menu_opcoes} ${menuOpenId === post.id ? styles.show : ""}`}>
-                    <li><button onClick={() => handleUpdate(post.id)}>Atualizar</button></li>
-                    <li><button onClick={() => handleDelete(post.id)}>Deletar</button></li>
-                    <li><button onClick={() => handleShare(post.id)}>Compartilhar</button></li>
-                  </ul>
-                </div>
               </div>
               <div className={styles.linha} />
             </div>
