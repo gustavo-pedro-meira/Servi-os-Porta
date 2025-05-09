@@ -81,7 +81,7 @@ const Home = () => {
           <p onClick={() => document.getElementById("sobre").scrollIntoView({ behavior: "smooth" })}>
             Sobre Nós
           </p>
-          <p onClick={() => document.getElementById("como_funciona").scrollIntoView({ behavior: "smooth" })}>
+          <p id="como_funciona" onClick={() => document.getElementById("como_funciona").scrollIntoView({ behavior: "smooth" })}>
             Como Funciona?
           </p>
           <button onClick={() => navigate("/cadastro")} type="button" className={styles.button_profissional}>Seja um Profissional</button>
@@ -218,7 +218,7 @@ const Home = () => {
             <p>Nenhum post encontrado</p>
           )}
         </div>
-        <button onClick={() => navigate("/posts")} className={styles.more_button} type="button">Ver Mais</button>
+        <button onClick={() => navigate("/posts")} className={styles.more_button} type="button" id="vermaisbotao">Ver Mais</button>
 
         <div id="como_funciona" className={styles.title_unicos}>
           <span className={styles.line}></span>
@@ -231,7 +231,7 @@ const Home = () => {
             <img src="./faxineira.png"></img>
           </div>
 
-          <div className={styles.funciona_info}>
+          <div className={styles.funciona_info} id="funciona_info">
             <p>
               Nosso sistema conecta pessoas que precisam de um serviço especializado a profissionais qualificados de forma simples e eficiente. <br></br>
               <span>1 Solicitação de Serviço</span> <br></br> O usuário acessa a plataforma, descreve o problema e escolhe o tipo de profissional necessário. <br></br>

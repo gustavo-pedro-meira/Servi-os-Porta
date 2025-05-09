@@ -261,7 +261,7 @@ const Posts = () => {
       <section className={styles.section}>
         <nav className={styles.nav}>
           <img src="/logoservicos.png" alt="Logo" height={80} />
-          <div className={styles.navcontent}>
+          <div className={styles.navcontent} id="navcontent">
             <p>Fale Conosco</p>
             <p>Sobre Nós</p>
             <p>Como Funciona?</p>

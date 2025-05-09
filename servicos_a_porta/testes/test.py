@@ -30,7 +30,8 @@ class TesteSelenium(StaticLiveServerTestCase):
         # URL do frontend (ajuste se necessário)
         self.frontend_url = 'http://localhost:5173'
         
-    def test_login_usuario(self):
+
+    def realizar_login(self):
         self.browser.get(f'{self.frontend_url}/login')
 
         username_input = WebDriverWait(self.browser, 10).until(
@@ -39,8 +40,7 @@ class TesteSelenium(StaticLiveServerTestCase):
         password_input = WebDriverWait(self.browser, 10).until(
             EC.presence_of_element_located((By.ID, "password"))
         )
-        
-        # Preenche o formulário
+
         username_input.send_keys(self.username)
         password_input.send_keys(self.password)
 
@@ -57,11 +57,64 @@ class TesteSelenium(StaticLiveServerTestCase):
             EC.presence_of_element_located((By.ID, 'mainimage'))
         )
 
-        
+    def test_login_usuario(self):
+        self.realizar_login()
         self.assertTrue(
             self.browser.current_url.endswith('/'),
             f"Esperava URL terminando em '/', mas obteve {self.browser.current_url}"
         )
+
+    def test_clicar_comofunciona(self):
+        self.realizar_login()
+
+        click_como_funciona = WebDriverWait(self.browser, 10).until(
+            EC.element_to_be_clickable((By.ID, 'como_funciona'))
+        )
+        click_como_funciona.click()
+
+        WebDriverWait(self.browser, 10).until(
+            EC.url_contains("http://localhost:5173/")
+        )
+
+        funciona_info = WebDriverWait(self.browser, 10).until(
+            EC.presence_of_element_located((By.ID, 'funciona_info'))
+        )
+
+        self.assertTrue(
+            self.browser.current_url.endswith('/'),
+            f"Esperava URL terminando em '/', mas obteve {self.browser.current_url}"
+        )
+        self.assertTrue(
+            funciona_info.is_displayed(),
+            "Elemento 'funciona_info' não está visível na página de posts"
+        )
+
+
+    def test_abrir_posts(self):
+        self.realizar_login()
+
+        click_button = WebDriverWait(self.browser, 10).until(
+            EC.element_to_be_clickable((By.ID, 'vermaisbotao'))
+        )
+        click_button.click()
+
+        WebDriverWait(self.browser, 10).until(
+            EC.url_contains("http://localhost:5173/posts")
+        )
+
+        nav_content = WebDriverWait(self.browser, 10).until(
+            EC.presence_of_element_located((By.ID, 'navcontent'))
+        )
+
+        self.assertTrue(
+            self.browser.current_url.endswith('/posts'),
+            f"Esperava URL terminando em '/posts', mas obteve {self.browser.current_url}"
+        )
+        self.assertTrue(
+            nav_content.is_displayed(),
+            "Elemento 'navcontent' não está visível na página de posts"
+        )
+
     def tearDown(self):
         self.browser.quit()
 
