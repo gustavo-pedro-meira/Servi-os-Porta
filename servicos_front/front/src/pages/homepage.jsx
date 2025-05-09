@@ -100,7 +100,7 @@ const Home = () => {
               <span className={styles.destaque}>Serviços à Porta.</span>
             </p>
           </div>
-          <div className={styles.mainimage}>
+          <div className={styles.mainimage} id="mainimage">
             <img className={styles.engenheiro} src="/Engenheiro.png" alt="Imagem" />
           </div>
           <div className={styles.search}>

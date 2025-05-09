@@ -23,7 +23,7 @@ const Login = () => {
             });
             localStorage.setItem("access", response.data.access);
             localStorage.setItem("refresh", response.data.refresh);
-            alert("Login bem-sucedido!");
+            // alert("Login bem-sucedido!");
             navigate("/");
         } catch (err) {
             setError("Credenciais inválidas.");
@@ -50,6 +50,8 @@ const Login = () => {
                                 <img src="/usuario.png" alt="email" className={styles.img_email} />
                                 <i className="fas fa-envelope"></i>
                                 <input
+                                    id="username"
+                                    name="username"
                                     placeholder="Usuário"
                                     type="text"
                                     value={email}
@@ -62,6 +64,7 @@ const Login = () => {
                                 <i className="fas fa-lock"></i>
                                 <input
                                     id="password"
+                                    name="password"
                                     placeholder="Senha"
                                     type={showPassword ? "text" : "password"}
                                     value={password}
@@ -75,7 +78,7 @@ const Login = () => {
                                 ></i>
                                 {error && <p style={{ color: "red" }}>{error}</p>}
 
-                                <button onClick={handleLogin} className={styles.loginbutton}>
+                                <button onClick={handleLogin} className={styles.loginbutton} id="loginbotao">
                                     Entrar
                                 </button>
                             </div>
