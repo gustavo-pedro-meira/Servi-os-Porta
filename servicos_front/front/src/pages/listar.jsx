@@ -75,7 +75,7 @@ const ListaProfissionais = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/profissionais/?search=${searchTerm}&cep=${cep}&estado=${estado}&cidade=${cidade}&nivel_profissional=${nivel}&idProfissao=${profissao}&t=${Date.now()}`,
+        `http://localhost:8000/api/profissionais/?search=${searchTerm}&cep=${cep}&estado=${estado}&cidade=${cidade}&nivel_profissional=${nivel}&profissao_nome=${profissao}&t=${Date.now()}`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("access")}` },
         }
@@ -129,7 +129,7 @@ const ListaProfissionais = () => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/profissionais/?idProfissao=${initialSearchTerm}&t=${Date.now()}`,
+          `http://localhost:8000/api/profissionais/?profissao_nome=${initialSearchTerm}&t=${Date.now()}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

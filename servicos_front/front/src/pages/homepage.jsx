@@ -14,7 +14,7 @@ const Home = () => {
   const handleSearch = async () => {
     if (searchTerm.trim()) {
       try {
-        await fetch(`http://localhost:8000/api/profissoes/?search=${searchTerm}`);
+        await fetch(`http://localhost:8000/api/profissionais/?search=${searchTerm}`);
         navigate("/listar", { state: { searchTerm } });
       } catch (error) {
         console.error("Erro ao buscar Profissões:", error);
@@ -124,33 +124,32 @@ const Home = () => {
           <h1 className={styles.destaque}>Principais Serviços</h1>
           <div className={styles.services_info}>
             <div className={styles.services_separator}>
-              <div className={styles.circle}>
+              <div className={styles.circle} onClick={() => navigate("/listar", {state: {searchTerm: "Limpeza Doméstica"}})}>
                 <img className={styles.circle_icon} src="/limpezadomestica.png" alt="Icon" />
               </div>
               <p>Limpeza Domésticas</p>
             </div>
             <div className={styles.services_separator}>
-              <div className={styles.circle}>
+              <div className={styles.circle} onClick={() => navigate("/listar", {state: {searchTerm: "Reparos e Manutenção"}})}>
                 <img className={styles.circle_icon} src="/reparo.png" alt="Icon" />
               </div>
               <p>Reparos e Manutenção</p>
             </div>
             <div className={styles.services_separator}>
-              <div className={styles.circle}>
+              <div className={styles.circle} onClick={() => navigate("/listar", {state: {searchTerm: "Serviços de Ar-Condicionado"}})}>
                 <img className={styles.circle_icon} src="/servicoar.png" alt="Icon" />
               </div>
               <p>Serviços de Ar-Condicionado</p>
             </div>
             <div className={styles.services_separator}>
-              <div className={styles.circle}>
+              <div className={styles.circle} onClick={() => navigate("/listar", {state: {searchTerm: "Mudança e Transportes"}})}>
                 <img className={styles.circle_icon} src="/transporte.png" alt="Icon" />
               </div>
               <p>Mudança e Transportes</p>
             </div>
             <div className={styles.services_separator}>
-              <div className={styles.circle}>
+              <div className={styles.circle} onClick={() => navigate("/listar", {state: {searchTerm: "Instalações"}})}>
                 <img className={styles.circle_icon} src="/instalacoes.png" alt="Icon" />
-                
               </div>
               <p>Instalações</p>
             </div>

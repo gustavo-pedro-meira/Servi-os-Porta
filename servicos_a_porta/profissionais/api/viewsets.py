@@ -6,12 +6,20 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from django_filters import rest_framework as filters
+
+class ProfissionalFilter(filters.FilterSet):
+    profissao_nome = filters.CharFilter(field_name='idProfissao__nome', lookup_expr='icontains')
+    
+    class Meta:
+        model = models.Profissional
+        fields = ['cep', 'nivel_profissional', 'idProfissao', 'profissao_nome']
 
 class ProfissionalViewSet(viewsets.ModelViewSet):
     queryset = models.Profissional.objects.all()
     serializer_class = serializers.ProfissionalSerializer
     filter_backends = [OrderingFilter, DjangoFilterBackend]
-    filterset_fields = ['cep', 'nivel_profissional', 'idProfissao']
+    filterset_class = ProfissionalFilter
     ordering = ['nome']
 
     @method_decorator(cache_page(900))
