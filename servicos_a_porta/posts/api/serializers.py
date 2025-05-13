@@ -10,12 +10,29 @@ class ProfissionalSerializer(serializers.ModelSerializer):
         fields = ["id", "nome", "idProfissao", "foto_perfil", "profissao"]
         ref_name = "PostProfissionalSerializer"
 
+class ComentarioSerializer(serializers.ModelSerializer):
+    profissional_nome = serializers.CharField(source='profissional.nome', read_only=True)
+    foto_perfil = serializers.CharField(source='profissional.foto_perfil', read_only=True)
+
+    class Meta:
+        model = models.ComentarioPost
+        fields = ['id', 'conteudo', 'dataCriacao', 'profissional_nome', 'foto_perfil', 'post']
+        read_only_fields = ["profissional_nome", "foto_perfil"]
 
 class PostSerializer(serializers.ModelSerializer):
     usuario = ProfissionalSerializer(source="profissional", read_only=True)
     profissional = serializers.PrimaryKeyRelatedField(queryset=Profissional.objects.all(), required=False)
+    comentarios = ComentarioSerializer(many=True, read_only=True)
     curtidas_count = serializers.SerializerMethodField()
     is_curtido = serializers.SerializerMethodField()
+
+    def get_comentarios(self, obj):
+        return {
+            "nome": obj.profissional.nome if obj.profissional else None,
+            "profissao": obj.profissional.profissao if obj.profissional else None,
+            "foto_perfil": obj.profissional.foto_perfil.url if obj.profissional and obj.profissional.foto_perfil else '/default.jpg' 
+        }
+
 
     def get_curtidas_count(self, obj):
         return obj.curtidas.count()
@@ -36,12 +53,6 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.PostServico
-        fields = ["id", "titulo", "conteudo", "dataCriacao", "profissional", "curtidas_count", "is_curtido", "usuario", "created_at", "updated_at", "is_active"]
+        fields = ["id", "titulo", "conteudo", "dataCriacao", "profissional", "curtidas_count", "is_curtido", "usuario", "created_at", "updated_at", "is_active", "comentarios"]
         read_only_fields = ["dataCriacao", "curtidas_count", "is_curtido", "usuario", "created_at", "updated_at", "is_active"]
         
-class ComentarioSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.ComentarioPost
-        fields = "__all__"
-        
-
