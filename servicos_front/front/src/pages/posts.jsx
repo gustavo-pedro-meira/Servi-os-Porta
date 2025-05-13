@@ -72,27 +72,23 @@ const Posts = () => {
 
   const checkProfissional = async () => {
     const token = localStorage.getItem("access");
-    if (token) {
-      try {
-        const response = await axios.get(
-          `http://localhost:8000/api/profissionais/?t=${Date.now()}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        if (response.data && !Array.isArray(response.data)) {
-          setIsProfissional(true);
-          setCurrentUser(response.data);
-        } else {
-          setIsProfissional(false);
-          setCurrentUser(null);
-        }
-      } catch (err) {
-        console.error("Erro ao verificar profissional:", err);
-        setIsProfissional(false);
-        setCurrentUser(null);
-      }
-    } else {
+    if (!token) {
+      setIsProfissional(false);
+      setCurrentUser(null);
+      navigate("/login");
+      return;
+    }
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/user/?t=${Date.now()}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log("Dados do usuário:", response.data);
+      setCurrentUser(response.data);
+      setIsProfissional(response.data.is_profissional || false);
+      console.log("isProfissional definido como:", response.data.is_profissional || false);
+    } catch (err) {
+      console.error("Erro:", err);
       setIsProfissional(false);
       setCurrentUser(null);
     }
@@ -255,14 +251,13 @@ const Posts = () => {
     }
   };
 
-  const abrirModal = () => {
-    if (!isProfissional) {
-      alert("Apenas profissionais podem criar publicações.");
-      navigate("/bio");
-      return;
-    }
-    setIsModalOpen(true);
-  };
+  // const abrirModal = () => {
+  //   if (!isProfissional) {
+  //     alert("Apenas profissionais podem criar publicações.");
+  //     return;
+  //   }
+  //   setIsModalOpen(true);
+  // };
 
   const fecharModal = () => {
     setIsModalOpen(false);
@@ -345,7 +340,7 @@ const Posts = () => {
                 className={styles.searchIcon}
                 onClick={() => handleSearch(searchTerm)}
               />
-              <button className={styles.button_publi} onClick={abrirModal}>
+              <button className={styles.button_publi} onClick={() => setIsModalOpen(true)}>
                 Criar Publicação
               </button>
             </div>
@@ -371,9 +366,9 @@ const Posts = () => {
             <div className={styles.posts}>
               <img
                 className={styles.img_perfil}
-                src={post?.usuario?.foto_perfil || "/default.jpg"}
+                src={post?.usuario?.foto_perfil || "/default.png"}
                 alt="Img Perfil"
-                onError={(e) => (e.target.src = "/default.jpg")}
+                onError={(e) => (e.target.src = "/default.png")}
               />
               <h3>{post?.usuario?.nome}</h3>
               <h5>{post?.usuario?.profissao || "Profissão não informada"}</h5>
@@ -452,9 +447,9 @@ const Posts = () => {
               <div className={styles.campos_criar}>
                 <img
                   className={styles.img_perfil}
-                  src={currentUser?.foto_perfil || "/default.jpg"}
+                  src={currentUser?.foto_perfil || "/default.png"}
                   alt="Img Perfil"
-                  onError={(e) => (e.target.src = "/default.jpg")}
+                  onError={(e) => (e.target.src = "/default.png")}
                 />
                 <h3>{currentUser?.nome || "Usuário"}</h3>
                 <textarea

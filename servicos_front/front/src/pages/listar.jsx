@@ -248,7 +248,7 @@ const ListaProfissionais = () => {
                 key={profissional.id}
                 onClick={() =>
                   navigate(`/bio/${profissional.id}`, {
-                    state: { profissional }, // Passa o objeto profissional no state
+                    state: { profissional }, 
                   })
                 }
               >

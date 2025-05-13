@@ -7,17 +7,15 @@ import axios from "axios";
 const Bio = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation(); // Para acessar o state
-  const [profissional, setProfissional] = useState(location.state?.profissional || null); // Usa o profissional do state, se disponível
+  const location = useLocation(); 
+  const [profissional, setProfissional] = useState(location.state?.profissional || null); 
   const [outrosProfissionais, setOutrosProfissionais] = useState([]);
-  const [isLoading, setIsLoading] = useState(!location.state?.profissional); // Só carrega se não houver state
+  const [isLoading, setIsLoading] = useState(!location.state?.profissional);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      // Se o profissional já está no state, não precisa buscar
       if (profissional) {
-        // Busca outros profissionais com a mesma profissão
         try {
           const outrosResponse = await axios.get(
             `http://localhost:8000/api/profissionais/?profissao_nome=${profissional.profissao}&t=${Date.now()}`,
@@ -30,7 +28,11 @@ const Bio = () => {
             : Array.isArray(outrosResponse.data.results)
             ? outrosResponse.data.results
             : [];
-          setOutrosProfissionais(outros.filter((p) => p.id !== parseInt(id)).slice(0, 4));
+            setOutrosProfissionais(
+              outros
+                .filter((p) => Number(p.id) !== Number(id)) 
+                .slice(0, 4)
+            );
         } catch (error) {
           console.error("Erro ao buscar outros profissionais:", error);
           setOutrosProfissionais([]);
@@ -41,7 +43,6 @@ const Bio = () => {
           setIsLoading(false);
         }
       } else {
-        // Se não há profissional no state, busca os dados do profissional pelo ID
         setIsLoading(true);
         try {
           const response = await axios.get(
@@ -53,7 +54,6 @@ const Bio = () => {
           console.log("Resposta da API (profissional):", response.data);
           setProfissional(response.data);
 
-          // Busca outros profissionais com a mesma profissão
           const outrosResponse = await axios.get(
             `http://localhost:8000/api/profissionais/?profissao_nome=${response.data.profissao}&t=${Date.now()}`,
             {
@@ -65,7 +65,11 @@ const Bio = () => {
             : Array.isArray(outrosResponse.data.results)
             ? outrosResponse.data.results
             : [];
-          setOutrosProfissionais(outros.filter((p) => p.id !== parseInt(id)).slice(0, 4));
+            setOutrosProfissionais(
+              outros
+                .filter((p) => Number(p.id) !== Number(id))
+                .slice(0, 4)
+            );
         } catch (error) {
           console.error("Erro ao buscar dados:", error);
           setError("Não foi possível carregar os dados do profissional.");
@@ -163,7 +167,7 @@ const Bio = () => {
                   className={styles.services_separator}
                   onClick={() =>
                     navigate(`/bio/${profissional.id}`, {
-                      state: { profissional }, // Passa o profissional para a próxima tela
+                      state: { profissional }, 
                     })
                   }
                 >

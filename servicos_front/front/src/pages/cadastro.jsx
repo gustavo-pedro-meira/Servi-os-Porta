@@ -218,12 +218,12 @@ const CadastroProfissional = () => {
                     value={cep}
                     onChange={(e) => setCep(e.target.value)}
                     />
-                    <select value={nivelProfissional} onChange={(e) => setNivelProfissional(e.target.value)} style={{ color: nivelProfissional === "" ? "gray" : "black" }} >
+                    {/* <select value={nivelProfissional} onChange={(e) => setNivelProfissional(e.target.value)} style={{ color: nivelProfissional === "" ? "gray" : "black" }} >
                         <option value="">Selecione o nível</option>
                         <option value="I">Iniciante</option>
                         <option value="Q">Qualificado</option>
                         <option value="P">Profissional</option>
-                    </select>
+                    </select> */}
                     <input
                     type="text"
                     placeholder="Descrição"
@@ -240,7 +240,7 @@ const CadastroProfissional = () => {
                         <option value="">Selecione uma profissão</option>
                         <option value="2">Pedreiro</option>
                     </select>
-                    <input
+                    {/* <input
                     type="text"
                     placeholder="Estado"
                     value={estado}
@@ -251,7 +251,7 @@ const CadastroProfissional = () => {
                     placeholder="Cidade"
                     value={cidade}
                     onChange={(e) => setCidade(e.target.value)}
-                    />
+                    /> */}
                     <button type="submit" disabled={isLoading}>
                     {isLoading ? "Enviando..." : "Cadastrar"}
                     </button>

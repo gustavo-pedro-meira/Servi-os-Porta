@@ -6,7 +6,10 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from django_filters import rest_framework as filters
+from rest_framework.permissions import IsAuthenticated
 
 class ProfissionalFilter(filters.FilterSet):
     profissao_nome = filters.CharFilter(field_name='idProfissao__nome', lookup_expr='icontains')
@@ -54,3 +57,12 @@ class ProfissaoViewSet(viewsets.ModelViewSet):
             ).filter(similarity__gt=0.2).order_by('-similarity')
         return queryset
     
+class CurrentUserView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        user = request.user
+        return Response({
+            'id': user.id,
+            'nome': user.username,  # ou first_name
+            'is_profissional': getattr(user, 'is_profissional', False)
+        })

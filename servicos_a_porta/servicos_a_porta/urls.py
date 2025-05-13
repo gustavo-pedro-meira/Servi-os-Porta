@@ -21,7 +21,7 @@ from django.conf import settings
 from rest_framework import routers, permissions
 from clientes.api.viewsets import ClienteViewSet
 from posts.api.viewsets import PostViewSet, ComentarioViewSet
-from profissionais.api.viewsets import ProfissaoViewSet, ProfissionalViewSet
+from profissionais.api.viewsets import ProfissaoViewSet, ProfissionalViewSet, CurrentUserView
 from servicos.api.viewsets import ServicoViewSet
 from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
 from drf_yasg.views import get_schema_view
@@ -49,6 +49,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api/', include('clientes.urls')),
+    path('api/me/', CurrentUserView.as_view(), name='current_user'),
     path('api/token/', TokenObtainPairView.as_view(),name='token_obtain_pair'),
     path('api/token/refresh/', TokenObtainPairView.as_view(), name='token_refresh'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
