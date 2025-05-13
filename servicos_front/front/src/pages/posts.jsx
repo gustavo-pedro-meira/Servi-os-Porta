@@ -239,6 +239,13 @@ const Posts = () => {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+    const token = localStorage.getItem("access");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
     fetchPosts();
     fetchProfissionais();
     checkProfissional();
@@ -348,6 +355,7 @@ const Posts = () => {
                 </button>
               </div>
               <div className={styles.linha} />
+              <div className={styles.linha_separacao} />
             </div>
           </section>
         ))
