@@ -19,7 +19,7 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 from rest_framework import routers, permissions
-from clientes.api.viewsets import ClienteViewSet, EnderecoViewSet
+from clientes.api.viewsets import ClienteViewSet
 from posts.api.viewsets import PostViewSet, ComentarioViewSet
 from profissionais.api.viewsets import ProfissaoViewSet, ProfissionalViewSet
 from servicos.api.viewsets import ServicoViewSet
@@ -29,7 +29,6 @@ from drf_yasg import openapi
 
 router = routers.DefaultRouter()
 router.register('clientes', ClienteViewSet)
-router.register('enderecos', EnderecoViewSet)
 router.register('posts', PostViewSet)
 router.register('comentarios', ComentarioViewSet)
 router.register('profissoes', ProfissaoViewSet)

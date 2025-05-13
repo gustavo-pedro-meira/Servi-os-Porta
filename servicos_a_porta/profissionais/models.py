@@ -55,7 +55,7 @@ class Profissional(User):
     dataNascimento = models.DateField(default="2023-03-03")
     cpf = models.CharField(max_length=11)
     cep = models.CharField(max_length=8, null=False)
-    numero = models.CharField(max_length=11, unique=True)
+    numero = models.CharField(max_length=13, unique=True)
     nivel_profissional = models.CharField(max_length=50, choices=NIVEL, default='I')
     estado = models.CharField(max_length=100, blank=True, null=True)
     cidade = models.CharField(max_length=100, blank=True, null=True)

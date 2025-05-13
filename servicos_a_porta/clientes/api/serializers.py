@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from clientes.models import Cliente, Endereco
+from clientes.models import Cliente
 from django.contrib.auth.models import User
 from rest_framework.validators import UniqueValidator
 import datetime
@@ -72,24 +72,4 @@ class ClienteSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.clean()
         instance.save()
-        return instance
-        
-        
-class EnderecoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Endereco
-        fields = "__all__"
-
-    def create(self, validated_data):
-        instance = Endereco(**validated_data)
-        instance.clean()
-        instance.save()   
-        return instance
-    
-    def update(self, instance, validated_data):
-        instance.rua = validated_data.get("rua", instance.rua)
-        instance.numero = validated_data.get("numero", instance.numero)
-        instance.cep = validated_data.get("cep", instance.cep)
-        instance.clean()  
-        instance.save()   
         return instance

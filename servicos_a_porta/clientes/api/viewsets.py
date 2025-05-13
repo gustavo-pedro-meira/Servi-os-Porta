@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from clientes.models import Endereco, Cliente
+from clientes.models import Cliente
 from clientes.api import serializers
 from django.contrib.postgres.search import TrigramSimilarity
 from django.utils.decorators import method_decorator
@@ -25,10 +25,3 @@ class ClienteViewSet(viewsets.ModelViewSet):
             ).filter(similarity__gt=0.2).order_by('-similarity')
         return queryset
     
-class EnderecoViewSet(viewsets.ModelViewSet):
-    queryset = Endereco.objects.all()
-    serializer_class = serializers.EnderecoSerializer
-    
-    @method_decorator(cache_page(900))
-    def dispatch(self, *args, **kwargs):
-        return super(EnderecoViewSet, self).dispatch(*args, **kwargs)

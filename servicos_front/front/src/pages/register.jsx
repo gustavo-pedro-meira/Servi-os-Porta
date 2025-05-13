@@ -129,7 +129,7 @@ const Register = () => {
                                 type="date"
                                 value={dataNascimento}
                                 onChange={(e) => setDataNascimento(e.target.value)}
-                                style={{ color: dataNascimento === "" ? "gray" : "black" }}
+                                style={{ color: dataNascimento === "" ? "gray" : "black"}}
                             />
                             <i
                                 id="toggle-dataNascimento"
