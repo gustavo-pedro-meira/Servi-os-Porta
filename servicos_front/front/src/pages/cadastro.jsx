@@ -91,9 +91,23 @@ const CadastroProfissional = () => {
                 <nav className={styles.nav}>
                 <img src="/logoservicos.png" alt="Logo" height={80} />
                 <div className={styles.navcontent}>
-                    <p>Fale Conosco</p>
-                    <p>Sobre Nós</p>
-                    <p>Como Funciona?</p>
+                    <p
+                        onClick={() => {
+                        navigate("/", { state: { scrollTo: "contato" } });
+                        }}
+                    >Fale Conosco</p>
+                    <p
+                        onClick={() => {
+                        navigate("/", { state: { scrollTo: "sobre" } });
+                        }}
+                    >Sobre Nós</p>
+                    <p 
+                        onClick={() => {
+                        navigate("/", { state: { scrollTo: "como_funciona" } });
+                        }}
+                    >
+                        Como Funciona? 
+                    </p>
                     <button type="button" onClick={() => navigate("/login")}>
                     Entrar
                     </button>

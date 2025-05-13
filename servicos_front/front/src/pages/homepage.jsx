@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import styles from "../styles/page.module.css";
 import axios from "axios";
 
 const Home = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [posts, setPosts] = useState([]);
@@ -56,7 +57,14 @@ const Home = () => {
     const token = localStorage.getItem("access");
     setIsLoggedIn(!!token);
     fetchPosts();
-  }, []);
+
+    if (location.state?.scrollTo) {
+      const section = document.getElementById(location.state.scrollTo);
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location.state]);
 
   const handleLogout = () => {
     const confirmLogout = window.confirm("Tem certeza que deseja sair?");
@@ -79,7 +87,7 @@ const Home = () => {
           <p onClick={() => document.getElementById("sobre").scrollIntoView({ behavior: "smooth" })}>
             Sobre Nós
           </p>
-          <p id="como_funciona" onClick={() => document.getElementById("como_funciona").scrollIntoView({ behavior: "smooth" })}>
+          <p onClick={() => document.getElementById("como_funciona").scrollIntoView({ behavior: "smooth" })}>
             Como Funciona?
           </p>
           <button onClick={() => navigate("/cadastro")} type="button" className={styles.button_profissional}>Seja um Profissional</button>

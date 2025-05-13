@@ -13,6 +13,7 @@ const Posts = () => {
   const [profissionais, setProfissionais] = useState([]);
   const [isProfissional, setIsProfissional] = useState(false);
   const [titulo, setTitulo] = useState("");
+  const [novoComentario, setNovoComentario] = useState("");
   const [conteudo, setConteudo] = useState(null);
   const [error, setError] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
@@ -94,6 +95,38 @@ const Posts = () => {
     } else {
       setIsProfissional(false);
       setCurrentUser(null);
+    }
+  };
+
+  const handleNovoComentarioChange = (postId, e) => {
+    setNovoComentario({ ...novoComentario, [postId]: e.target.value });
+  };
+  
+  const handleAdicionarComentario = async (postId) => {
+    const comentario = novoComentario[postId];
+    if (!comentario || !comentario.trim()) return;
+  
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/api/comentarios/`,
+        { post: postId, conteudo: comentario },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("access")}` },
+        }
+      );
+      // Atualizar o estado com o novo comentário
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post.id === postId
+            ? { ...post, comentarios: [...post.comentarios, response.data] }
+            : post
+        )
+      );
+      // Limpar o campo de entrada
+      setNovoComentario({ ...novoComentario, [postId]: "" });
+    } catch (error) {
+      console.error("Erro ao adicionar comentário:", error);
+      alert("Erro ao adicionar comentário. Tente novamente.");
     }
   };
 
@@ -269,9 +302,23 @@ const Posts = () => {
         <nav className={styles.nav}>
           <img src="/logoservicos.png" alt="Logo" height={80} />
           <div className={styles.navcontent} id="navcontent">
-            <p>Fale Conosco</p>
-            <p>Sobre Nós</p>
-            <p>Como Funciona?</p>
+            <p
+              onClick={() => {
+                navigate("/", { state: { scrollTo: "contato" } });
+              }}
+            >Fale Conosco</p>
+            <p
+              onClick={() => {
+                navigate("/", { state: { scrollTo: "sobre" } });
+              }}
+            >Sobre Nós</p>
+            <p 
+              onClick={() => {
+                navigate("/", { state: { scrollTo: "como_funciona" } });
+              }}
+            >
+              Como Funciona? 
+            </p>
             <button type="button" onClick={() => navigate("/cadastro")} className={styles.button_profissional}>
               Seja um Profissional
             </button>
@@ -353,9 +400,38 @@ const Posts = () => {
                   />
                   {post.curtidas_count || 0} curtidas
                 </button>
+                <span className={styles.comentarios_count}>
+                  {post.comentarios_count || 0} comentários
+                </span>
               </div>
               <div className={styles.linha} />
               <div className={styles.linha_separacao} />
+              <div className={styles.comentarios}>
+                {post.comentarios && post.comentarios.length > 0 ? (
+                  post.comentarios.map((comentario) => (
+                    <div key={comentario.id} className={styles.comentario}>
+                      <p>{comentario.conteudo}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p></p>
+                )}
+              </div>
+              <div className={styles.adicionar_comentario}>
+                <input
+                  type="text"
+                  value={novoComentario[post.id] || ""}
+                  onChange={(e) => handleNovoComentarioChange(post.id, e)}
+                  placeholder="Adicione um comentário..."
+                  className={styles.input_comentario}
+                />
+                <button
+                  onClick={() => handleAdicionarComentario(post.id)}
+                  className={styles.botao_comentar}
+                >
+                  Comentar
+                </button>
+              </div>
             </div>
           </section>
         ))
