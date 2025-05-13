@@ -7,7 +7,7 @@ import debounce from "lodash/debounce";
 
 const ListaProfissionais = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // Para acessar o state passado por Home
+  const location = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
   const [profissionais, setProfissionais] = useState([]);
   const [cep, setCep] = useState("");
@@ -17,7 +17,6 @@ const ListaProfissionais = () => {
   const [profissao, setProfissao] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isCepLoading, setIsCepLoading] = useState(false);
-
 
   // Função utilitária para cortar texto
   const truncateText = (text, maxLength = 100) => {
@@ -70,7 +69,6 @@ const ListaProfissionais = () => {
     setProfissao(e.target.value);
   };
 
-  // Busca por termo
   const handleSearch = async () => {
     setIsLoading(true);
     try {
@@ -110,7 +108,6 @@ const ListaProfissionais = () => {
     }
   };
 
-  // Verificação de autenticação e busca inicial
   useEffect(() => {
     window.scrollTo(0, 0);
     const token = localStorage.getItem("access");
@@ -119,10 +116,9 @@ const ListaProfissionais = () => {
       return;
     }
 
-    // Recebe o searchTerm do state (vindo de Home)
     const initialSearchTerm = location.state?.searchTerm || "";
     if (initialSearchTerm) {
-      setProfissao(initialSearchTerm); // Define o termo no campo profissão
+      setProfissao(initialSearchTerm);
     }
 
     const buscarProfissionais = async () => {
@@ -151,11 +147,9 @@ const ListaProfissionais = () => {
       }
     };
 
-    // Executa a busca inicial se houver um searchTerm
     if (initialSearchTerm) {
       buscarProfissionais();
     } else {
-      // Busca padrão sem filtros (como no código original)
       buscarProfissionais();
     }
   }, [navigate, location.state]);
@@ -168,7 +162,9 @@ const ListaProfissionais = () => {
           <p>Fale Conosco</p>
           <p>Sobre Nós</p>
           <p onClick={() => navigate("..")}>Como Funciona?</p>
-          <button type="button" onClick={() => navigate("/cadastro")}>Seja um Profissional</button>
+          <button type="button" onClick={() => navigate("/cadastro")}>
+            Seja um Profissional
+          </button>
           <button type="button">Entrar</button>
         </div>
       </nav>
@@ -233,7 +229,15 @@ const ListaProfissionais = () => {
             <p>Carregando...</p>
           ) : Array.isArray(profissionais) && profissionais.length > 0 ? (
             profissionais.map((profissional) => (
-              <div className={styles.perfil} key={profissional.id} onClick={() => navigate(`/bio`)}>
+              <div
+                className={styles.perfil}
+                key={profissional.id}
+                onClick={() =>
+                  navigate(`/bio/${profissional.id}`, {
+                    state: { profissional }, // Passa o objeto profissional no state
+                  })
+                }
+              >
                 <div className={styles.perfil_image}>
                   <img
                     className={styles.image}
@@ -270,7 +274,6 @@ const ListaProfissionais = () => {
           </p>
           <p>© 2024. Serviços à Porta. Todos os direitos reservados.</p>
         </div>
-
         <div className={styles.footer_redes}>
           <h3>Redes Sociais</h3>
           <span className={styles.footer_line}></span>
@@ -280,7 +283,6 @@ const ListaProfissionais = () => {
           <a>LinkedIn</a>
           <a>X</a>
         </div>
-
         <div className={styles.footer_paginas}>
           <h3>Páginas</h3>
           <span className={styles.footer_line}></span>
@@ -290,7 +292,6 @@ const ListaProfissionais = () => {
           <a>Entrar</a>
           <a>Contato</a>
         </div>
-
         <div className={styles.footer_regulamento}>
           <h3>Regulamento</h3>
           <span className={styles.footer_line}></span>

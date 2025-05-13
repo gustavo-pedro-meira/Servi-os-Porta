@@ -10,7 +10,7 @@ class ClienteSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
     class Meta:
         model = Cliente
-        fields = ["cpf", "nome", "dataNascimento", "biografia", "password", "username", "numero", "email"]
+        fields = ["cpf", "nome", "dataNascimento", "password", "username", "numero", "email"]
         write_only_fields = ('password')
         read_only_fields = ('is_staff', 'is_superuser', 'is_active')
         

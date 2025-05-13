@@ -1,42 +1,68 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import styles from "../styles/register.module.css";
 
 const Register = () => {
-    const [showPassword, setShowPassword] = useState(false);
+    const [nome, setNome] = useState("");
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState("");
+    const [confirmarPassword, setConfirmarPassword] = useState("");
+    const [numero, setNumero] = useState("");
+    const [dataNascimento, setDataNascimento] = useState("");
+    const [cpf, setCpf] = useState("");
+    const [erro, setErro] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
-    const togglePassword = () => {
-        setShowPassword(!showPassword);
-    };
 
-    const handleRegister = async () => {
-        console.log("handleRegister foi chamado");
-        
-        try {
-            await axios.post("http://127.0.0.1:8000/api/register/", {
-                username: username,
-                email: email,
-                password: password,
-            });
-            setSuccess("Cadastro realizado com sucesso!");
-            setError("");
-        } catch (err) {
-            setError("Erro ao cadastrar.");
-            setSuccess("");
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setErro("");
+
+        if (password !== confirmarPassword) {
+            setErro("As senhas não conferem");
+            return;
         }
-    };
 
-    useEffect(() => {
-        document.body.classList.add(styles.registerBody);
-        return () => {
-            document.body.classList.remove(styles.registerBody);
-        };
-    }, []);
+        if (!nome || !email || !username || !cpf) {
+            setErro("Por favor, preencha todos os campos obrigatórios");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("nome", nome);
+        formData.append("username", username);
+        formData.append("email", email);
+        formData.append("password", password);
+        formData.append("confirmarPassword", confirmarPassword);
+        formData.append("numero", numero);
+        formData.append("cpf", cpf);
+        formData.append("dataNascimento", dataNascimento);
+
+        setIsLoading(true);
+        try {
+            const response = await axios.post(`http://localhost:8000/api/clientes/?t=${Date.now()}`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                }
+            })
+            console.log(response.data);
+        } catch (error) {
+            console.error("Erro ao cadastrar cliente", error);
+            if (error.response) {
+                console.log("Erro detalhado:", error.response.data);
+                setErro(JSON.stringify(error.response.data)); // Mostra os campos com problema
+            } else {
+                setErro("Erro ao cadastrar cliente");
+            }
+        } finally {
+            setIsLoading(false);
+        }
+
+        navigate("/login");
+    }
 
     return (
         <main>
@@ -72,11 +98,44 @@ const Register = () => {
                         <div className={styles.inputcontainer}>
                             <i className="fas fa-user"></i>
                             <input
-                                placeholder="Usuário"
+                                placeholder="Nome"
                                 type="text"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                value={nome}
+                                onChange={(e) => setNome(e.target.value)}
                             />
+                        </div>
+
+                        <div className={styles.inputcontainer}>
+                            <i className="fas fa-lock"></i>
+                            <input
+                                id="cpf"
+                                placeholder="CPF"
+                                type="text"
+                                value={cpf}
+                                onChange={(e) => setCpf(e.target.value)}
+                            />
+                            <i
+                                id="toggle-cpf"
+                                className="fas fa-eye"
+                                style={{ cursor: "pointer" }}
+                            ></i>
+                        </div>
+
+                        <div className={styles.inputcontainer}>
+                            <i className="fas fa-lock"></i>
+                            <input
+                                id="dataNascimento"
+                                placeholder="Data de Nascimento"
+                                type="date"
+                                value={dataNascimento}
+                                onChange={(e) => setDataNascimento(e.target.value)}
+                                style={{ color: dataNascimento === "" ? "gray" : "black" }}
+                            />
+                            <i
+                                id="toggle-dataNascimento"
+                                className="fas fa-eye"
+                                style={{ cursor: "pointer" }}
+                            ></i>
                         </div>
 
                         <div className={styles.inputcontainer}>
@@ -90,26 +149,67 @@ const Register = () => {
                         </div>
 
                         <div className={styles.inputcontainer}>
+                            <i className="fas fa-user"></i>
+                            <input
+                                placeholder="Usuário"
+                                type="text"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                            />
+                        </div>
+
+                        <div className={styles.inputcontainer}>
                             <i className="fas fa-lock"></i>
                             <input
                                 id="password"
                                 placeholder="Senha"
-                                type={showPassword ? "text" : "password"}
+                                type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                             <i
                                 id="toggle-password"
                                 className="fas fa-eye"
-                                onClick={togglePassword}
                                 style={{ cursor: "pointer" }}
                             ></i>
                         </div>
 
-                        {error && <p style={{ color: "red" }}>{error}</p>}
-                        {success && <p style={{ color: "green" }}>{success}</p>}
+                        <div className={styles.inputcontainer}>
+                            <i className="fas fa-lock"></i>
+                            <input
+                                id="confirmarPassword"
+                                placeholder="Confirmar Senha"
+                                type="password"
+                                value={confirmarPassword}
+                                onChange={(e) => setConfirmarPassword(e.target.value)}
+                            />
+                            <i
+                                id="toggle-confirmar-password"
+                                className="fas fa-eye"
+                                style={{ cursor: "pointer" }}
+                            ></i>
+                        </div>
 
-                        <button onClick={handleRegister} className={styles.cadastrar_button}>
+                        <div className={styles.inputcontainer}>
+                            <i className="fas fa-lock"></i>
+                            <input
+                                id="numero"
+                                placeholder="Numero"
+                                type="text"
+                                value={numero}
+                                onChange={(e) => setNumero(e.target.value)}
+                            />
+                            <i
+                                id="toggle-numero"
+                                className="fas fa-eye"
+                                style={{ cursor: "pointer" }}
+                            ></i>
+                        </div>
+
+                        {/* {error && <p style={{ color: "red" }}>{error}</p>}
+                        {success && <p style={{ color: "green" }}>{success}</p>} */}
+
+                        <button onClick={handleSubmit} className={styles.cadastrar_button}>
                             Cadastrar
                         </button>
                     </div>
