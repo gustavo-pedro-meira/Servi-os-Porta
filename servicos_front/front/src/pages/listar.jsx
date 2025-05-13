@@ -162,7 +162,7 @@ const ListaProfissionais = () => {
           <p>Fale Conosco</p>
           <p>Sobre Nós</p>
           <p onClick={() => navigate("..")}>Como Funciona?</p>
-          <button type="button" onClick={() => navigate("/cadastro")}>
+          <button type="button" onClick={() => navigate("/cadastro")} className={styles.button_profissional}>
             Seja um Profissional
           </button>
           <button type="button">Entrar</button>

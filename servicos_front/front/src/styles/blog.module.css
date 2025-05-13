@@ -1,3 +1,10 @@
+body {
+    width: auto;
+    height: auto;
+    font-family: sans-serif;
+    color: #595959;
+}
+
 .nav {
     display: flex;
     justify-content: space-between;
@@ -23,18 +30,15 @@
 
 .navcontent button {
     border-radius: 10px;
-    border-style: none;
+    border: 2px solid #74C7DF;
     height: 5vh;
     width: 12vw;
     cursor: pointer;
+    color: #74C7DF;
+    background-color: #FFFFFF;
     transition: 0.3s;
     font-family: "Rubik", sans-serif;
     font-weight: 500;
-}
-
-.navcontent button:first-of-type {
-    border-color: #74C7DF;
-    border-width: 1px;
 }
 
 .navcontent button:first-of-type:hover {
@@ -53,7 +57,6 @@
 .navcontent button:last-of-type:hover {
     border: 1px solid #74C7DF;
     font-weight: 400;
-
 }
 
 .navcontent button:focus {
@@ -62,7 +65,7 @@
 
 .button_profissional {
     background-color: #74C7DF;
-    color: #FFFFFF;
+    color: #FFFFFF
 }
 
 .service_search {
@@ -201,12 +204,6 @@
     cursor: pointer;
 }
 
-body {
-    width: auto;
-    height: auto;
-    font-family: sans-serif;
-    color: #595959;
-}
 
 .destaque {
     color: #74C7DF;
@@ -235,38 +232,6 @@ body {
     gap: 50px;
 }
 
-.navcontent button {
-    border-radius: 10px;
-    border-style: solid;
-    height: 5vh;
-    width: 12vw;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.navcontent button:first-of-type {
-    background-color: #ffffff;
-    color: #595959;
-    border-color: #38AFD1;
-    border-width: 1px;
-}
-
-.navcontent button:first-of-type:hover {
-    background-color: #38AFD1;
-    color: white;
-    border-style: none;
-}
-
-.navcontent button:last-of-type {
-    background-color: #38AFD1;
-    color: white;
-    border-style: none;
-}
-
-.navcontent button:last-of-type:hover {
-    background-color: #2F6F9B;
-    border: 1px solid #38AFD1;
-}
 
 .section_one {
     display: flex;

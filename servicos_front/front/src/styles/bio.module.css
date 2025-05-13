@@ -37,18 +37,15 @@ body {
 
 .navcontent button {
     border-radius: 10px;
-    border-style: none;
+    border: 2px solid #74C7DF;
     height: 5vh;
     width: 12vw;
     cursor: pointer;
+    color: #74C7DF;
+    background-color: #FFFFFF;
     transition: 0.3s;
     font-family: "Rubik", sans-serif;
     font-weight: 500;
-}
-
-.navcontent button:first-of-type {
-    border-color: #74C7DF;
-    border-width: 1px;
 }
 
 .navcontent button:first-of-type:hover {
@@ -78,7 +75,6 @@ body {
     background-color: #74C7DF;
     color: #FFFFFF;
 }
-
 
 .section_one {
     display: flex;
