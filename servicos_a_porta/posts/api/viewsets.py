@@ -19,7 +19,7 @@ class PostViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     ordering_fields = ['created_at', 'titulo', 'id'] 
     ordering = ['-created_at']  
-    permission_classes = [IsAuthenticated, IsProfissional]
+    # permission_classes = [IsAuthenticated, IsProfissional]
 
     def get_permissions(self):
         if self.action == "curtir":

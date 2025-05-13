@@ -26,9 +26,7 @@ const Home = () => {
   const fetchPosts = async() => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`http://localhost:8000/api/posts/?ordering=-dataCriacao&t=${Date.now()}`, {
-        headers: {Authorization: `Bearer ${localStorage.getItem("access")}`}
-      })
+      const response = await axios.get(`http://localhost:8000/api/posts/?ordering=-dataCriacao&t=${Date.now()}`)
       const data = Array.isArray(response.data)
         ? response.data
         : Array.isArray(response.data.results)
