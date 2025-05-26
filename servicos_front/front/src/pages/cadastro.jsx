@@ -73,7 +73,7 @@ const CadastroProfissional = () => {
             console.error("Erro ao cadastrar profissional", error);
             if (error.response) {
                 console.log("Erro detalhado:", error.response.data);
-                setErro(JSON.stringify(error.response.data)); // Mostra os campos com problema
+                setErro(JSON.stringify(error.response.data)); 
             } else {
                 setErro("Erro ao cadastrar profissional");
             }
@@ -239,6 +239,12 @@ const CadastroProfissional = () => {
                     <select value={idProfissao} onChange={(e) => setIdProfissao(e.target.value)} style={{ color: idProfissao === "" ? "gray" : "black" }}>
                         <option value="">Selecione uma profissão</option>
                         <option value="2">Pedreiro</option>
+                        <option value="3">Limpeza Doméstica</option>
+                        <option value="4">Reparos e Manutenção</option>
+                        <option value="5">Serviços de Ar-Condicionado</option>
+                        <option value="6">Mudança e Transportes</option>
+                        <option value="7">Instalações</option>
+                        <option value="8">Montador de Móveis</option>
                     </select>
                     {/* <input
                     type="text"

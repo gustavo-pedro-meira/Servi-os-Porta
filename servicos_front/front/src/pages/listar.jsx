@@ -231,6 +231,13 @@ const ListaProfissionais = () => {
               type="text"
               placeholder="Profissão"
             />
+            <button 
+              className={styles.button_buscar}
+              onClick={handleSearch}
+              disabled={isLoading}
+            >
+              {isLoading ? "Buscando..." : "Buscar"}
+            </button>
             <datalist id="lista-nivel">
               <option value="Iniciante" />
               <option value="Qualificado" />
@@ -240,7 +247,7 @@ const ListaProfissionais = () => {
         </div>
         <div className={styles.div_perfil}>
           {isLoading ? (
-            <p>Carregando...</p>
+            null
           ) : Array.isArray(profissionais) && profissionais.length > 0 ? (
             profissionais.map((profissional) => (
               <div

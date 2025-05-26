@@ -105,6 +105,7 @@ body {
     font-size: 12px;
 }
 
+
 .inputWrapper {
     position: relative;
     width: 100%;
@@ -266,7 +267,6 @@ body {
     width: 10vw;
     height: 20vh;
     border-radius: 60%;
-    /*border: #595959 1px solid; */
     justify-content: center;
     align-items: center;
 }
@@ -284,6 +284,27 @@ body {
 
 .services_info p {
     white-space: nowrap;
+}
+
+.button_buscar {
+    height: 30px;
+    width: 120px;
+    position: absolute;
+    left: 87%;
+    top: 24%;
+    background: #38AFD1;
+    color: #FFFFFF;
+    border-radius: 20px;
+    border: 2px solid transparent;
+    box-shadow: 0px 5px 4px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
+    transition: 0.4s;
+}
+
+.button_buscar:hover {
+    transform: scale(1.05);
 }
 
 .whatsapp_button {

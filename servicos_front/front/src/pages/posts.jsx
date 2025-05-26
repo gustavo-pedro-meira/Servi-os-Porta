@@ -19,6 +19,9 @@ const Posts = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [isPosting, setIsPosting] = useState(false);
   const [menuOpenId, setMenuOpenId] =  useState(null);
+  const [isComentariosModalOpen, setIsComentariosModalOpen] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState(null);
+  const [comentarios, setComentarios] = useState([]);
   const menuRef = useRef(null);
 
   const handleMenuClick = (postId) => {
@@ -27,7 +30,7 @@ const Posts = () => {
 
   const fetchPosts = async () => {
     try {
-      setIsLoading(true);
+      // setIsLoading(true);
       const response = await axios.get(
         `http://localhost:8000/api/posts/?t=${Date.now()}`,
         {
@@ -110,20 +113,55 @@ const Posts = () => {
           headers: { Authorization: `Bearer ${localStorage.getItem("access")}` },
         }
       );
-      // Atualizar o estado com o novo comentário
       setPosts((prevPosts) =>
         prevPosts.map((post) =>
           post.id === postId
-            ? { ...post, comentarios: [...post.comentarios, response.data] }
+            ? {
+                ...post,
+                comentarios: [...(post.comentarios || []), response.data],
+                comentarios_count: (post.comentarios_count || 0) + 1,
+              }
             : post
         )
       );
-      // Limpar o campo de entrada
+      if (postId === selectedPostId) {
+        setComentarios((prevComentarios) => [...prevComentarios, response.data]);
+      }
       setNovoComentario({ ...novoComentario, [postId]: "" });
     } catch (error) {
       console.error("Erro ao adicionar comentário:", error);
       alert("Erro ao adicionar comentário. Tente novamente.");
     }
+  };
+
+  const handleOpenComentariosModal = async (postId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8000/api/comentarios/?post=${postId}&t=${Date.now()}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("access")}` },
+        }
+      );
+      const data = Array.isArray(response.data)
+        ? response.data
+        : Array.isArray(response.data.results)
+        ? response.data.results
+        : [];
+      console.log("Comentários encontrados:", data);
+      setComentarios(data);
+      setSelectedPostId(postId);
+      setIsComentariosModalOpen(true);
+    } catch (error) {
+      console.error("Erro ao carregar comentários:", error);
+      alert("Erro ao carregar comentários. Tente novamente.");
+    }
+  };
+
+  const fecharComentariosModal = () => {
+    setIsComentariosModalOpen(false);
+    setSelectedPostId(null);
+    setComentarios([]);
+    setNovoComentario({ ...novoComentario, [selectedPostId]: "" });
   };
 
   const handleSearch = async (term) => {
@@ -201,7 +239,7 @@ const Posts = () => {
     }
 
     try {
-      await axios.post(`http://localhost:8000/api/posts/`, formData, {
+      await axios.post(`http://localhost:8000/api/posts/?t=${Date.now()}`, formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access")}`,
           "Content-Type": "multipart/form-data",
@@ -349,7 +387,7 @@ const Posts = () => {
       </section>
 
       {isLoading ? (
-        <p className={styles.loading}>Carregando...</p>
+        null
       ) : Array.isArray(posts) && posts.length > 0 ? (
         posts.map((post) => (
           <section className={styles.postagens} key={post.id}>
@@ -395,7 +433,7 @@ const Posts = () => {
                   />
                   {post.curtidas_count || 0} curtidas
                 </button>
-                <span className={styles.comentarios_count}>
+                <span className={styles.comentarios_count} onClick={() => handleOpenComentariosModal(post.id)}>
                   {post.comentarios_count || 0} comentários
                 </span>
               </div>
@@ -485,6 +523,68 @@ const Posts = () => {
               >
                 {isPosting ? "Postando..." : "Postar"}
               </button>
+            </div>
+          </section>
+        </>
+      )}
+
+      {isComentariosModalOpen && (
+        <>
+          <div className={styles.overlay} onClick={fecharComentariosModal}></div>
+          <section className={styles.criar_postagem_modal}>
+            <div className={styles.criar_publicacao}>
+              <button className={styles.button_fechar} onClick={fecharComentariosModal}>
+                X
+              </button>
+              <h2 className={styles.titulo_post}>Comentários</h2>
+              <div className={styles.linha_criar} />
+              <div className={styles.campos_criar}>
+                {posts.find((post) => post.id === selectedPostId) && (
+                  <>
+                    <img
+                      src={
+                        posts.find((post) => post.id === selectedPostId).conteudo ||
+                        "/default.jpg"
+                      }
+                      alt="Img Post"
+                      className={styles.img_post}
+                      onError={(e) => (e.target.src = "/default.jpg")}
+                    />
+                    <div className={styles.comentarios}>
+                      {comentarios.length > 0 ? (
+                        comentarios.map((comentario) => (
+                          <div key={comentario.id} className={styles.comentario}>
+                            <p>
+                              <strong>{comentario.autor?.nome || "Usuário"}:</strong>{" "}
+                              {comentario.conteudo}
+                            </p>
+                            <span>
+                              {new Date(comentario.created_at).toLocaleDateString()}
+                            </span>
+                          </div>
+                        ))
+                      ) : (
+                        <p>Sem comentários ainda.</p>
+                      )}
+                    </div>
+                    <div className={styles.adicionar_comentario}>
+                      <input
+                        type="text"
+                        value={novoComentario[selectedPostId] || ""}
+                        onChange={(e) => handleNovoComentarioChange(selectedPostId, e)}
+                        placeholder="Adicione um comentário..."
+                        className={styles.input_comentario}
+                      />
+                      <button
+                        onClick={() => handleAdicionarComentario(selectedPostId)}
+                        className={styles.botao_comentar}
+                      >
+                        Comentar
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </section>
         </>
