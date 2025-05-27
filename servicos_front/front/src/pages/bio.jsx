@@ -1,19 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { FaWhatsapp } from "react-icons/fa";
-import { useParams, useNavigate, useLocation } from "react-router-dom"; // Adicione useLocation
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import styles from "../styles/bio.module.css";
 import axios from "axios";
 
 const Bio = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation(); 
-  const [profissional, setProfissional] = useState(location.state?.profissional || null); 
+  const location = useLocation();
+  const [profissional, setProfissional] = useState(location.state?.profissional || null);
   const [outrosProfissionais, setOutrosProfissionais] = useState([]);
   const [isLoading, setIsLoading] = useState(!location.state?.profissional);
   const [error, setError] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("access"));
+
+  // Função de logout
+  const handleLogout = () => {
+    localStorage.removeItem("access");
+    setIsLoggedIn(false);
+    navigate("/login");
+  };
 
   useEffect(() => {
+    // Atualiza o estado de autenticação com base no token
+    setIsLoggedIn(!!localStorage.getItem("access"));
+
     const fetchData = async () => {
       if (profissional) {
         try {
@@ -28,11 +39,11 @@ const Bio = () => {
             : Array.isArray(outrosResponse.data.results)
             ? outrosResponse.data.results
             : [];
-            setOutrosProfissionais(
-              outros
-                .filter((p) => Number(p.id) !== Number(id)) 
-                .slice(0, 4)
-            );
+          setOutrosProfissionais(
+            outros
+              .filter((p) => Number(p.id) !== Number(id))
+              .slice(0, 4)
+          );
         } catch (error) {
           console.error("Erro ao buscar outros profissionais:", error);
           setOutrosProfissionais([]);
@@ -65,11 +76,11 @@ const Bio = () => {
             : Array.isArray(outrosResponse.data.results)
             ? outrosResponse.data.results
             : [];
-            setOutrosProfissionais(
-              outros
-                .filter((p) => Number(p.id) !== Number(id))
-                .slice(0, 4)
-            );
+          setOutrosProfissionais(
+            outros
+              .filter((p) => Number(p.id) !== Number(id))
+              .slice(0, 4)
+          );
         } catch (error) {
           console.error("Erro ao buscar dados:", error);
           setError("Não foi possível carregar os dados do profissional.");
@@ -94,24 +105,35 @@ const Bio = () => {
             onClick={() => {
               navigate("/", { state: { scrollTo: "contato" } });
             }}
-          >Fale Conosco</p>
+          >
+            Fale Conosco
+          </p>
           <p
             onClick={() => {
               navigate("/", { state: { scrollTo: "sobre" } });
             }}
-          >Sobre Nós</p>
-          <p 
+          >
+            Sobre Nós
+          </p>
+          <p
             onClick={() => {
               navigate("/", { state: { scrollTo: "como_funciona" } });
             }}
           >
-            Como Funciona? 
+            Como Funciona?
           </p>
-          <button type="button" onClick={() => navigate("/cadastro")}>
+          <button
+            type="button"
+            onClick={() => navigate("/cadastro")}
+            className={styles.button_profissional}
+          >
             Seja um Profissional
           </button>
-          <button type="button" onClick={() => navigate("/login")}>
-            Entrar
+          <button
+            type="button"
+            onClick={isLoggedIn ? handleLogout : () => navigate("/login")}
+          >
+            {isLoggedIn ? "Sair" : "Entrar"}
           </button>
         </div>
       </nav>
@@ -167,7 +189,7 @@ const Bio = () => {
                   className={styles.services_separator}
                   onClick={() =>
                     navigate(`/bio/${profissional.id}`, {
-                      state: { profissional }, 
+                      state: { profissional },
                     })
                   }
                 >

@@ -17,11 +17,19 @@ const ListaProfissionais = () => {
   const [profissao, setProfissao] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isCepLoading, setIsCepLoading] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("access"));
 
   // Função utilitária para cortar texto
   const truncateText = (text, maxLength = 100) => {
     if (typeof text !== "string") return "";
     return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
+  };
+
+  // Função de logout
+  const handleLogout = () => {
+    localStorage.removeItem("access");
+    setIsLoggedIn(false);
+    navigate("/login");
   };
 
   // Validação de CEP
@@ -111,6 +119,7 @@ const ListaProfissionais = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     const token = localStorage.getItem("access");
+    setIsLoggedIn(!!token);
     if (!token) {
       navigate("/login");
       return;
@@ -160,26 +169,39 @@ const ListaProfissionais = () => {
         <img src="/logoservicos.png" alt="Logo" height={80} />
         <div className={styles.navcontent}>
           <p
-              onClick={() => {
-                navigate("/", { state: { scrollTo: "contato" } });
-              }}
-            >Fale Conosco</p>
-            <p
-              onClick={() => {
-                navigate("/", { state: { scrollTo: "sobre" } });
-              }}
-            >Sobre Nós</p>
-            <p 
-              onClick={() => {
-                navigate("/", { state: { scrollTo: "como_funciona" } });
-              }}
-            >
-              Como Funciona? 
-            </p>
-          <button type="button" onClick={() => navigate("/cadastro")} className={styles.button_profissional}>
+            onClick={() => {
+              navigate("/", { state: { scrollTo: "contato" } });
+            }}
+          >
+            Fale Conosco
+          </p>
+          <p
+            onClick={() => {
+              navigate("/", { state: { scrollTo: "sobre" } });
+            }}
+          >
+            Sobre Nós
+          </p>
+          <p
+            onClick={() => {
+              navigate("/", { state: { scrollTo: "como_funciona" } });
+            }}
+          >
+            Como Funciona?
+          </p>
+          <button
+            type="button"
+            onClick={() => navigate("/cadastro")}
+            className={styles.button_profissional}
+          >
             Seja um Profissional
           </button>
-          <button type="button">Entrar</button>
+          <button
+            type="button"
+            onClick={isLoggedIn ? handleLogout : () => navigate("/login")}
+          >
+            {isLoggedIn ? "Sair" : "Entrar"}
+          </button>
         </div>
       </nav>
       <section className={styles.section_one}>
@@ -231,7 +253,7 @@ const ListaProfissionais = () => {
               type="text"
               placeholder="Profissão"
             />
-            <button 
+            <button
               className={styles.button_buscar}
               onClick={handleSearch}
               disabled={isLoading}
@@ -255,7 +277,7 @@ const ListaProfissionais = () => {
                 key={profissional.id}
                 onClick={() =>
                   navigate(`/bio/${profissional.id}`, {
-                    state: { profissional }, 
+                    state: { profissional },
                   })
                 }
               >
