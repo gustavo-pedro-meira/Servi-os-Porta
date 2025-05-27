@@ -562,6 +562,64 @@ body {
     transition: 0.3s;
 }
 
+.comentario {
+    display: flex;
+    align-items: flex-start;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .img_perfil_comentario {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin-right: 15px;
+    object-fit: cover;
+  }
+  
+  .text_container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    font-family: "Rubik", sans-serif;
+    font-weight: 400;
+  }
+  
+  .nome_profissao_comentario {
+    margin-bottom: 5px;
+  }
+  
+  .nome_comentario {
+    font-size: 16px;
+    margin: 0;
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
+  }
+  
+  .profissao_comentario {
+    font-size: 12px;
+    color: #666;
+    margin: 0;
+    font-family: "Rubik", sans-serif;
+    font-weight: 400;
+  }
+  
+  .conteudo_comentario {
+    font-size: 14px;
+    margin: 0 0 10px 0;
+    word-wrap: break-word;     /* Quebra palavras longas */
+    overflow-wrap: break-word; /* Suporte moderno */
+    width: 50%;
+  }
+  
+  .data_comentario {
+    font-size: 12px;
+    color: #999;
+  }
+
 
 .footer {
     display: flex;
@@ -605,3 +663,4 @@ body {
     height: 1px;
     background-color: #595959;
 }
+

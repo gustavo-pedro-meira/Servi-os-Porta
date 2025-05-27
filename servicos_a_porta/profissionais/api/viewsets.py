@@ -64,5 +64,5 @@ class CurrentUserView(APIView):
         return Response({
             'id': user.id,
             'nome': user.username,  # ou first_name
-            'is_profissional': getattr(user, 'is_profissional', False)
+            'is_profissional': getattr(user, 'is_profissional', True)
         })

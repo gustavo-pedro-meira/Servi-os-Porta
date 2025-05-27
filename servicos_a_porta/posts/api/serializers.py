@@ -11,13 +11,18 @@ class ProfissionalSerializer(serializers.ModelSerializer):
         ref_name = "PostProfissionalSerializer"
 
 class ComentarioSerializer(serializers.ModelSerializer):
+    autor = serializers.CharField(source='profissional.nome', read_only=True)
+    profissao = serializers.CharField(source='profissional.idProfissao.nome', read_only=True)
+    foto_perfil = serializers.CharField(source='profissional.foto_perfil', read_only=True)
     class Meta:
         model = models.ComentarioPost
-        fields = "__all__"
+        fields = ["conteudo", "dataCriacao",  "post", "profissional",  "autor", "foto_perfil", "profissao"]
+        read_only_fields = ["dataCriacao", "autor", "foto_perfil", "profissao"]
 
 class PostSerializer(serializers.ModelSerializer):
     usuario = ProfissionalSerializer(source="profissional", read_only=True)
     profissional = serializers.PrimaryKeyRelatedField(queryset=Profissional.objects.all(), required=False)
+    profissional_nome = serializers.CharField(source="profissional.nome", read_only=True)
     curtidas_count = serializers.SerializerMethodField()
     is_curtido = serializers.SerializerMethodField()
     comentarios = ComentarioSerializer(many=True, read_only=True)
@@ -45,6 +50,6 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.PostServico
-        fields = ["id", "titulo", "conteudo", "dataCriacao", "profissional", "curtidas_count", "is_curtido", "usuario", "created_at", "updated_at", "is_active", "comentarios", "comentarios_count"]
-        read_only_fields = ["dataCriacao", "curtidas_count", "is_curtido", "usuario", "created_at", "updated_at", "is_active", "comentarios_count"]
+        fields = ["id", "titulo", "conteudo", "dataCriacao", "profissional", "curtidas_count", "is_curtido", "usuario", "created_at", "updated_at", "is_active", "comentarios", "comentarios_count", "profissional_nome"]
+        read_only_fields = ["dataCriacao", "curtidas_count", "is_curtido", "usuario", "created_at", "updated_at", "is_active", "comentarios_count", "profissional_nome"]
         

@@ -18,19 +18,19 @@ const Posts = () => {
   const [error, setError] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
   const [isPosting, setIsPosting] = useState(false);
-  const [menuOpenId, setMenuOpenId] =  useState(null);
-  const [isComentariosModalOpen, setIsComentariosModalOpen] = useState(false);
-  const [selectedPostId, setSelectedPostId] = useState(null);
-  const [comentarios, setComentarios] = useState([]);
-  const menuRef = useRef(null);
+  const [menuOpenId, setMenuOpenId] = useState(null);
+  const [openComments, setOpenComments] = useState({});
+  const menuRefs = useRef({}); // Objeto para armazenar refs por postId
 
-  const handleMenuClick = (postId) => {
+  const handleMenuClick = (postId, event) => {
+    event.stopPropagation();
+    console.log("Clicou no botão de menu, postId:", postId);
     setMenuOpenId(menuOpenId === postId ? null : postId);
-  }
+  };
 
   const fetchPosts = async () => {
     try {
-      // setIsLoading(true);
+      setIsLoading(true);
       const response = await axios.get(
         `http://localhost:8000/api/posts/?t=${Date.now()}`,
         {
@@ -76,39 +76,53 @@ const Posts = () => {
   const checkProfissional = async () => {
     const token = localStorage.getItem("access");
     if (!token) {
+      console.log("Nenhum token encontrado, redirecionando para login...");
       setIsProfissional(false);
       setCurrentUser(null);
       navigate("/login");
       return;
     }
     try {
+      console.log("Fazendo requisição para /api/me/ com token:", token);
       const response = await axios.get(
-        `http://localhost:8000/api/user/?t=${Date.now()}`,
+        `http://localhost:8000/api/me/?t=${Date.now()}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log("Dados do usuário:", response.data);
+      console.log("Resposta da API /api/me/: ", response.data);
       setCurrentUser(response.data);
-      setIsProfissional(response.data.is_profissional || false);
-      console.log("isProfissional definido como:", response.data.is_profissional || false);
+      const isProf = response.data.is_profissional || false;
+      console.log("isProfissional definido como:", isProf);
+      setIsProfissional(isProf);
+      if (!isProf) {
+        console.log("Aviso: Usuário não é profissional, criação de posts bloqueada.");
+      }
     } catch (err) {
-      console.error("Erro:", err);
+      console.error("Erro ao verificar usuário:", err.response?.data || err.message);
       setIsProfissional(false);
       setCurrentUser(null);
+      navigate("/login");
     }
   };
 
   const handleNovoComentarioChange = (postId, e) => {
     setNovoComentario({ ...novoComentario, [postId]: e.target.value });
   };
-  
+
+  const toggleComments = (postId) => {
+    setOpenComments((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }));
+  };
+
   const handleAdicionarComentario = async (postId) => {
     const comentario = novoComentario[postId];
     if (!comentario || !comentario.trim()) return;
-  
+
     try {
       const response = await axios.post(
         `http://localhost:8000/api/comentarios/`,
-        { post: postId, conteudo: comentario },
+        { post: postId, conteudo: comentario, profissional: currentUser?.id },
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("access")}` },
         }
@@ -124,44 +138,12 @@ const Posts = () => {
             : post
         )
       );
-      if (postId === selectedPostId) {
-        setComentarios((prevComentarios) => [...prevComentarios, response.data]);
-      }
+      setOpenComments((prev) => ({ ...prev, [postId]: true }));
       setNovoComentario({ ...novoComentario, [postId]: "" });
     } catch (error) {
       console.error("Erro ao adicionar comentário:", error);
       alert("Erro ao adicionar comentário. Tente novamente.");
     }
-  };
-
-  const handleOpenComentariosModal = async (postId) => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8000/api/comentarios/?post=${postId}&t=${Date.now()}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("access")}` },
-        }
-      );
-      const data = Array.isArray(response.data)
-        ? response.data
-        : Array.isArray(response.data.results)
-        ? response.data.results
-        : [];
-      console.log("Comentários encontrados:", data);
-      setComentarios(data);
-      setSelectedPostId(postId);
-      setIsComentariosModalOpen(true);
-    } catch (error) {
-      console.error("Erro ao carregar comentários:", error);
-      alert("Erro ao carregar comentários. Tente novamente.");
-    }
-  };
-
-  const fecharComentariosModal = () => {
-    setIsComentariosModalOpen(false);
-    setSelectedPostId(null);
-    setComentarios([]);
-    setNovoComentario({ ...novoComentario, [selectedPostId]: "" });
   };
 
   const handleSearch = async (term) => {
@@ -226,9 +208,12 @@ const Posts = () => {
     setError("");
     setIsPosting(true);
 
+    console.log("Tentando criar post, título:", titulo, "conteúdo:", conteudo);
+
     if (!titulo.trim()) {
       setError("O título é obrigatório.");
       setIsPosting(false);
+      console.log("Erro: Título vazio");
       return;
     }
 
@@ -239,25 +224,65 @@ const Posts = () => {
     }
 
     try {
-      await axios.post(`http://localhost:8000/api/posts/?t=${Date.now()}`, formData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access")}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      console.log("Enviando requisição POST para /api/posts/");
+      const response = await axios.post(
+        `http://localhost:8000/api/posts/?t=${Date.now()}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access")}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("Post criado com sucesso, resposta:", response.data);
       alert("Post criado com sucesso!");
       setTitulo("");
       setConteudo(null);
       setIsModalOpen(false);
       fetchPosts();
     } catch (err) {
-      console.error("Erro ao criar post:", err);
+      console.error("Erro ao criar post:", err.response?.data || err.message);
       setError(
         err.response?.data?.detail ||
           "Erro ao criar o post. Verifique se você é um profissional."
       );
     } finally {
       setIsPosting(false);
+    }
+  };
+
+  const handleDelete = async (postId, event) => {
+    event.stopPropagation();
+    console.log("Clicou em Deletar, postId:", postId, "currentUser:", currentUser);
+    console.log("Elemento clicado:", event.target);
+
+    if (!window.confirm("Tem certeza que deseja deletar este post?")) {
+      console.log("Deleção cancelada pelo usuário");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("access");
+      console.log("Enviando requisição DELETE para /api/posts/", postId, "com token:", token);
+      await axios.delete(`http://localhost:8000/api/posts/${postId}/?t=${Date.now()}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log("Post deletado com sucesso, postId:", postId);
+      alert("Post deletado com sucesso!");
+      setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+    } catch (error) {
+      console.error("Erro ao deletar post:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+      });
+      alert(
+        error.response?.data?.detail || "Erro ao deletar o post. Tente novamente."
+      );
+    } finally {
+      console.log("Fechando menu após tentativa de deleção, postId:", postId);
+      setMenuOpenId(null);
     }
   };
 
@@ -289,14 +314,6 @@ const Posts = () => {
     }
   };
 
-  // const abrirModal = () => {
-  //   if (!isProfissional) {
-  //     alert("Apenas profissionais podem criar publicações.");
-  //     return;
-  //   }
-  //   setIsModalOpen(true);
-  // };
-
   const fecharModal = () => {
     setIsModalOpen(false);
     setTitulo("");
@@ -319,15 +336,19 @@ const Posts = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+      const currentMenuRef = menuRefs.current[menuOpenId];
+      if (currentMenuRef && !currentMenuRef.contains(event.target)) {
+        console.log("Clicou fora do menu, fechando menuOpenId:", menuOpenId, "target:", event.target);
         setMenuOpenId(null);
+      } else {
+        console.log("Clicou dentro do menu, mantendo aberto, menuOpenId:", menuOpenId, "target:", event.target);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
     };
-  }, []);
+  }, [menuOpenId]);
 
   return (
     <main className={styles.mainClass}>
@@ -339,20 +360,28 @@ const Posts = () => {
               onClick={() => {
                 navigate("/", { state: { scrollTo: "contato" } });
               }}
-            >Fale Conosco</p>
+            >
+              Fale Conosco
+            </p>
             <p
               onClick={() => {
                 navigate("/", { state: { scrollTo: "sobre" } });
               }}
-            >Sobre Nós</p>
-            <p 
+            >
+              Sobre Nós
+            </p>
+            <p
               onClick={() => {
                 navigate("/", { state: { scrollTo: "como_funciona" } });
               }}
             >
-              Como Funciona? 
+              Como Funciona?
             </p>
-            <button type="button" onClick={() => navigate("/cadastro")} className={styles.button_profissional}>
+            <button
+              type="button"
+              onClick={() => navigate("/cadastro")}
+              className={styles.button_profissional}
+            >
               Seja um Profissional
             </button>
             <button type="button" onClick={() => navigate("/login")}>
@@ -378,7 +407,25 @@ const Posts = () => {
                 className={styles.searchIcon}
                 onClick={() => handleSearch(searchTerm)}
               />
-              <button className={styles.button_publi} onClick={() => setIsModalOpen(true)}>
+              <button
+                className={styles.button_publi}
+                onClick={() => {
+                  console.log("Clicou em Criar Publicação, isProfissional:", isProfissional, "currentUser:", currentUser);
+                  if (!isProfissional) {
+                    alert("Apenas profissionais podem criar publicações.");
+                    console.log("Bloqueado: Usuário não é profissional.");
+                    return;
+                  }
+                  if (!currentUser) {
+                    alert("Usuário não carregado. Faça login novamente.");
+                    console.log("Bloqueado: currentUser é null.");
+                    navigate("/login");
+                    return;
+                  }
+                  setIsModalOpen(true);
+                  console.log("Definindo isModalOpen como true");
+                }}
+              >
                 Criar Publicação
               </button>
             </div>
@@ -389,91 +436,133 @@ const Posts = () => {
       {isLoading ? (
         null
       ) : Array.isArray(posts) && posts.length > 0 ? (
-        posts.map((post) => (
-          <section className={styles.postagens} key={post.id}>
-            <div className={styles.pontos_editar} ref={menuRef}>
+        posts.map((post) => {
+          // Criar ref para cada post
+          if (!menuRefs.current[post.id]) {
+            menuRefs.current[post.id] = React.createRef();
+          }
+          return (
+            <section className={styles.postagens} key={post.id}>
+              <div className={styles.pontos_editar} ref={menuRefs.current[post.id]}>
                 <div className={styles.menu_container}>
-                  <button className={styles.botao_editar} onClick={() => handleMenuClick(post.id)}>⋮</button>
-                  <ul className={`${styles.menu_opcoes} ${menuOpenId === post.id ? styles.show : ""}`}>
-                    <li><button onClick={() => handleUpdate(post.id)}>Atualizar</button></li>
-                    <li><button onClick={() => handleDelete(post.id)}>Deletar</button></li>
-                    <li><button onClick={() => handleShare(post.id)}>Compartilhar</button></li>
-                </ul>
+                  <button
+                    className={styles.botao_editar}
+                    onClick={(e) => handleMenuClick(post.id, e)}
+                  >
+                    ⋮
+                  </button>
+                  <ul
+                    className={`${styles.menu_opcoes} ${
+                      menuOpenId === post.id ? styles.show : ""
+                    }`}
+                  >
+                    {isProfissional && post.usuario.id === currentUser?.id && (
+                      <li>
+                        <button onClick={(e) => handleDelete(post.id, e)}>
+                          Deletar
+                        </button>
+                      </li>
+                    )}
+                  </ul>
+                </div>
               </div>
-            </div>
-            <div className={styles.posts}>
-              <img
-                className={styles.img_perfil}
-                src={post?.usuario?.foto_perfil || "/default.png"}
-                alt="Img Perfil"
-                onError={(e) => (e.target.src = "/default.png")}
-              />
-              <h3>{post?.usuario?.nome}</h3>
-              <h5>{post?.usuario?.profissao || "Profissão não informada"}</h5>
-              <p>{post?.titulo}</p>
-              <div className={styles.imagem_midia}>
+              <div className={styles.posts}>
                 <img
-                  src={post?.conteudo || "/default.jpg"}
-                  alt="Img Post"
-                  className={styles.img_post}
-                  onError={(e) => (e.target.src = "/default.jpg")}
+                  className={styles.img_perfil}
+                  src={post?.usuario?.foto_perfil || "/default.png"}
+                  alt="Img Perfil"
+                  onError={(e) => (e.target.src = "/default.png")}
                 />
-              </div>
-              <div className={styles.curtidas}>
-                <button
-                  className={styles.botao_curtir}
-                  onClick={() => handleCurtir(post.id)}
-                  disabled={!localStorage.getItem("access")}
-                >
-                  <FaHeart
-                    style={{
-                      color: post.is_curtido ? "#74C7DF" : "grey",
-                      marginRight: "5px",
-                    }}
+                <h3>{post?.usuario?.nome}</h3>
+                <h5>{post?.usuario?.profissao || "Profissão não informada"}</h5>
+                <p>{post?.titulo}</p>
+                <div className={styles.imagem_midia}>
+                  <img
+                    src={post?.conteudo || "/default.jpg"}
+                    alt="Img Post"
+                    className={styles.img_post}
+                    onError={(e) => (e.target.src = "/default.jpg")}
                   />
-                  {post.curtidas_count || 0} curtidas
-                </button>
-                <span className={styles.comentarios_count} onClick={() => handleOpenComentariosModal(post.id)}>
-                  {post.comentarios_count || 0} comentários
-                </span>
+                </div>
+                <div className={styles.curtidas}>
+                  <button
+                    className={styles.botao_curtir}
+                    onClick={() => handleCurtir(post.id)}
+                    disabled={!localStorage.getItem("access")}
+                  >
+                    <FaHeart
+                      style={{
+                        color: post.is_curtido ? "#74C7DF" : "grey",
+                        marginRight: "5px",
+                      }}
+                    />
+                    {post.curtidas_count || 0} curtidas
+                  </button>
+                  <span
+                    className={styles.comentarios_count}
+                    onClick={() => toggleComments(post.id)}
+                  >
+                    {post.comentarios_count || 0} comentários
+                  </span>
+                </div>
+                <div className={styles.linha} />
+                <div className={styles.linha_separacao} />
+                <div className={styles.comentarios}>
+                  {openComments[post.id] && post.comentarios && post.comentarios.length > 0 ? (
+                    post.comentarios.map((comentario) => (
+                      <div key={comentario.id} className={styles.comentario}>
+                        <img
+                          src={comentario.foto_perfil || "/default.png"}
+                          alt="Img Perfil"
+                          onError={(e) => (e.target.src = "/default.png")}
+                          className={styles.img_perfil_comentario}
+                        />
+                        <div className={styles.text_container}>
+                          <div className={styles.nome_profissao_comentario}>
+                            <h4 className={styles.nome_comentario}>
+                              {comentario.autor || "Usuário"}
+                            </h4>
+                            <h6 className={styles.profissao_comentario}>
+                              {comentario.profissao || "Profissão não informada"}
+                            </h6>
+                          </div>
+                          <p className={styles.conteudo_comentario}>{comentario.conteudo}</p>
+                          <span className={styles.data_comentario}>
+                            {new Date(comentario.dataCriacao).toLocaleDateString()}
+                          </span>
+                        </div>
+                      </div>
+                    ))
+                  ) : openComments[post.id] ? (
+                    <p>Sem comentários ainda.</p>
+                  ) : null}
+                </div>
+                <div className={styles.adicionar_comentario}>
+                  <input
+                    type="text"
+                    value={novoComentario[post.id] || ""}
+                    onChange={(e) => handleNovoComentarioChange(post.id, e)}
+                    placeholder="Adicione um comentário..."
+                    className={styles.input_comentario}
+                  />
+                  <button
+                    onClick={() => handleAdicionarComentario(post.id)}
+                    className={styles.botao_comentar}
+                  >
+                    Comentar
+                  </button>
+                </div>
               </div>
-              <div className={styles.linha} />
-              <div className={styles.linha_separacao} />
-              <div className={styles.comentarios}>
-                {post.comentarios && post.comentarios.length > 0 ? (
-                  post.comentarios.map((comentario) => (
-                    <div key={comentario.id} className={styles.comentario}>
-                      <p>{comentario.conteudo}</p>
-                    </div>
-                  ))
-                ) : (
-                  <p></p>
-                )}
-              </div>
-              <div className={styles.adicionar_comentario}>
-                <input
-                  type="text"
-                  value={novoComentario[post.id] || ""}
-                  onChange={(e) => handleNovoComentarioChange(post.id, e)}
-                  placeholder="Adicione um comentário..."
-                  className={styles.input_comentario}
-                />
-                <button
-                  onClick={() => handleAdicionarComentario(post.id)}
-                  className={styles.botao_comentar}
-                >
-                  Comentar
-                </button>
-              </div>
-            </div>
-          </section>
-        ))
+            </section>
+          );
+        })
       ) : (
         <p>Nenhum post encontrado</p>
       )}
 
-      {isModalOpen && (
+      {isModalOpen && currentUser && (
         <>
+          {console.log("Renderizando modal, isModalOpen:", isModalOpen, "currentUser:", currentUser)}
           <div className={styles.overlay} onClick={fecharModal}></div>
           <section className={styles.criar_postagem_modal}>
             <div className={styles.criar_publicacao}>
@@ -486,13 +575,13 @@ const Posts = () => {
                 <img
                   className={styles.img_perfil}
                   src={currentUser?.foto_perfil || "/default.png"}
-                  alt="Img Perfil"
+                  alt="Imagem de Perfil"
                   onError={(e) => (e.target.src = "/default.png")}
                 />
-                <h3>{currentUser?.nome || "Usuário"}</h3>
+                <h3>{currentUser.nome || "Usuário"}</h3>
                 <textarea
                   className={styles.text_post}
-                  placeholder={`No que você está pensando, ${currentUser?.nome || "Usuário"}?`}
+                  placeholder={`No que você está pensando, ${currentUser.nome || "Usuário"}?`}
                   rows={17}
                   value={titulo}
                   onChange={(e) => setTitulo(e.target.value)}
@@ -501,7 +590,7 @@ const Posts = () => {
                   Adicionar Mídia
                   <img
                     src="/imgMidia.png"
-                    alt="Img Midia"
+                    alt="Ícone de Mídia"
                     className={styles.img_midia}
                   />
                 </label>
@@ -521,70 +610,8 @@ const Posts = () => {
                 onClick={handleCreatePost}
                 disabled={isPosting}
               >
-                {isPosting ? "Postando..." : "Postar"}
+                {isPosting ? "Salvando..." : "Postar"}
               </button>
-            </div>
-          </section>
-        </>
-      )}
-
-      {isComentariosModalOpen && (
-        <>
-          <div className={styles.overlay} onClick={fecharComentariosModal}></div>
-          <section className={styles.criar_postagem_modal}>
-            <div className={styles.criar_publicacao}>
-              <button className={styles.button_fechar} onClick={fecharComentariosModal}>
-                X
-              </button>
-              <h2 className={styles.titulo_post}>Comentários</h2>
-              <div className={styles.linha_criar} />
-              <div className={styles.campos_criar}>
-                {posts.find((post) => post.id === selectedPostId) && (
-                  <>
-                    <img
-                      src={
-                        posts.find((post) => post.id === selectedPostId).conteudo ||
-                        "/default.jpg"
-                      }
-                      alt="Img Post"
-                      className={styles.img_post}
-                      onError={(e) => (e.target.src = "/default.jpg")}
-                    />
-                    <div className={styles.comentarios}>
-                      {comentarios.length > 0 ? (
-                        comentarios.map((comentario) => (
-                          <div key={comentario.id} className={styles.comentario}>
-                            <p>
-                              <strong>{comentario.autor?.nome || "Usuário"}:</strong>{" "}
-                              {comentario.conteudo}
-                            </p>
-                            <span>
-                              {new Date(comentario.created_at).toLocaleDateString()}
-                            </span>
-                          </div>
-                        ))
-                      ) : (
-                        <p>Sem comentários ainda.</p>
-                      )}
-                    </div>
-                    <div className={styles.adicionar_comentario}>
-                      <input
-                        type="text"
-                        value={novoComentario[selectedPostId] || ""}
-                        onChange={(e) => handleNovoComentarioChange(selectedPostId, e)}
-                        placeholder="Adicione um comentário..."
-                        className={styles.input_comentario}
-                      />
-                      <button
-                        onClick={() => handleAdicionarComentario(selectedPostId)}
-                        className={styles.botao_comentar}
-                      >
-                        Comentar
-                      </button>
-                    </div>
-                  </>
-                )}
-              </div>
             </div>
           </section>
         </>
