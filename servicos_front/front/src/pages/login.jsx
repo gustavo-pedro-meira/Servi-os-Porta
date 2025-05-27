@@ -26,7 +26,7 @@ const Login = () => {
             // alert("Login bem-sucedido!");
             navigate("/");
         } catch (err) {
-            setError("Credenciais inválidas.");
+            alert("Credenciais inválidas.");
         }
     };
 

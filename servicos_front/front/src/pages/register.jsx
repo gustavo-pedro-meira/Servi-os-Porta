@@ -16,18 +16,68 @@ const Register = () => {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
+    // Função para validar a senha
+    const validatePassword = (password) => {
+        if (password.length < 8) {
+            return alert("A senha deve ter pelo menos 8 caracteres.");
+        }
+        if (!/[A-Z]/.test(password)) {
+            return alert("A senha deve conter pelo menos uma letra maiúscula.");
+        }
+        if (!/[0-9]/.test(password)) {
+            return alert("A senha deve conter pelo menos um número.");
+        }
+        if (!/[!@#$%^&*]/.test(password)) {
+            return alert("A senha deve conter pelo menos um caractere especial (!, @, #, $, %, ^, &, *).");
+        }
+        if (/\s/.test(password)) {
+            return alert("A senha não pode conter espaços.");
+        }
+        return null;
+    };
+
+    // Função para validar a idade
+    const validateAge = (dataNascimento) => {
+        const today = new Date();
+        const birthDate = new Date(dataNascimento);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        if (age < 18) {
+            return alert("A pessoa deve ter pelo menos 18 anos.");
+        }
+        return null;
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErro("");
 
+        // Verifica se as senhas coincidem
         if (password !== confirmarPassword) {
-            setErro("As senhas não conferem");
+            alert("As senhas não conferem");
             return;
         }
 
-        if (!nome || !email || !username || !cpf) {
-            setErro("Por favor, preencha todos os campos obrigatórios");
+        // Verifica se os campos obrigatórios estão preenchidos
+        if (!nome || !email || !username || !cpf || !dataNascimento) {
+            alert("Por favor, preencha todos os campos obrigatórios");
+            return;
+        }
+
+        // Valida a senha
+        const passwordError = validatePassword(password);
+        if (passwordError) {
+            alert(passwordError);
+            return;
+        }
+
+        // Valida a idade
+        const ageError = validateAge(dataNascimento);
+        if (ageError) {
+            alert(ageError);
             return;
         }
 
@@ -47,22 +97,21 @@ const Register = () => {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 }
-            })
+            });
             console.log(response.data);
+            navigate("/login");
         } catch (error) {
             console.error("Erro ao cadastrar cliente", error);
             if (error.response) {
                 console.log("Erro detalhado:", error.response.data);
-                setErro(JSON.stringify(error.response.data)); // Mostra os campos com problema
+                // setErro(JSON.stringify(error.response.data));
             } else {
                 setErro("Erro ao cadastrar cliente");
             }
         } finally {
             setIsLoading(false);
         }
-
-        navigate("/login");
-    }
+    };
 
     return (
         <main>
@@ -94,6 +143,8 @@ const Register = () => {
                     <div className={styles.loginforms}>
                         <h1>Crie sua conta</h1>
                         <p>Preencha seus dados</p>
+
+                        {erro && <p style={{ color: "red" }}>{erro}</p>}
 
                         <div className={styles.inputcontainer}>
                             <i className="fas fa-user"></i>
@@ -129,7 +180,7 @@ const Register = () => {
                                 type="date"
                                 value={dataNascimento}
                                 onChange={(e) => setDataNascimento(e.target.value)}
-                                style={{ color: dataNascimento === "" ? "gray" : "black"}}
+                                style={{ color: dataNascimento === "" ? "gray" : "black" }}
                             />
                             <i
                                 id="toggle-dataNascimento"
@@ -206,11 +257,8 @@ const Register = () => {
                             ></i>
                         </div>
 
-                        {/* {error && <p style={{ color: "red" }}>{error}</p>}
-                        {success && <p style={{ color: "green" }}>{success}</p>} */}
-
-                        <button onClick={handleSubmit} className={styles.cadastrar_button}>
-                            Cadastrar
+                        <button onClick={handleSubmit} className={styles.cadastrar_button} disabled={isLoading}>
+                            {isLoading ? "Cadastrando..." : "Cadastrar"}
                         </button>
                     </div>
                 </div>

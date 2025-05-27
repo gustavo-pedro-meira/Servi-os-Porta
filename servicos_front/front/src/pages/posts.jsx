@@ -20,7 +20,17 @@ const Posts = () => {
   const [isPosting, setIsPosting] = useState(false);
   const [menuOpenId, setMenuOpenId] = useState(null);
   const [openComments, setOpenComments] = useState({});
-  const menuRefs = useRef({}); // Objeto para armazenar refs por postId
+  const menuRefs = useRef({});
+
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem("access"); // Remove token from localStorage
+    setCurrentUser(null); // Reset current user
+    setIsProfissional(false); // Reset profissional status
+    setPosts([]); // Optional: Clear posts
+    navigate("/login"); // Redirect to login page
+    console.log("Logout realizado com sucesso");
+  };
 
   const handleMenuClick = (postId, event) => {
     event.stopPropagation();
@@ -142,7 +152,7 @@ const Posts = () => {
       setNovoComentario({ ...novoComentario, [postId]: "" });
     } catch (error) {
       console.error("Erro ao adicionar comentário:", error);
-      alert("Erro ao adicionar comentário. Tente novamente.");
+      alert("Você não é um profissional.");
     }
   };
 
@@ -384,13 +394,21 @@ const Posts = () => {
             >
               Seja um Profissional
             </button>
-            <button type="button" onClick={() => navigate("/login")}>
-              Entrar
-            </button>
+            {/* Conditional rendering for Login/Logout button */}
+            {currentUser ? (
+              <button type="button" onClick={handleLogout}>
+                Sair
+              </button>
+            ) : (
+              <button type="button" onClick={() => navigate("/login")}>
+                Entrar
+              </button>
+            )}
           </div>
         </nav>
       </section>
 
+      {/* Rest of the component remains unchanged */}
       <section className={styles.section_one}>
         <div className={styles.search_div}>
           <div className={styles.service_search}>
@@ -437,7 +455,6 @@ const Posts = () => {
         null
       ) : Array.isArray(posts) && posts.length > 0 ? (
         posts.map((post) => {
-          // Criar ref para cada post
           if (!menuRefs.current[post.id]) {
             menuRefs.current[post.id] = React.createRef();
           }
