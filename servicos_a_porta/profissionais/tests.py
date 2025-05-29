@@ -38,12 +38,13 @@ class ProfissionalTesteCase(TestCase):
         url = f"/api/profissionais/"
         data = {
             "username": "gusta",
-            "password": "guga2004#",
+            "password": "Guga2004#",
             "cep": "58695000",
             "nome": "Gustavo",
             "cpf": "12345678900",
             "descricao": "Pedreiro",
             "dataInicio": datetime.date(2020, 1, 1),
+            "dataNascimento": datetime.date(2000, 1, 1),
             "idProfissao": self.profissao.id,
             "numero": "83998397274",
             "email": "gustavo16pedro@gmail.com"
@@ -57,14 +58,15 @@ class ProfissionalTesteCase(TestCase):
         url = f"/api/profissionais/"
         data = {
             "username": "gustainho",
-            "password": "guga2004#",
+            "password": "Guga2004#",
             "cep": "58695001",
             "nome": "Gustavo",
             "cpf": "10625523423",
             "descricao": "Pedreiro",
             "dataInicio": datetime.date(2020, 1, 1),
+            "dataNascimento": datetime.date(2000, 1, 1),
             "idProfissao": self.profissao.id,
-            "numero": "83998397274",
+            "numero": "83998397200",
             "email": "gustavo16pe7894152@gmail.com"
         }
         response = self.client.post(url, data, format="json")
@@ -76,14 +78,15 @@ class ProfissionalTesteCase(TestCase):
         url = f"/api/profissionais/"
         data = {
             "username": "gustavinho",
-            "password": "guga2004#",
+            "password": "Guga2004#",
             "cep": "58695000",
             "nome": "Gustavo",
             "cpf": "10625523423",
             "descricao": "Pedreiro",
             "dataInicio": datetime.date(2020, 1, 1),
+            "dataNascimento": datetime.date(2000, 1, 1),
             "idProfissao": self.profissao.id,
-            "numero": "83998397274",
+            "numero": "83998397243",
             "email": "gustavo16pedro787878@gmail.com"
         }
         response = self.client.post(url, data, format="json")

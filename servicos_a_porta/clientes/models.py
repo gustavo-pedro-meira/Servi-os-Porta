@@ -12,7 +12,7 @@ class Cliente(User):
     numero = models.CharField(max_length=13, unique=True)
     
     def ValidaEmail(self):
-        url = f"https://emailvalidation.abstractapi.com/v1/?api_key=f1c1e678a6724d0e853721b6eb9b0354&email={self.email}"
+        url = f"https://emailvalidation.abstractapi.com/v1/?api_key=2b44d8f470a54327abf68d32c5594a52&email={self.email}"
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()

@@ -17,7 +17,7 @@ class ServicoTesteCase(TestCase):
         #Objeto profissional
         self.profissional = Profissional.objects.create_user(
             username="gustavo",
-            password="guga2004#",
+            password="Guga2004#",
             cep="58695000",
             nome="João Teste",
             cpf="10625523423",
@@ -32,7 +32,6 @@ class ServicoTesteCase(TestCase):
             username= "gabriel14",
             password= "guga2004#",
             email= "gustavo518pedroca@gmail.com",
-            biografia= "teste",
             nome= "Gabriel",
             dataNascimento= datetime.date(2020, 1, 1),
             cpf= "10625523423",

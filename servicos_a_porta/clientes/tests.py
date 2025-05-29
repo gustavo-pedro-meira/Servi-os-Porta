@@ -28,13 +28,13 @@ class ClienteTesteCase(TestCase):
         self.client.login(username="gustavo", password="guga2004#")
         url = f"/api/clientes/"
         data = {
-            "username": "gusta",
-            "password": "guga2004#",
+            "username": "gustavinhao",
+            "password": "Guga2004#",
             "nome": "Gustavo",
             "cpf": "10625523425",
-            "dataNascimento": datetime.date(2020, 1, 1),
+            "dataNascimento": datetime.date(2000, 1, 1),
             "numero": "83998397274",
-            "email": "gustavo16pedro@gmail.com"
+            "email": "cursor341@gmail.com"
         }
         self.response = self.client.post(url, data, format="json")
         self.assertEqual(self.response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -44,13 +44,13 @@ class ClienteTesteCase(TestCase):
         self.client.login(username="gustavo", password="guga2004#")
         url = f"/api/clientes/"
         data = {
-            "username": "gustavinho",
-            "password": "guga2004#",
+            "username": "gustavinhao",
+            "password": "Guga2004#",
             "nome": "Gustavo",
             "cpf": "10625523423",
-            "dataNascimento": datetime.date(2020, 1, 1),
+            "dataNascimento": datetime.date(2000, 1, 1),
             "numero": "83998397274",
-            "email": "gustavo16pedro787878@gmail.com"
+            "email": "curso9383ebsb@gmail.com"
         }
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

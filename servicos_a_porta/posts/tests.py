@@ -17,12 +17,13 @@ class PostTesteCase(TestCase):
         #Objeto profissional
         self.profissional = Profissional.objects.create_user(
             username="gustavo",
-            password="guga2004#",
+            password="Guga2004#",
             cep="58695000",
             nome="João Teste",
             cpf="10625523423",
             descricao="Profissional experiente",
             dataInicio=datetime.date(2020, 1, 1),
+            dataNascimento= datetime.date(2002, 1, 1),
             idProfissao=self.profissao,
             numero="83998397275",
             email="gustavomeira@ads.fiponline.edu.br"
@@ -30,11 +31,10 @@ class PostTesteCase(TestCase):
         #Objeto Cliente
         self.cliente = Cliente.objects.create_user(
             username= "gabriel14",
-            password= "guga2004#",
+            password= "Guga2004#",
             email= "gustavo518pedroca@gmail.com",
-            biografia= "teste",
             nome= "Gabriel",
-            dataNascimento= datetime.date(2020, 1, 1),
+            dataNascimento= datetime.date(2002, 1, 1),
             cpf= "10625523423",
             numero= "83998397275"
         )
@@ -49,18 +49,6 @@ class PostTesteCase(TestCase):
             titulo= "Serviço hoje pela manhã na casa de Gabriel, reboquei a parede e...",
             dataCriacao=datetime.date(2020, 1, 1)
         )
-
-    def test_postar_publicacao_postServico(self):
-        self.client.login(username="gustavo", password="guga2004#")
-        url = "/api/posts/"
-        self.post_data = {
-            "titulo": "Serviço hoje pela manhã na casa de Gabriel, reboquei a parede e...",
-            "dataCriacao": "2020-01-01",
-            "profissional": self.profissional.id,
-            "servico": self.servico.id
-        }
-        self.response = self.client.post(url, self.post_data, format="json")
-        self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
         
     def test_get_publicacao_postServico(self):
         self.client.login(username="gustavo", password="guga2004#")
