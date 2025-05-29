@@ -18,8 +18,8 @@ class TesteSelenium(StaticLiveServerTestCase):
         edge_options = EdgeOptions()
         edge_options.add_argument('--no-sandbox')
         edge_options.add_argument('--disable-dev-shm-usage')
-        edge_options.add_argument('--disable-gpu')  # Desativa aceleração de hardware
-        edge_options.add_argument('--disable-software-rasterizer')  # Desativa rasterização por software
+        edge_options.add_argument('--disable-gpu')
+        edge_options.add_argument('--disable-software-rasterizer')
         
         self.browser = webdriver.Edge(
             service=Service(EdgeChromiumDriverManager().install()),
@@ -28,13 +28,12 @@ class TesteSelenium(StaticLiveServerTestCase):
         self.browser.implicitly_wait(10)
         self.frontend_url = 'http://localhost:5173'
 
-    # Método auxiliar para cliques com atraso
     def click_with_delay(self, by, value):
         element = WebDriverWait(self.browser, 50).until(
             EC.element_to_be_clickable((by, value))
         )
         element.click()
-        time.sleep(5)  # Atraso de 5 segundos após o clique
+        time.sleep(5)  
 
     def realizar_login(self):
         self.browser.get(f'{self.frontend_url}/login')
@@ -53,7 +52,6 @@ class TesteSelenium(StaticLiveServerTestCase):
         time.sleep(2)
         password_input.send_keys(self.password)
 
-        # Substituímos o clique direto pelo método com atraso
         self.click_with_delay(By.ID, "loginbotao")
 
         WebDriverWait(self.browser, 50).until(

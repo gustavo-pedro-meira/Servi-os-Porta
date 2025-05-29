@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { FaWhatsapp } from "react-icons/fa";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import styles from "../styles/bio.module.css";
 import axios from "axios";
 
 const Bio = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
-  const [profissional, setProfissional] = useState(location.state?.profissional || null);
+  const [profissional, setProfissional] = useState(null);
   const [outrosProfissionais, setOutrosProfissionais] = useState([]);
-  const [isLoading, setIsLoading] = useState(!location.state?.profissional);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("access"));
 
-  // Função de logout
   const handleLogout = () => {
     localStorage.removeItem("access");
     setIsLoggedIn(false);
@@ -22,79 +20,50 @@ const Bio = () => {
   };
 
   useEffect(() => {
-    // Atualiza o estado de autenticação com base no token
-    setIsLoggedIn(!!localStorage.getItem("access"));
-
     const fetchData = async () => {
-      if (profissional) {
-        try {
-          const outrosResponse = await axios.get(
-            `http://localhost:8000/api/profissionais/?profissao_nome=${profissional.profissao}&t=${Date.now()}`,
-            {
-              headers: { Authorization: `Bearer ${localStorage.getItem("access")}` },
-            }
-          );
-          const outros = Array.isArray(outrosResponse.data)
-            ? outrosResponse.data
-            : Array.isArray(outrosResponse.data.results)
-            ? outrosResponse.data.results
-            : [];
-          setOutrosProfissionais(
-            outros
-              .filter((p) => Number(p.id) !== Number(id))
-              .slice(0, 4)
-          );
-        } catch (error) {
-          console.error("Erro ao buscar outros profissionais:", error);
-          setOutrosProfissionais([]);
-          if (error.response?.status === 401) {
-            navigate("/login");
-          }
-        } finally {
-          setIsLoading(false);
-        }
-      } else {
-        setIsLoading(true);
-        try {
-          const response = await axios.get(
-            `http://localhost:8000/api/profissionais/${id}/?t=${Date.now()}`,
-            {
-              headers: { Authorization: `Bearer ${localStorage.getItem("access")}` },
-            }
-          );
-          console.log("Resposta da API (profissional):", response.data);
-          setProfissional(response.data);
+      setIsLoading(true);
+      setError(null);
+      setProfissional(null);
 
-          const outrosResponse = await axios.get(
-            `http://localhost:8000/api/profissionais/?profissao_nome=${response.data.profissao}&t=${Date.now()}`,
-            {
-              headers: { Authorization: `Bearer ${localStorage.getItem("access")}` },
-            }
-          );
-          const outros = Array.isArray(outrosResponse.data)
-            ? outrosResponse.data
-            : Array.isArray(outrosResponse.data.results)
-            ? outrosResponse.data.results
-            : [];
-          setOutrosProfissionais(
-            outros
-              .filter((p) => Number(p.id) !== Number(id))
-              .slice(0, 4)
-          );
-        } catch (error) {
-          console.error("Erro ao buscar dados:", error);
-          setError("Não foi possível carregar os dados do profissional.");
-          if (error.response?.status === 401) {
-            navigate("/login");
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/profissionais/${id}/?t=${Date.now()}`,
+          {
+            headers: { Authorization: `Bearer ${localStorage.getItem("access")}` },
           }
-        } finally {
-          setIsLoading(false);
+        );
+        const fetchedProfissional = response.data;
+        setProfissional(fetchedProfissional);
+
+        const outrosResponse = await axios.get(
+          `http://localhost:8000/api/profissionais/?profissao_nome=${fetchedProfissional.profissao}&t=${Date.now()}`,
+          {
+            headers: { Authorization: `Bearer ${localStorage.getItem("access")}` },
+          }
+        );
+        const outros = Array.isArray(outrosResponse.data)
+          ? outrosResponse.data
+          : Array.isArray(outrosResponse.data.results)
+          ? outrosResponse.data.results
+          : [];
+        setOutrosProfissionais(
+          outros
+            .filter((p) => Number(p.id) !== Number(id))
+            .slice(0, 4)
+        );
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+        setError("Não foi possível carregar os dados do profissional.");
+        if (error.response?.status === 401) {
+          navigate("/login");
         }
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchData();
-  }, [id, navigate, profissional, location.state]);
+  }, [id, navigate]);
 
   return (
     <main className={styles.mainClass}>
@@ -102,23 +71,17 @@ const Bio = () => {
         <img src="/logoservicos.png" alt="Logo" height={80} />
         <div className={styles.navcontent}>
           <p
-            onClick={() => {
-              navigate("/", { state: { scrollTo: "contato" } });
-            }}
+            onClick={() => navigate("/", { state: { scrollTo: "contato" } })}
           >
             Fale Conosco
           </p>
           <p
-            onClick={() => {
-              navigate("/", { state: { scrollTo: "sobre" } });
-            }}
+            onClick={() => navigate("/", { state: { scrollTo: "sobre" } })}
           >
             Sobre Nós
           </p>
           <p
-            onClick={() => {
-              navigate("/", { state: { scrollTo: "como_funciona" } });
-            }}
+            onClick={() => navigate("/", { state: { scrollTo: "como_funciona" } })}
           >
             Como Funciona?
           </p>
@@ -183,25 +146,21 @@ const Bio = () => {
           </h1>
           <div className={styles.services_info}>
             {Array.isArray(outrosProfissionais) && outrosProfissionais.length > 0 ? (
-              outrosProfissionais.map((profissional) => (
+              outrosProfissionais.map((prof) => (
                 <div
-                  key={profissional.id}
+                  key={prof.id}
                   className={styles.services_separator}
-                  onClick={() =>
-                    navigate(`/bio/${profissional.id}`, {
-                      state: { profissional },
-                    })
-                  }
+                  onClick={() => navigate(`/bio/${prof.id}`)}
                 >
                   <div className={styles.circle}>
                     <img
                       className={styles.circle_icon}
-                      src={profissional.foto_perfil || "/default.png"}
-                      alt={profissional.nome}
+                      src={prof.foto_perfil || "/default.png"}
+                      alt={prof.nome}
                       onError={(e) => (e.target.src = "/default.png")}
                     />
                   </div>
-                  <p>{profissional.nome}</p>
+                  <p>{prof.nome}</p>
                 </div>
               ))
             ) : (
@@ -212,7 +171,7 @@ const Bio = () => {
         <button
           className={styles.more_button}
           type="button"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/listar")}
         >
           Ver Mais
         </button>
@@ -231,7 +190,6 @@ const Bio = () => {
           </p>
           <p>© 2024. Serviços à Porta. Todos os direitos reservados.</p>
         </div>
-
         <div className={styles.footer_contatos}>
           <h3>Contato</h3>
           <span className={styles.footer_line}></span>
@@ -240,7 +198,6 @@ const Bio = () => {
           <a>+55 (83) 1.2345 - 6789</a>
           <a>+55 (83) 9.8765 - 4321</a>
         </div>
-
         <div className={styles.footer_paginas}>
           <h3>Páginas</h3>
           <span className={styles.footer_line}></span>
@@ -252,15 +209,17 @@ const Bio = () => {
             {isLoggedIn ? "Sair" : "Entrar"}
           </a>
         </div>
-
         <div className={styles.footer_regulamento}>
           <h3>Regulamento</h3>
           <span className={styles.footer_line}></span>
           <a>Termos de Uso</a>
           <a>Política de Privacidade</a>
-          <a onClick={() => {navigate("/", { state: { scrollTo: "como_funciona" } });}}>Como Funciona</a>
-          <a onClick={() => {navigate("/", { state: { scrollTo: "sobre" } });}}>Sobre nós</a>
-
+          <a onClick={() => navigate("/", { state: { scrollTo: "como_funciona" } })}>
+            Como Funciona
+          </a>
+          <a onClick={() => navigate("/", { state: { scrollTo: "sobre" } })}>
+            Sobre nós
+          </a>
         </div>
       </footer>
     </main>

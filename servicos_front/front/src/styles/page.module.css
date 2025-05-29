@@ -151,6 +151,10 @@ body {
     font-weight: 300;
 }
 
+.inputsearch:focus{
+    border-color: #00b7eb;
+}
+
 .inputWrapper {
     position: relative;
     width: 100%;
@@ -456,7 +460,7 @@ body {
     box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.2);
     margin-top: 30px;
     margin-left: -70px;
-    width: 110%;
+    width: 105.2%;
 }
 
 .footer_sobre,
