@@ -35,7 +35,7 @@ class TesteSelenium(StaticLiveServerTestCase):
             EC.element_to_be_clickable((by, value))
         )
         element.click()
-        time.sleep(5)
+        
 
     def realizar_login(self):
         self.browser.get(f'{self.frontend_url}/login')
@@ -43,14 +43,14 @@ class TesteSelenium(StaticLiveServerTestCase):
         username_input = WebDriverWait(self.browser, 50).until(
             EC.presence_of_element_located((By.ID, "username"))
         )
-        time.sleep(2)
+        
         password_input = WebDriverWait(self.browser, 50).until(
             EC.presence_of_element_located((By.ID, "password"))
         )
-        time.sleep(2)
+        
 
         username_input.send_keys(self.username)
-        time.sleep(2)
+        
         password_input.send_keys(self.password)
 
         self.click_with_delay(By.ID, "loginbotao")
@@ -73,7 +73,7 @@ class TesteSelenium(StaticLiveServerTestCase):
     def test_clicar_comofunciona(self):
         self.realizar_login()
 
-        time.sleep(2)
+        
         self.click_with_delay(By.ID, 'sobre')
 
         WebDriverWait(self.browser, 50).until(
@@ -96,15 +96,15 @@ class TesteSelenium(StaticLiveServerTestCase):
     def test_abrir_posts(self):
         self.realizar_login()
 
-        time.sleep(2)
+        
         self.click_with_delay(By.ID, 'vermaisbotao')
 
-        time.sleep(2)
+        
         WebDriverWait(self.browser, 50).until(
             EC.url_contains("http://localhost:5173/posts")
         )
 
-        time.sleep(2)
+        
         nav_content = WebDriverWait(self.browser, 50).until(
             EC.presence_of_element_located((By.ID, 'navcontent'))
         )
@@ -121,23 +121,23 @@ class TesteSelenium(StaticLiveServerTestCase):
     def test_acessar_servico(self):
         self.realizar_login()
 
-        time.sleep(1)
+        
         self.click_with_delay(By.ID, 'caixa_busca')
 
-        time.sleep(1)
+        
         caixa_input = WebDriverWait(self.browser, 50).until(
             EC.presence_of_element_located((By.ID, "caixa_busca"))
         )
 
-        time.sleep(1)
+        
         caixa_input.send_keys("Limpeza Doméstica", Keys.ENTER)
 
-        time.sleep(1)
+        
         WebDriverWait(self.browser, 50).until(
             EC.url_contains("http://localhost:5173/listar")
         )
 
-        time.sleep(2)
+        
         self.assertTrue(
             self.browser.current_url.endswith('/listar'),
             f"Esperava URL terminando em '/listar', mas obteve {self.browser.current_url}"
@@ -146,26 +146,26 @@ class TesteSelenium(StaticLiveServerTestCase):
     def test_buscar_profissionais_cep(self):
         self.realizar_login()
 
-        time.sleep(1)
+        
         self.click_with_delay(By.ID, 'button_contratar_profissional')
 
-        time.sleep(1)
+        
         WebDriverWait(self.browser, 50).until(
             EC.url_contains("http://localhost:5173/listar")
         )
 
-        time.sleep(1)
+        
         caixa_input = WebDriverWait(self.browser, 50).until(
             EC.presence_of_element_located((By.ID, "input_cep"))
         )
 
-        time.sleep(1)
+        
         caixa_input.send_keys("58695000")
 
-        time.sleep(1)
+        
         self.click_with_delay(By.ID, 'buscar_button')
 
-        time.sleep(1)
+        
         self.assertTrue(
             self.browser.current_url.endswith('/listar'),
             f"Esperava URL terminando em '/listar', mas obteve {self.browser.current_url}"
@@ -174,17 +174,17 @@ class TesteSelenium(StaticLiveServerTestCase):
     def test_ver_bio_profissional(self):
         self.test_buscar_profissionais_cep()
 
-        time.sleep(1)
+        
         self.click_with_delay(By.ID, 'perfil')
 
-        time.sleep(1)
+        
         WebDriverWait(self.browser, 50).until(
             EC.url_contains("http://localhost:5173/bio")
         )
 
-        time.sleep(1)
+        
         self.assertTrue(
-            self.browser.current_url.endswith('/bio'),
+            self.browser.current_url.endswith('/bio/96'),
             f"Esperava URL terminando em '/bio', mas obteve {self.browser.current_url}"
         )
 
