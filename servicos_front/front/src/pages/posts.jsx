@@ -367,6 +367,7 @@ const Posts = () => {
         <nav className={styles.nav}>
           <img src="/logoservicos.png" alt="Logo" height={80} />
           <div className={styles.navcontent} id="navcontent">
+          <p onClick={() => navigate("/")}>Home</p>
             <p
               onClick={() => {
                 navigate("/", { state: { scrollTo: "contato" } });

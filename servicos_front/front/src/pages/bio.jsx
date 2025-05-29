@@ -71,6 +71,7 @@ const Bio = () => {
       <nav className={styles.nav}>
         <img src="/logoservicos.png" alt="Logo" height={80} />
         <div className={styles.navcontent}>
+          <p onClick={() => navigate("/")}>Home</p>
           <p
             onClick={() => navigate("/", { state: { scrollTo: "contato" } })}
           >
@@ -103,7 +104,7 @@ const Bio = () => {
       </nav>
       <section className={styles.section_one}>
         {isLoading ? (
-          <p>Carregando...</p>
+          <p></p>
         ) : error ? (
           <p>{error}</p>
         ) : profissional ? (
@@ -173,7 +174,7 @@ const Bio = () => {
         <button
           className={styles.more_button}
           type="button"
-          onClick={() => navigate("/listar", {state: {searchTerm: "Limpeza Doméstica"}})}
+          onClick={() => navigate("/listar", {state: {searchTerm: profissional.profissao}})}
         >
           Ver Mais
         </button>

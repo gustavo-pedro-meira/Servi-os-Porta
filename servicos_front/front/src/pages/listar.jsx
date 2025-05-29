@@ -168,6 +168,7 @@ const ListaProfissionais = () => {
       <nav className={styles.nav}>
         <img src="/logoservicos.png" alt="Logo" height={80} />
         <div className={styles.navcontent}>
+        <p onClick={() => navigate("/")}>Home</p>
           <p
             onClick={() => {
               navigate("/", { state: { scrollTo: "contato" } });

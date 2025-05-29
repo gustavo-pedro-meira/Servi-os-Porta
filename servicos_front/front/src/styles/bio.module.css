@@ -25,6 +25,14 @@ body {
     cursor: pointer;
     font-family: "Rubik", sans-serif;
     font-weight: 400;
+    padding: 8px 12px; 
+    transition: all 0.2s ease-in-out;
+}
+
+.nav p:hover {
+    background: #00b7eb;
+    color: #fff;
+    text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .navcontent {
