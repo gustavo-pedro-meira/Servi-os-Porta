@@ -227,6 +227,7 @@ const ListaProfissionais = () => {
               value={cep}
               type="text"
               placeholder="CEP"
+              id="input_cep"
               maxLength={9}
               pattern="\d*"
               disabled={isCepLoading}
@@ -257,6 +258,7 @@ const ListaProfissionais = () => {
               className={styles.button_buscar}
               onClick={handleSearch}
               disabled={isLoading}
+              id="buscar_button"
             >
               {isLoading ? "Buscando..." : "Buscar"}
             </button>

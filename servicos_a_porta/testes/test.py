@@ -7,6 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.edge.options import Options as EdgeOptions
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
+from selenium.webdriver.common.keys import Keys
 import time  # Importação adicionada para usar time.sleep()
 
 class TesteSelenium(StaticLiveServerTestCase):
@@ -116,6 +117,62 @@ class TesteSelenium(StaticLiveServerTestCase):
             nav_content.is_displayed(),
             "Elemento 'navcontent' não está visível na página de posts"
         )
+
+    def acessar_servico(self):
+        self.realizar_login()
+
+        time.sleep(1)
+        self.click_with_delay(By.ID, 'caixa_busca')
+
+        time.sleep(1)
+        caixa_input = WebDriverWait(self.browser, 50).until(
+            EC.presence_of_element_located((By.ID, "caixa_busca"))
+        )
+
+        time.sleep(1)
+        caixa_input.send_keys("Limpeza Doméstica", Keys.ENTER)
+
+        time.sleep(1)
+        WebDriverWait(self.browser, 50).until(
+            EC.url_contains("http://localhost:5173/listar")
+        )
+
+        time.sleep(2)
+        self.assertTrue(
+            self.browser.current_url.endswith('/listar'),
+            f"Esperava URL terminando em '/listar', mas obteve {self.browser.current_url}"
+        )
+
+    def buscar_profissionais_cep(self):
+        self.realizar_login()
+
+        time.sleep(1)
+        self.click_with_delay(By.ID, 'button_contratar_profissional')
+
+        time.sleep(1)
+        WebDriverWait(self.browser, 50).until(
+            EC.url_contains("http://localhost:5173/listar")
+        )
+
+        time.sleep(1)
+        caixa_input = WebDriverWait(self.browser, 50).until(
+            EC.presence_of_element_located((By.ID, "input_cep"))
+        )
+
+        time.sleep(1)
+        caixa_input.send_keys("58695000")
+
+        time.sleep(1)
+        self.click_with_delay(By.ID, 'buscar_button')
+
+        time.sleep(1)
+
+        time.sleep(2)
+        self.assertTrue(
+            self.browser.current_url.endswith('/listar'),
+            f"Esperava URL terminando em '/listar', mas obteve {self.browser.current_url}"
+        )
+
 
     def tearDown(self):
         self.browser.quit()

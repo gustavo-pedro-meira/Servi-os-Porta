@@ -8,6 +8,7 @@ const Bio = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [profissional, setProfissional] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   const [outrosProfissionais, setOutrosProfissionais] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -171,7 +172,7 @@ const Bio = () => {
         <button
           className={styles.more_button}
           type="button"
-          onClick={() => navigate("/listar")}
+          onClick={() => navigate("/listar", {state: {searchTerm: "Limpeza Doméstica"}})}
         >
           Ver Mais
         </button>

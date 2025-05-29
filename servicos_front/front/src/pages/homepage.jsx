@@ -24,10 +24,10 @@ const Home = () => {
     }
   };
 
-  const fetchPosts = async() => {
+  const fetchPosts = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`http://localhost:8000/api/posts/?ordering=-dataCriacao&t=${Date.now()}`)
+      const response = await axios.get(`http://localhost:8000/api/posts/?ordering=-dataCriacao&t=${Date.now()}`);
       const data = Array.isArray(response.data)
         ? response.data
         : Array.isArray(response.data.results)
@@ -42,7 +42,6 @@ const Home = () => {
       setIsLoading(false);
     }
   };
-
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -76,6 +75,9 @@ const Home = () => {
       navigate("/");
     }
   };
+
+  // Filtra os posts que têm imagem
+  const postsWithImages = posts.filter(post => post.conteudo);
 
   return (
     <main className={styles.mainClass}>
@@ -119,6 +121,7 @@ const Home = () => {
                 className={styles.inputsearch}
                 type="text"
                 placeholder="Buscar profissão..."
+                id="caixa_busca"
                 value={searchTerm}
                 onChange={handleSearchChange}
                 onKeyPress={handleKeyPress}
@@ -131,31 +134,31 @@ const Home = () => {
           <h1 className={styles.destaque}>Principais Serviços</h1>
           <div className={styles.services_info}>
             <div className={styles.services_separator}>
-              <div className={styles.circle} onClick={() => navigate("/listar", {state: {searchTerm: "Limpeza Doméstica"}})}>
+              <div className={styles.circle} id="limpeza" onClick={() => navigate("/listar", { state: { searchTerm: "Limpeza Doméstica" } })}>
                 <img className={styles.circle_icon} src="/limpezadomestica.png" alt="Icon" />
               </div>
               <p>Limpeza Domésticas</p>
             </div>
             <div className={styles.services_separator}>
-              <div className={styles.circle} onClick={() => navigate("/listar", {state: {searchTerm: "Reparos e Manutenção"}})}>
+              <div className={styles.circle} onClick={() => navigate("/listar", { state: { searchTerm: "Reparos e Manutenção" } })}>
                 <img className={styles.circle_icon} src="/reparo.png" alt="Icon" />
               </div>
               <p>Reparos e Manutenção</p>
             </div>
             <div className={styles.services_separator}>
-              <div className={styles.circle} onClick={() => navigate("/listar", {state: {searchTerm: "Serviços de Ar-Condicionado"}})}>
+              <div className={styles.circle} onClick={() => navigate("/listar", { state: { searchTerm: "Serviços de Ar-Condicionado" } })}>
                 <img className={styles.circle_icon} src="/servicoar.png" alt="Icon" />
               </div>
               <p>Serviços de Ar-Condicionado</p>
             </div>
             <div className={styles.services_separator}>
-              <div className={styles.circle} onClick={() => navigate("/listar", {state: {searchTerm: "Mudança e Transportes"}})}>
+              <div className={styles.circle} onClick={() => navigate("/listar", { state: { searchTerm: "Mudança e Transportes" } })}>
                 <img className={styles.circle_icon} src="/transporte.png" alt="Icon" />
               </div>
               <p>Mudança e Transportes</p>
             </div>
             <div className={styles.services_separator}>
-              <div className={styles.circle} onClick={() => navigate("/listar", {state: {searchTerm: "Instalações"}})}>
+              <div className={styles.circle} onClick={() => navigate("/listar", { state: { searchTerm: "Instalações" } })}>
                 <img className={styles.circle_icon} src="/instalacoes.png" alt="Icon" />
               </div>
               <p>Instalações</p>
@@ -165,7 +168,6 @@ const Home = () => {
       </section>
 
       <section className={styles.section_two}>
-
         <div className={styles.title_unicos}>
           <span className={styles.line}></span>
           <h3 className={styles.destaque}>Conheça o que nos torna únicos</h3>
@@ -182,7 +184,7 @@ const Home = () => {
           <div className={styles.diferencial}>
             <img className={styles.diferencial_icon} src="/agendamento.png" alt="Icon"></img>
             <h4>Agendamento Ágil</h4>
-            <p>Agendamento ágil e sem complicações. Seu serviço marcado em poucos cliques!"</p>
+            <p>Agendamento ágil e sem complicações. Seu serviço marcado em poucos cliques!</p>
           </div>
 
           <div className={styles.diferencial}>
@@ -207,21 +209,21 @@ const Home = () => {
         <div className={styles.posts_blog}>
           {isLoading ? (
             <p>Carregando posts...</p>
-          ) : posts.length > 0 ? (
-            posts.slice(0,3).map((post) => (
+          ) : postsWithImages.length > 0 ? (
+            postsWithImages.slice(0, 3).map((post) => (
               <div className={styles.post_home} key={post.id || Math.random()}>
                 <img
-                  src={post.conteudo || "/default.jpg"} 
-                  alt={post.titulo || "Imagem do post"} 
+                  src={post.conteudo}
+                  alt={post.titulo || "Imagem do post"}
                   className={styles.post_image}
-                  onError={(e) => (e.target.src = "/default.jpg")} 
+                  onError={(e) => (e.target.src = "/default.jpg")}
                 />
                 <h2>{post?.usuario?.nome}</h2>
                 <h4>{post.titulo || "Sem título"}</h4>
               </div>
             ))
           ) : (
-            <p>Nenhum post encontrado</p>
+            <p>Nenhum post com imagem encontrado</p>
           )}
         </div>
         <button onClick={() => navigate("/posts")} className={styles.more_button} type="button" id="vermaisbotao">Ver Mais</button>
@@ -234,7 +236,7 @@ const Home = () => {
 
         <div className={styles.funciona_div}>
           <div className={styles.funciona_faxineira}>
-            <img src="./faxineira.png"></img>
+            <img src="./faxineira.png" alt="Faxineira"></img>
           </div>
 
           <div className={styles.funciona_info} id="funciona_info">
@@ -252,35 +254,33 @@ const Home = () => {
           </div>
         </div>
 
-        <button className={styles.more_button} onClick={() => navigate("/listar")} type="button">Contratar Serviço</button>
-        
+        <button className={styles.more_button} id="button_contratar_profissional" onClick={() => navigate("/listar")} type="button">Contratar Serviço</button>
+
         <div id="sobre" className={styles.title_unicos}>
           <span className={styles.line}></span>
           <h3 className={styles.destaque}>Sobre Nós</h3>
           <span className={styles.line}></span>
         </div>
-
       </section>
       <section className={styles.section_three}>
         <div className={styles.div_sobre}>
           <div className={styles.sobre_info}>
             <p>
-            Na Serviços à Porta, dedicamo-nos apaixonadamente a levar praticidade
-            e qualidade para o seu lar. Desde a nossa fundação, somos a escolha ideal
-            para quem busca serviços eficientes e confiáveis, garantindo cuidado e
-            excelência em cada detalhe. Com uma equipe experiente e comprometida,
-            oferecemos diversos tipos de serviços em sua residencia, empresa, comercio
-            e muito mais, sempre com agilidade e profissionalismo.
-            Na Serviços à Porta, estamos empenhados em superar expectativas,
-            proporcionando soluções que trazem conforto, segurança e tranquilidade
-            para o seu dia a dia.
+              Na Serviços à Porta, dedicamo-nos apaixonadamente a levar praticidade
+              e qualidade para o seu lar. Desde a nossa fundação, somos a escolha ideal
+              para quem busca serviços eficientes e confiáveis, garantindo cuidado e
+              excelência em cada detalhe. Com uma equipe experiente e comprometida,
+              oferecemos diversos tipos de serviços em sua residência, empresa, comércio
+              e muito mais, sempre com agilidade e profissionalismo.
+              Na Serviços à Porta, estamos empenhados em superar expectativas,
+              proporcionando soluções que trazem conforto, segurança e tranquilidade
+              para o seu dia a dia.
             </p>
           </div>
 
           <div className={styles.sobre_mecanico}>
-            <img src="./mecanico.png"></img>
+            <img src="./mecanico.png" alt="Mecânico"></img>
           </div>
-
         </div>
 
         <div id="contato" className={styles.title_unicos}>
@@ -288,7 +288,7 @@ const Home = () => {
           <h3 className={styles.destaque}>Contato</h3>
           <span className={styles.line}></span>
         </div>
-        
+
         <div className={styles.div_contato}>
           <div className={styles.diferencial}>
             <img className={styles.contato_icon} src="/whatsapp.png" alt="Icon"></img>
@@ -299,8 +299,7 @@ const Home = () => {
           <div className={styles.diferencial}>
             <img className={styles.contato_icon} src="/endereco.png" alt="Icon"></img>
             <h4>Endereço</h4>
-            <p>Rua Unifip, Centro,
-            Patos - PB</p>
+            <p>Rua Unifip, Centro, Patos - PB</p>
           </div>
 
           <div className={styles.diferencial}>
@@ -309,8 +308,6 @@ const Home = () => {
             <p>serviçosaporta@gmail.com</p>
           </div>
         </div>
-
-      
       </section>
 
       <footer className={styles.footer}>
@@ -354,9 +351,8 @@ const Home = () => {
           <span className={styles.footer_line}></span>
           <a>Termos de Uso</a>
           <a>Política de Privacidade</a>
-          <a onClick={() => {navigate("/", { state: { scrollTo: "como_funciona" } });}}>Como Funciona</a>
-          <a onClick={() => {navigate("/", { state: { scrollTo: "sobre" } });}}>Sobre nós</a>
-
+          <a onClick={() => { navigate("/", { state: { scrollTo: "como_funciona" } }); }}>Como Funciona</a>
+          <a onClick={() => { navigate("/", { state: { scrollTo: "sobre" } }); }}>Sobre nós</a>
         </div>
       </footer>
     </main>

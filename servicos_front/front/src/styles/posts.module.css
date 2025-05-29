@@ -374,10 +374,6 @@ body {
     color: #656565;
 }
 
-.imagem_midia {
-
-}
-
 .img_post img {
     width: auto;
     margin: 10px auto;
@@ -392,10 +388,16 @@ body {
 .img_post {
     width: 90%;
     aspect-ratio: 3 / 4;
-    height: auto%;
+    height: auto;
     margin-left: 5%;
     margin-bottom: -40px;
 }
+
+.posts.noImage .interacao_post {
+    margin-top: -50px; 
+}
+
+
 
 .linha {
     margin: 50px;

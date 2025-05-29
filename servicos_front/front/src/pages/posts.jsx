@@ -23,13 +23,12 @@ const Posts = () => {
   const [openComments, setOpenComments] = useState({});
   const menuRefs = useRef({});
 
-  // Logout function
   const handleLogout = () => {
-    localStorage.removeItem("access"); // Remove token from localStorage
-    setCurrentUser(null); // Reset current user
-    setIsProfissional(false); // Reset profissional status
-    setPosts([]); // Optional: Clear posts
-    navigate("/login"); // Redirect to login page
+    localStorage.removeItem("access");
+    setCurrentUser(null);
+    setIsProfissional(false);
+    setPosts([]);
+    navigate("/login");
     console.log("Logout realizado com sucesso");
   };
 
@@ -138,6 +137,7 @@ const Posts = () => {
           headers: { Authorization: `Bearer ${localStorage.getItem("access")}` },
         }
       );
+      console.log("Novo comentário adicionado:", response.data);
       setPosts((prevPosts) =>
         prevPosts.map((post) =>
           post.id === postId
@@ -395,7 +395,6 @@ const Posts = () => {
             >
               Seja um Profissional
             </button>
-            {/* Conditional rendering for Login/Logout button */}
             {currentUser ? (
               <button type="button" onClick={handleLogout}>
                 Sair
@@ -409,7 +408,6 @@ const Posts = () => {
         </nav>
       </section>
 
-      {/* Rest of the component remains unchanged */}
       <section className={styles.section_one}>
         <div className={styles.search_div}>
           <div className={styles.service_search}>
@@ -484,7 +482,7 @@ const Posts = () => {
                   </ul>
                 </div>
               </div>
-              <div className={styles.posts}>
+              <div className={`${styles.posts} ${post.conteudo ? '' : styles.noImage}`}>
                 <img
                   className={styles.img_perfil}
                   src={post?.usuario?.foto_perfil || "/default.png"}
@@ -494,81 +492,91 @@ const Posts = () => {
                 <h3>{post?.usuario?.nome}</h3>
                 <h5>{post?.usuario?.profissao || "Profissão não informada"}</h5>
                 <p>{post?.titulo}</p>
-                <div className={styles.imagem_midia}>
-                  <img
-                    src={post?.conteudo || "/default.jpg"}
-                    alt="Img Post"
-                    className={styles.img_post}
-                    onError={(e) => (e.target.src = "/default.jpg")}
-                  />
-                </div>
-                <div className={styles.curtidas}>
-                  <button
-                    className={styles.botao_curtir}
-                    onClick={() => handleCurtir(post.id)}
-                    disabled={!localStorage.getItem("access")}
-                  >
-                    <FaHeart
-                      style={{
-                        color: post.is_curtido ? "#74C7DF" : "grey",
-                        marginRight: "5px",
+                {post?.conteudo && (
+                  <div className={styles.imagem_midia}>
+                    <img
+                      src={post?.conteudo}
+                      alt="Img Post"
+                      className={styles.img_post}
+                      onError={(e) => {
+                        e.target.src = "/default.jpg";
+                        e.target.style.display = "none";
                       }}
                     />
-                    {post.curtidas_count || 0} curtidas
-                  </button>
-                  <span
-                    className={styles.comentarios_count}
-                    onClick={() => toggleComments(post.id)}
-                  >
-                    {post.comentarios_count || 0} comentários
-                  </span>
-                </div>
-                <div className={styles.linha} />
-                <div className={styles.linha_separacao} />
-                <div className={styles.comentarios}>
-                  {openComments[post.id] && post.comentarios && post.comentarios.length > 0 ? (
-                    post.comentarios.map((comentario) => (
-                      <div key={comentario.id} className={styles.comentario}>
-                        <img
-                          src={comentario.foto_perfil || "/default.png"}
-                          alt="Img Perfil"
-                          onError={(e) => (e.target.src = "/default.png")}
-                          className={styles.img_perfil_comentario}
-                        />
-                        <div className={styles.text_container}>
-                          <div className={styles.nome_profissao_comentario}>
-                            <h4 className={styles.nome_comentario}>
-                              {comentario.autor || "Usuário"}
-                            </h4>
-                            <h6 className={styles.profissao_comentario}>
-                              {comentario.profissao || "Profissão não informada"}
-                            </h6>
+                  </div>
+                )}
+                <div className={styles.interacao_post}>
+                  <div className={styles.curtidas}>
+                    <button
+                      className={styles.botao_curtir}
+                      onClick={() => handleCurtir(post.id)}
+                      disabled={!localStorage.getItem("access")}
+                    >
+                      <FaHeart
+                        style={{
+                          color: post.is_curtido ? "#74C7DF" : "grey",
+                          marginRight: "5px",
+                        }}
+                      />
+                      {post.curtidas_count || 0} curtidas
+                    </button>
+                    <span
+                      className={styles.comentarios_count}
+                      onClick={() => toggleComments(post.id)}
+                    >
+                      {post.comentarios_count || 0} comentários
+                    </span>
+                  </div>
+                  <div className={styles.linha} />
+                  <div className={styles.linha_separacao} />
+                  <div className={styles.comentarios}>
+                    {openComments[post.id] && post.comentarios && post.comentarios.length > 0 ? (
+                      post.comentarios.map((comentario) => (
+                        <div key={comentario.id} className={styles.comentario}>
+                          <img
+                            src={`http://localhost:8000/media/${comentario?.foto_perfil}` || "/default.png"}
+                            alt="Img Perfil"
+                            onError={(e) => {
+                              console.log("Erro ao carregar imagem do comentário:", comentario, "URL tentada:", e.target.src);
+                              e.target.src = "/default.png";
+                            }}
+                            className={styles.img_perfil_comentario}
+                          />
+                          <div className={styles.text_container}>
+                            <div className={styles.nome_profissao_comentario}>
+                              <h4 className={styles.nome_comentario}>
+                                {comentario.autor || "Usuário"}
+                              </h4>
+                              <h6 className={styles.profissao_comentario}>
+                                {comentario.profissao || "Profissão não informada"}
+                              </h6>
+                            </div>
+                            <p className={styles.conteudo_comentario}>{comentario.conteudo}</p>
+                            <span className={styles.data_comentario}>
+                              {new Date(comentario.dataCriacao).toLocaleDateString()}
+                            </span>
                           </div>
-                          <p className={styles.conteudo_comentario}>{comentario.conteudo}</p>
-                          <span className={styles.data_comentario}>
-                            {new Date(comentario.dataCriacao).toLocaleDateString()}
-                          </span>
                         </div>
-                      </div>
-                    ))
-                  ) : openComments[post.id] ? (
-                    <p>Sem comentários ainda.</p>
-                  ) : null}
-                </div>
-                <div className={styles.adicionar_comentario}>
-                  <input
-                    type="text"
-                    value={novoComentario[post.id] || ""}
-                    onChange={(e) => handleNovoComentarioChange(post.id, e)}
-                    placeholder="Adicione um comentário..."
-                    className={styles.input_comentario}
-                  />
-                  <button
-                    onClick={() => handleAdicionarComentario(post.id)}
-                    className={styles.botao_comentar}
-                  >
-                    Comentar
-                  </button>
+                      ))
+                    ) : openComments[post.id] ? (
+                      <p>Sem comentários ainda.</p>
+                    ) : null}
+                  </div>
+                  <div className={styles.adicionar_comentario}>
+                    <input
+                      type="text"
+                      value={novoComentario[post.id] || ""}
+                      onChange={(e) => handleNovoComentarioChange(post.id, e)}
+                      placeholder="Adicione um comentário..."
+                      className={styles.input_comentario}
+                    />
+                    <button
+                      onClick={() => handleAdicionarComentario(post.id)}
+                      className={styles.botao_comentar}
+                    >
+                      Comentar
+                    </button>
+                  </div>
                 </div>
               </div>
             </section>
