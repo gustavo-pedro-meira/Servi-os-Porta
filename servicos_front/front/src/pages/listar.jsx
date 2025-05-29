@@ -277,6 +277,7 @@ const ListaProfissionais = () => {
               <div
                 className={styles.perfil}
                 key={profissional.id}
+                id = "perfil"
                 onClick={() =>
                   navigate(`/bio/${profissional.id}`, {
                     state: { profissional },

@@ -134,6 +134,7 @@ const Bio = () => {
           <button
             className={styles.whatsapp_button}
             type="button"
+            id="falar_profissional"
             onClick={() => window.open(`https://wa.me/${profissional.numero}`, "_blank")}
           >
             <FaWhatsapp size={20} style={{ marginRight: "8px" }} />

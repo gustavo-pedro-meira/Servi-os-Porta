@@ -173,6 +173,18 @@ class TesteSelenium(StaticLiveServerTestCase):
             f"Esperava URL terminando em '/listar', mas obteve {self.browser.current_url}"
         )
 
+    def ver_bio_profissional(self):
+        self.buscar_profissionais_cep()
+
+        time.sleep(1)
+        self.click_with_delay(By.ID, 'perfil')
+
+        time.sleep(1)
+        WebDriverWait(self.browser, 50).until(
+            EC.url_contains("http://localhost:5173/bio")
+        )
+        time.sleep(1)
+
 
     def tearDown(self):
         self.browser.quit()
