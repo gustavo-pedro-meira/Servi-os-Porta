@@ -231,9 +231,10 @@ body {
 
 .campos_criar h3 {
     color: #656565;
-    margin-right: 490px;
+    margin-right: 570px;
     font-family: "Rubik", sans-serif;
     font-weight: 500;
+    margin-top: 30px;
 }
 
 .text_post {

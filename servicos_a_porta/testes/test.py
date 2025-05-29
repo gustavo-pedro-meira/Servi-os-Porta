@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.edge.options import Options as EdgeOptions
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
 from selenium.webdriver.common.keys import Keys
-import time  # Importação adicionada para usar time.sleep()
+import time
 
 class TesteSelenium(StaticLiveServerTestCase):
     def setUp(self):
@@ -21,6 +21,7 @@ class TesteSelenium(StaticLiveServerTestCase):
         edge_options.add_argument('--disable-dev-shm-usage')
         edge_options.add_argument('--disable-gpu')
         edge_options.add_argument('--disable-software-rasterizer')
+        edge_options.add_argument('--headless') 
         
         self.browser = webdriver.Edge(
             service=Service(EdgeChromiumDriverManager().install()),
@@ -34,7 +35,7 @@ class TesteSelenium(StaticLiveServerTestCase):
             EC.element_to_be_clickable((by, value))
         )
         element.click()
-        time.sleep(5)  
+        time.sleep(5)
 
     def realizar_login(self):
         self.browser.get(f'{self.frontend_url}/login')
@@ -47,7 +48,6 @@ class TesteSelenium(StaticLiveServerTestCase):
             EC.presence_of_element_located((By.ID, "password"))
         )
         time.sleep(2)
-
 
         username_input.send_keys(self.username)
         time.sleep(2)
@@ -118,7 +118,7 @@ class TesteSelenium(StaticLiveServerTestCase):
             "Elemento 'navcontent' não está visível na página de posts"
         )
 
-    def acessar_servico(self):
+    def test_acessar_servico(self):
         self.realizar_login()
 
         time.sleep(1)
@@ -143,7 +143,7 @@ class TesteSelenium(StaticLiveServerTestCase):
             f"Esperava URL terminando em '/listar', mas obteve {self.browser.current_url}"
         )
 
-    def buscar_profissionais_cep(self):
+    def test_buscar_profissionais_cep(self):
         self.realizar_login()
 
         time.sleep(1)
@@ -166,15 +166,13 @@ class TesteSelenium(StaticLiveServerTestCase):
         self.click_with_delay(By.ID, 'buscar_button')
 
         time.sleep(1)
-
-        time.sleep(2)
         self.assertTrue(
             self.browser.current_url.endswith('/listar'),
             f"Esperava URL terminando em '/listar', mas obteve {self.browser.current_url}"
         )
 
-    def ver_bio_profissional(self):
-        self.buscar_profissionais_cep()
+    def test_ver_bio_profissional(self):
+        self.test_buscar_profissionais_cep()
 
         time.sleep(1)
         self.click_with_delay(By.ID, 'perfil')
@@ -183,8 +181,12 @@ class TesteSelenium(StaticLiveServerTestCase):
         WebDriverWait(self.browser, 50).until(
             EC.url_contains("http://localhost:5173/bio")
         )
-        time.sleep(1)
 
+        time.sleep(1)
+        self.assertTrue(
+            self.browser.current_url.endswith('/bio'),
+            f"Esperava URL terminando em '/bio', mas obteve {self.browser.current_url}"
+        )
 
     def tearDown(self):
         self.browser.quit()
