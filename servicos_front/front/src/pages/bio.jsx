@@ -231,29 +231,36 @@ const Bio = () => {
           </p>
           <p>© 2024. Serviços à Porta. Todos os direitos reservados.</p>
         </div>
-        <div className={styles.footer_redes}>
-          <h3>Redes Sociais</h3>
+
+        <div className={styles.footer_contatos}>
+          <h3>Contato</h3>
           <span className={styles.footer_line}></span>
-          <a>Instagram</a>
-          <a>Facebook</a>
-          <a>WhatsApp</a>
-          <a>LinkedIn</a>
-          <a>X</a>
+          <a>Rua Unifip, Centro, Patos - PB</a>
+          <a>serviçosaporta@gmail.com</a>
+          <a>+55 (83) 1.2345 - 6789</a>
+          <a>+55 (83) 9.8765 - 4321</a>
         </div>
+
         <div className={styles.footer_paginas}>
           <h3>Páginas</h3>
           <span className={styles.footer_line}></span>
-          <a>Como Funciona</a>
-          <a>Seja um Profissional</a>
-          <a>Criar Conta</a>
-          <a>Entrar</a>
-          <a>Contato</a>
+          <a onClick={() => navigate("/listar")}>Profissionais</a>
+          <a onClick={() => navigate("/posts")}>Publicações</a>
+          <a onClick={() => navigate("/cadastro")}>Seja um Profissional</a>
+          <a onClick={() => navigate("/register")}>Criar Conta</a>
+          <a onClick={isLoggedIn ? handleLogout : () => navigate("/login")}>
+            {isLoggedIn ? "Sair" : "Entrar"}
+          </a>
         </div>
+
         <div className={styles.footer_regulamento}>
           <h3>Regulamento</h3>
           <span className={styles.footer_line}></span>
           <a>Termos de Uso</a>
           <a>Política de Privacidade</a>
+          <a onClick={() => {navigate("/", { state: { scrollTo: "como_funciona" } });}}>Como Funciona</a>
+          <a onClick={() => {navigate("/", { state: { scrollTo: "sobre" } });}}>Sobre nós</a>
+
         </div>
       </footer>
     </main>
