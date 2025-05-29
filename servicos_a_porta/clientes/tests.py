@@ -11,8 +11,7 @@ class ClienteTesteCase(TestCase):
             username="gustavo",
             password="guga2004#",
             nome="João Teste",
-            cpf="10625523424",
-            biografia="cliente experiente",
+            cpf="10625523423",
             dataNascimento=datetime.date(2020, 1, 1),
             numero="83998397275",
             email="gustavomeira@ads.fiponline.edu.br"
@@ -32,8 +31,7 @@ class ClienteTesteCase(TestCase):
             "username": "gusta",
             "password": "guga2004#",
             "nome": "Gustavo",
-            "cpf": "12345678900",
-            "biografia": "Pedreiro",
+            "cpf": "10625523425",
             "dataNascimento": datetime.date(2020, 1, 1),
             "numero": "83998397274",
             "email": "gustavo16pedro@gmail.com"
@@ -50,7 +48,6 @@ class ClienteTesteCase(TestCase):
             "password": "guga2004#",
             "nome": "Gustavo",
             "cpf": "10625523423",
-            "biografia": "Pedreiro",
             "dataNascimento": datetime.date(2020, 1, 1),
             "numero": "83998397274",
             "email": "gustavo16pedro787878@gmail.com"

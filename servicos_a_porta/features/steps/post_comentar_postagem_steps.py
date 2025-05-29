@@ -42,8 +42,7 @@ def step_given_realizar_comentario(context):
     #Objeto post
     context.titulo = "Serviço na casa de Gustavo"
     context.profissional = response_profissional
-    context.idServico = servico
-    response_post = PostServico.objects.create(titulo=context.titulo, profissional=context.profissional, idServico=context.idServico)
+    response_post = PostServico.objects.create(titulo=context.titulo, profissional=context.profissional)
     #Objeto Comentario
     context.conteudo = "Excelente profissional"
     context.post = response_post
